@@ -52,3 +52,8 @@ int bin(int n)
     for (j = i - 1; j >= 0; j--)
         return B[j];
 }
+
+void helo()
+{
+    printf("helo");
+}
