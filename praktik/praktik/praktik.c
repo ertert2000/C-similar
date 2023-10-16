@@ -1,42 +1,44 @@
 #include <stdio.h>
-#include "func.h"
 
-#define MAX_ROWS 10
-#define MAX_COLS 10
+#define N 35
 
 int main() {
-    int rows, cols;
+    int n,i;
+    int temp = 0, j,help;
+    int arr[N];
 
-    scanf_s("%d", &rows);
 
-    scanf_s("%d", &cols);
+    scanf_s("%d", &n);
 
-    if (rows > MAX_ROWS || cols > MAX_COLS)
-        return 1;
-
-    double arr[MAX_ROWS][MAX_COLS + 1]; 
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%d %d", i, j);
-            scanf_s("%lf", &arr[i][j]);
+    for (i = 0; i < n; i++)
+        scanf_s("%d", &arr[i]);
+    if (n % 2 == 1) 
+    {
+        for (i = 0; i < n-1; i++)
+        {
+            i++;
+            int s = 1;
+            help = arr[i];
+            arr[i] = arr[s];
+            arr[s] = temp;
+            s = s + 2;
+            i = i - 1;
         }
     }
-
-    for (int i = 0; i < rows; i++) {
-        double sum = 0.0;
-        for (int j = 0; j < cols; j++) {
-            sum += arr[i][j];
+    else
+    {
+        for (i = 0; i < n; i++)
+        {
+            i++;
+            int s=1;
+            help = arr[i];
+            arr[i] = arr[s];
+            arr[s] = temp;
+            s = s + 2;
+            i = i - 1;
         }
-        arr[i][cols] = sum / cols;
     }
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols + 1; j++) {
-            printf("%10.2f ", arr[i][j]);
-        }
-        printf("\n");
-    }
-
+    for (j = 0; j < n; j++)
+        printf("%d", arr[j]);
     return 0;
 }
