@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="praktik.c">
+    <ClCompile Include="..\hello.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
