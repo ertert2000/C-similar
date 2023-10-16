@@ -19,7 +19,7 @@ int main()
     puts("element kuda hotite perestavit");
     scanf_s("%d",&s);
 
-
+    size_t n = sizeof(A) / sizeof(int);
 
     for (i=k;i<k+m;i++)
     {
@@ -30,7 +30,7 @@ int main()
     }
 
     puts("");
-    printmas(A);
+    printmas(A,n);
 
     return 0;
 }
