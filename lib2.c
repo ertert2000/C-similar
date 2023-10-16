@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include "func.h"
-#define N 9
+//#define N 9
 
 int main()
 {
-    int m,k,s;
+    
+    int N,m,k,s;
+    scanf ("%d",&N)
     int A[N];
     int i,temp=0,j;
 
