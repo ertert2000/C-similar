@@ -1,6 +1,8 @@
 #include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-double min(double a, double b)
+double minn(double a, double b)
 {
     if (a>=b) return b;
     else return a;
@@ -11,7 +13,7 @@ double summ(double a,double b)
     return a+b;
 }
 
-double max(double a, double b)
+double maxx(double a, double b)
 {
     if (a>=b) return a;
     else return b;
