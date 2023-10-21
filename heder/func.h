@@ -53,7 +53,10 @@ int bin(int n)
         return B[j];
 }
 
-void helo()
+void delay(int number_of_seconds)
 {
-    printf("helo");
+    int milli_seconds = 500 * number_of_seconds; /*500 - способ изменения времени*/
+    clock_t start_time = clock();
+    while (clock() < start_time + milli_seconds)
+        ;
 }

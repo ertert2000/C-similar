@@ -1,44 +1,27 @@
 #include <stdio.h>
 
-#define N 35
-
 int main() {
-    int n,i;
-    int temp = 0, j,help;
-    int arr[N];
+    int N;
+    int count = 0;
 
 
-    scanf_s("%d", &n);
+    scanf_s("%d", &N);
 
-    for (i = 0; i < n; i++)
-        scanf_s("%d", &arr[i]);
-    if (n % 2 == 1) 
-    {
-        for (i = 0; i < n-1; i++)
-        {
-            i++;
-            int s = 1;
-            help = arr[i];
-            arr[i] = arr[s];
-            arr[s] = temp;
-            s = s + 2;
-            i = i - 1;
+    if (N < 1 || N >= 10000) {
+        return 1;
+    }
+
+
+    for (int i = 0; i < N; i++) {
+        int num;
+        scanf_s("%d", &num);
+        if (num > 0) {
+            count++;
         }
     }
-    else
-    {
-        for (i = 0; i < n; i++)
-        {
-            i++;
-            int s=1;
-            help = arr[i];
-            arr[i] = arr[s];
-            arr[s] = temp;
-            s = s + 2;
-            i = i - 1;
-        }
-    }
-    for (j = 0; j < n; j++)
-        printf("%d", arr[j]);
+
+
+    printf("%d\n", count);
+
     return 0;
 }
