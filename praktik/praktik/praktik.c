@@ -1,27 +1,16 @@
 #include <stdio.h>
+#include "func.h"
 
-int main() {
-    int N;
-    int count = 0;
+int check_triangle(int a, int b, int c)
+{
+    if (((a + b) < c) || ((c + b) < a) || ((c + a) < b))
+        return 0;
+    return 1;
+}
 
-
-    scanf_s("%d", &N);
-
-    if (N < 1 || N >= 10000) {
-        return 1;
-    }
-
-
-    for (int i = 0; i < N; i++) {
-        int num;
-        scanf_s("%d", &num);
-        if (num > 0) {
-            count++;
-        }
-    }
-
-
-    printf("%d\n", count);
+int main()
+{
+    int a, b, c;
 
     return 0;
 }

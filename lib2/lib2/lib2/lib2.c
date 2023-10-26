@@ -17,16 +17,16 @@ int main()
 
     puts("enter array");
     for (j = 0; j < N; j++)
-        scanf_s("%d", &A[j]);
+        scanf("%d", &A[j]);
 
     puts("how many elements do you want to rearrange");
-    scanf_s("%d", &m);
+    scanf("%d", &m);
 
     puts("enter the number of the element you want to start the permutation from");
-    scanf_s("%d", &k);
+    scanf("%d", &k);
 
     puts("enter the number of the position where you want to rearrange the group of elements");
-    scanf_s("%d", &s);
+    scanf("%d", &s);
 
 
     size_t n = sizeof(A) / sizeof(int);
