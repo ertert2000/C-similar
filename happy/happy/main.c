@@ -1,37 +1,53 @@
 #include <stdio.h>
 #include <locale.h>
 #include <stdlib.h>
+#include <time.h>
 #include "func.h"
 
+struct MyStruct
+{
+	int w, h;
+};
 
+void c(struct MyStruct *ob);
 
 int main()
 {
-	setlocale(LC_ALL, "Rus");
-	int loop = 1;
+	const int M = 5;
+	int A[5] = { 1,2,3,4,5 };
+	int n=0, x = sizeof(A[5]);
+	int * pn = &n;
+
+	void* p;
+
+	int o,*t=NULL;
+	o = sizeof(pn);
+	printf("%d\n", o);
+
+	o = sizeof(char);
+	printf("%d\n", o);
+
+	t = malloc(sizeof(int));
+	*t = 325;
+	printf("%d\n", *t);
 	
 	
+	struct MyStruct sq = { 5, 7 };
+	c(&sq);
+
+	printf("%d\n", x);
+	printf("%p\n", &x);
+	printf("%p\n", &pn);
+	printf("%d\n", *pn);
 	
-	
-	/*switch (i)
-	{
-	case '1':
-		while (loop == 1) {
-			puts("\t\t\t\t\t\tС днем рождения");
-			delay(1);
-		}
-		break;
-	}*/
-	
-	
-	while (loop == 1) {
-		puts("\t\t\t\t\t\tС днем рождения");
-		delay(1);
-	}
-	
-	
-	
-	
-	
+
+	free(t);
+	t = NULL;
 	return 0;
+}
+
+void c(struct MyStruct *ob)
+{
+	int res = ob->w * ob->h;
+	printf("%d\n", res);
 }
