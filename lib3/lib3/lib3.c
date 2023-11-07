@@ -1,21 +1,28 @@
-// Дан двумерный массив.Определить количество элементов массива с различными значениями.
 #include <stdio.h>
-#define rows 2
-#define columns 2
+#define R 10
+#define C 10
 
 
 int main()
 {
-    int temp, counter = 1;
-    /*scanf_s("%d", &columns);
-    scanf_s("%d", &rows);*/
+    int temp, columns=11, i, j, rows=11, counter = 1;
 
-    int array[columns * rows];
-    for (int i = 0; i < (columns * rows); i++)
+
+    puts("enter the size of the array (two numbers from 0 to 10)");
+    while (C <= columns)
+        scanf_s("%d", &columns);
+    while (R <= rows)
+        scanf_s("%d", &rows);
+
+    int array[C * R];
+
+    puts("enter the array elements");
+    for (i = 0; i < (columns * rows); i++)
         scanf_s("%d", &array[i]);
 
-    for (int i = 0; i < (columns * rows); i++)
-        for (int j = 0; j < (columns * rows) - 1 - i; j++)
+
+    for (i = 0; i < (columns * rows); i++)
+        for (j = 0; j < (columns * rows) - 1 - i; j++)
             if (array[j] > array[j + 1])
             {
                 temp = array[j];
@@ -23,12 +30,14 @@ int main()
                 array[j + 1] = temp;
             }
 
-    for (int i = 0; i < (columns * rows) - 1; i++)
+
+    for (i = 0; i < (columns * rows) - 1; i++)
         if (array[i] != array[i + 1])
             counter++;
     
     
     printf("%d", counter);
+
 
     return 0;
 }
