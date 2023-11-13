@@ -36,7 +36,7 @@ int main()
             counter++;
     
     
-    printf("%d", counter);
+    printf("result: %d", counter);
 
 
     return 0;
