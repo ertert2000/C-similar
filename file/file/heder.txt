@@ -1,0 +1,26 @@
+HTTP/1.1 200 OK
+date: Sun, 19 Nov 2023 13:23:10 GMT
+vary: Accept-Encoding,Cookie
+server: ATS/9.1.4
+x-content-type-options: nosniff
+content-language: ru
+accept-ch: 
+last-modified: Sat, 18 Nov 2023 00:13:46 GMT
+content-type: text/html; charset=UTF-8
+age: 8698
+x-cache: cp3072 hit, cp3072 hit/15
+x-cache-status: hit-front
+server-timing: cache;desc="hit-front", host;desc="cp3072"
+strict-transport-security: max-age=106384710; includeSubDomains; preload
+report-to: { "group": "wm_nel", "max_age": 604800, "endpoints": [{ "url": "https://intake-logging.wikimedia.org/v1/events?stream=w3c.reportingapi.network_error&schema_uri=/w3c/reportingapi/network_error/1.0.0" }] }
+nel: { "report_to": "wm_nel", "max_age": 604800, "failure_fraction": 0.05, "success_fraction": 0.0}
+set-cookie: WMF-Last-Access=19-Nov-2023;Path=/;HttpOnly;secure;Expires=Thu, 21 Dec 2023 12:00:00 GMT
+set-cookie: WMF-Last-Access-Global=19-Nov-2023;Path=/;Domain=.wikipedia.org;HttpOnly;secure;Expires=Thu, 21 Dec 2023 12:00:00 GMT
+set-cookie: WMF-DP=35f;Path=/;HttpOnly;secure;Expires=Mon, 20 Nov 2023 00:00:00 GMT
+x-client-ip: 178.70.246.244
+cache-control: private, s-maxage=0, max-age=0, must-revalidate
+set-cookie: GeoIP=RU:SPE:St_Petersburg:59.90:30.26:v4; Path=/; secure; Domain=.wikipedia.org
+set-cookie: NetworkProbeLimit=0.001;Path=/;Secure;Max-Age=3600
+accept-ranges: bytes
+content-length: 193129
+
