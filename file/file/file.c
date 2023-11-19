@@ -2,6 +2,7 @@
 #include "func.h"
 #include <locale.h>
 #include "libxl.h"
+#include <curl/curl.h>
 
 //int main()
 //{
@@ -47,20 +48,34 @@ static size_t WD(char* ptr, size_t size, size_t nmemb, FILE * data)
 }
 int main()
 {
-	int ar[3] = {1,2,3};
-	int arr[3] = { 4,5,6 };
-	char chy[4] = { 'x' ,'a' ,'h','w' };
-	
-	FILE* file = fopen("test.xls", "w");
 
-	fclose(heder);
-	fclose(body);
+    FILE* header= fopen("heder.txt", "w");
+    if (header == NULL)
+        return 1;
+    FILE* body = fopen("body.html", "w");
+    if (body == NULL)
+        return 1;
 
-	/*for (int i = 0; i < 3; i++)
-	{
-		fprintf(file, "%d\n", ar[i] + arr[i]);
-	}*/
+    CURL* curl_handle = curl_easy_init();
+    if (curl_handle)
+    {
+        curl_easy_setopt(curl_handle, CURLOPT_URL, "https://www.cyberforum.ru");
 
-	fclose(file);
-	return 0;
+
+        curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, body);
+        curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WD);
+
+        curl_easy_setopt(curl_handle, CURLOPT_WRITEHEADER, header);
+
+        CURLcode res = curl_easy_perform(curl_handle);
+        if (res != CURLE_OK)
+            puts("xuina");
+        curl_easy_cleanup(curl_handle);
+    }
+
+    fclose(header);
+    fclose(body);
+
+    getchar();
+    return 0;
 }
