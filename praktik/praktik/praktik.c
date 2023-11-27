@@ -1,33 +1,35 @@
+//Реализуйте функцию substring_count, которая подсчитывает количество вхождений фрагмента в тексте
+
+//Аргументы функции : string типа char*, substring типа char*
+
+//Возвращаемый тип : int
 #include <stdio.h>
 #include "func.h"
-#include <math.h>
+#include <string.h>
 
-int matrix(int matrix[][64], int arr[], int n)
+int substring_count(char* string, char* substring) 
 {
-    int k = cell(sqrt);
-    int i, j;
-    int index = 0;
-
-    for (int i = 0; i < 64; i++)
-        for (int j = 0; j < 64; j++)
+    int count = 0;
+    for(int i=0;i<strlen(string);i++)
+        for (int j = 0; j < strlen(substring); j++)
         {
-            if (index < n)
+            if (string[i] == substring[j])
             {
-                matrix[i][j] = arr[index];
-                index++;
+                count++;
             }
             else
-                matrix[i][j] = 0;
+                break;
         }
-    return 0;
+    count = count / strlen(substring);
+    return count;
 }
 
 
 int main()
 {
-    int a;
-    a = 2500 - (690 * 3);
-    printf("%d",a);
+    char string[] = { "This is an example. Return the number of occurrences of example in this example string example" };
+    char substring[] = { "example" };
+    substring_count(string,substring);
     return 0;
 }
 
