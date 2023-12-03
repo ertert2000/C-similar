@@ -26,6 +26,6 @@ int main()
 
 	for (int i = 0; i < 256; i++)
 		if (ASCLL[i] != 0)
-			printf("%c Found: %d once\n", i, ASCLL[i]);
+			printf("'%c' Found: % d once\n", i, ASCLL[i]);
 	return 0;
 }
