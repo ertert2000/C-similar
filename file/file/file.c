@@ -3,6 +3,7 @@
 #include <locale.h>
 #include "libxl.h"
 #include <curl/curl.h>
+#include <string.h>
 
 //int main()
 //{
@@ -42,40 +43,81 @@ struct car
 //	fclose(file);
 //	return 0;
 //}
-static size_t WD(char* ptr, size_t size, size_t nmemb, FILE * data)
-{
-	return fwrite(ptr, size, nmemb, data);
-}
-int main()
-{
+//static size_t WD(char* ptr, size_t size, size_t nmemb, FILE * data)
+//{
+//	return fwrite(ptr, size, nmemb, data);
+//}
+//int main()
+//{
+//
+//    FILE* header= fopen("heder.txt", "w");
+//    if (header == NULL)
+//        return 1;
+//    FILE* body = fopen("body.html", "w");
+//    if (body == NULL)
+//        return 1;
+//
+//    CURL* curl_handle = curl_easy_init();
+//    if (curl_handle)
+//    {
+//        curl_easy_setopt(curl_handle, CURLOPT_URL, "https://www.cyberforum.ru");
+//
+//
+//        curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, body);
+//        curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WD);
+//
+//        curl_easy_setopt(curl_handle, CURLOPT_WRITEHEADER, header);
+//
+//        CURLcode res = curl_easy_perform(curl_handle);
+//        if (res != CURLE_OK)
+//            puts("xuina");
+//        curl_easy_cleanup(curl_handle);
+//    }
+//
+//    fclose(header);
+//    fclose(body);
+//
+//    getchar();
+//    return 0;
+//}
 
-    FILE* header= fopen("heder.txt", "w");
-    if (header == NULL)
-        return 1;
-    FILE* body = fopen("body.html", "w");
-    if (body == NULL)
-        return 1;
+//int main()
+//{
+//	char str[100];
+//	
+//	fgets(str, 100, stdin);
+//	while ((getchar()) != '\n');
+//	FILE* stringg = fopen(str, "w");
+//	if (stringg == NULL)
+//		return 1;
+//	for (int i = 0; i < 10; i++)
+//		fprintf(stringg, "%d", i);
+//	fclose(stringg);
+//	return 0;
+//}
 
-    CURL* curl_handle = curl_easy_init();
-    if (curl_handle)
-    {
-        curl_easy_setopt(curl_handle, CURLOPT_URL, "https://www.cyberforum.ru");
+int main() {
+    char str[100];
+    printf("Введите имя файла: ");
 
+    fgets(str, sizeof(str), stdin);
 
-        curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, body);
-        curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WD);
-
-        curl_easy_setopt(curl_handle, CURLOPT_WRITEHEADER, header);
-
-        CURLcode res = curl_easy_perform(curl_handle);
-        if (res != CURLE_OK)
-            puts("xuina");
-        curl_easy_cleanup(curl_handle);
+    // Удаление символа новой строки, если он присутствует
+    int len = strlen(str);
+    if (len > 0 && str[len - 1] == '\n') {
+        str[len - 1] = '\0';
     }
 
-    fclose(header);
-    fclose(body);
+    FILE* filePointer = fopen(str, "w");
+    if (filePointer == NULL) {
+        perror("Ошибка при открытии файла");
+        return 1;
+    }
 
-    getchar();
+    for (int i = 0; i < 10; i++) {
+        fprintf(filePointer, "%d", i);
+    }
+
+    fclose(filePointer);
     return 0;
 }
