@@ -2,6 +2,33 @@
 #define Mrows 10
 #define Mcols 10
 
+
+void inputArray(int, int, int arr[Mrows][Mcols]);
+
+int isColumnOdd(int, int, int arr[Mrows][Mcols], int);
+
+void deleteOddColumns(int, int*, int arr[Mrows][Mcols]);
+
+void printArray(int, int, int arr[Mrows][Mcols]);
+
+int main() {
+	int rows=11, cols=11;
+
+	printf("Enter the number of rows and columns not exceeding 10:");
+	while (Mrows < rows)
+		scanf_s("%d", &rows);
+	while (Mcols < cols)
+		scanf_s("%d", &cols);
+
+	int arr[Mrows][Mcols];
+
+	inputArray(rows, cols, arr);
+	deleteOddColumns(rows, &cols, arr);
+	printArray(rows, cols, arr);
+	
+	return 0;
+}
+
 void inputArray(int r, int c, int arr[Mrows][Mcols]) {
 	printf("Enter array elements:\n");
 
@@ -27,57 +54,47 @@ void inputArray(int r, int c, int arr[Mrows][Mcols]) {
 	}
 }
 
-
-int isColumnOdd(int rows, int col, int arr[Mrows][Mcols], int colIndex) {
-	for (int i = 0; i < rows; ++i) {
-		if (arr[i][colIndex] % 2 == 0) {
-			return 0;
+int isColumnOdd(int rows, int col, int arr[Mrows][Mcols], int colIndex) 
+{
+	int key = 1;
+	for (int i = 0; i < rows; ++i) 
+	{
+		if (arr[i][colIndex] % 2 == 0) 
+		{
+			key=0;
 		}
 	}
-	return 1;  
+	return key;
 }
 
-void deleteOddColumns(int rows, int* cols, int arr[Mrows][Mcols]) {
+void deleteOddColumns(int rows, int* cols, int arr[Mrows][Mcols]) 
+{
 	int newCols = *cols;
 
-	for (int j = 0; j < *cols; ++j) {
-		if (isColumnOdd(rows, *cols, arr, j)) {
+	for (int j = 0; j < *cols; ++j) 
+	{
+		if (isColumnOdd(rows, *cols, arr, j))
+		{
 			for (int i = 0; i < rows; ++i)
-				for (int k = j; k < *cols - 1; ++k) 
+				for (int k = j; k < *cols - 1; ++k)
 					arr[i][k] = arr[i][k + 1];
 
 			--newCols;
-			--j;        
+			--j;
 		}
 	}
 
 	*cols = newCols;
 }
 
-void printArray(int rows, int cols, int arr[Mrows][Mcols]) {
+void printArray(int rows, int cols, int arr[Mrows][Mcols]) 
+{
 	printf("Converted array:\n");
 
-	for (int i = 0; i < rows; ++i) {
+	for (int i = 0; i < rows; ++i) 
+	{
 		for (int j = 0; j < cols; ++j)
 			printf("%d\t", arr[i][j]);
 		printf("\n");
 	}
-}
-
-int main() {
-	int rows=11, cols=11;
-
-	printf("Enter the number of rows and columns not exceeding 10:");
-	while (Mrows < rows)
-		scanf_s("%d", &rows);
-	while (Mcols < cols)
-		scanf_s("%d", &cols);
-
-	int arr[Mrows][Mcols];
-
-	inputArray(rows, cols, arr);
-	deleteOddColumns(rows, &cols, arr);
-	printArray(rows, cols, arr);
-
-	return 0;
 }
