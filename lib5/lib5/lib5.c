@@ -24,8 +24,8 @@ int main()
 		if (strchr(rasdeliteli, string[j]) != NULL)
 			ASCLL[string[j]]++;
 
-	for (int i = 0; i < 256; i++)
-		if (ASCLL[i] != 0)
-			printf("'%c' Found: % d once\n", i, ASCLL[i]);
+	for (int k = 0; k < 256; k++)
+		if (ASCLL[k] != 0)
+			printf("'%c' Found: % d once\n", k, ASCLL[k]);
 	return 0;
 }
