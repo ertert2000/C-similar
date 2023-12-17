@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 double minn(double a, double b)
 {
@@ -64,3 +65,44 @@ void delay(int number_of_seconds)
     while (clock() < start_time + milli_seconds)
         ;
 }
+
+char* dynamicarrayforstrings() 
+{
+    size_t bufferSize = 10;
+
+    char* str = (char*)malloc(bufferSize * sizeof(char));
+
+    if (str == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        return NULL;
+    }
+
+    printf("Enter the string: ");
+
+    char ch;
+    size_t index = 0;
+
+    while ((ch = getchar()) != '\n') {
+        if (index == bufferSize - 1) {
+            bufferSize *= 2;
+            char* temp = (char*)realloc(str, bufferSize * sizeof(char));
+
+            if (temp == NULL) {
+                fprintf(stderr, "Memory reallocation error\n");
+                free(str);
+                return NULL;
+            }
+
+            str = temp;
+        }
+        str[index++] = ch;
+    }
+
+    str[index] = '\0';
+
+    return str;
+    //обязательно в конце main очищать память
+}
+
+for(int i = 0;i < strlen(str);i++)
+    if (str[i] == ' ')

@@ -1,0 +1,162 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-16 16:07+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: main.c:64
+msgid "one "
+msgstr ""
+
+#: main.c:64
+msgid "two "
+msgstr ""
+
+#: main.c:64
+msgid "three "
+msgstr ""
+
+#: main.c:64
+msgid "four "
+msgstr ""
+
+#: main.c:64
+msgid "five "
+msgstr ""
+
+#: main.c:64
+msgid "six "
+msgstr ""
+
+#: main.c:64
+msgid "seven "
+msgstr ""
+
+#: main.c:64
+msgid "eight "
+msgstr ""
+
+#: main.c:64
+msgid "nine "
+msgstr ""
+
+#: main.c:65
+msgid "thousands "
+msgstr ""
+
+#: main.c:65
+msgid "hundreds "
+msgstr ""
+
+#: main.c:65
+msgid "dozens "
+msgstr ""
+
+#: main.c:66
+msgid "twenty "
+msgstr ""
+
+#: main.c:66
+msgid "thirty "
+msgstr ""
+
+#: main.c:66
+msgid "forty "
+msgstr ""
+
+#: main.c:66
+msgid "fifty "
+msgstr ""
+
+#: main.c:66
+msgid "sixty "
+msgstr ""
+
+#: main.c:66
+msgid "seventy "
+msgstr ""
+
+#: main.c:66
+msgid "eighty "
+msgstr ""
+
+#: main.c:66
+msgid "ninety "
+msgstr ""
+
+#: main.c:67
+msgid "ten"
+msgstr ""
+
+#: main.c:67
+msgid "eleven"
+msgstr ""
+
+#: main.c:67
+msgid "twelve"
+msgstr ""
+
+#: main.c:67
+msgid "thirteen"
+msgstr ""
+
+#: main.c:67
+msgid "fourteen"
+msgstr ""
+
+#: main.c:67
+msgid "fifteen"
+msgstr ""
+
+#: main.c:67
+msgid "sixteen"
+msgstr ""
+
+#: main.c:67
+msgid "seventeen"
+msgstr ""
+
+#: main.c:67
+msgid "eighteen"
+msgstr ""
+
+#: main.c:67
+msgid "nineteen"
+msgstr ""
+
+#: main.c:68
+msgid "rubel "
+msgstr ""
+
+#: main.c:68
+msgid "rubels "
+msgstr ""
+
+#: main.c:68
+msgid "rurubels"
+msgstr ""
+
+#: main.c:90
+msgid "enter a number from 0 to 9999"
+msgstr ""
+
+#: main.c:139 main.c:202
+msgid "zero"
+msgstr ""
+
+#: main.c:150 main.c:213
+msgid "press any key to continue"
+msgstr ""
