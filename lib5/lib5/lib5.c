@@ -29,3 +29,8 @@ int main()
 			printf("'%c' Found: % d once\n", k, ASCLL[k]);
 	return 0;
 }
+
+
+for (int i = 0; i < strlen(string); i++)
+	if (strchr(rasdeliteli, string[i]) != NULL)
+		< действие >

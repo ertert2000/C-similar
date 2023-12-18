@@ -1,239 +1,244 @@
-# Russian translations for PACKAGE package.
+# Russian translations for PACKAGE package
+#                                PACKAGE.
 # Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#  <ertert2000@yandex.ru>, 2023.
+# <EMAIL@ADDRESS>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-18 11:39+0300\n"
-"PO-Revision-Date: 2023-12-18 11:39+0300\n"
-"Last-Translator:  <ertert2000@yandex.ru>\n"
-"Language-Team: Russian <gnu@d07.ru>\n"
+"POT-Creation-Date: 2023-12-18 17:54+0300\n"
+"PO-Revision-Date: 2023-12-18 17:54+0300\n"
+"Last-Translator: <EMAIL@ADDRESS>\n"
+"Language-Team: Russian\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: main.c:52
 msgid "enter the path to the file"
 msgstr "введите путь к файлу"
 
-#: main.c:89
+#: main.c:90
 msgid "one "
 msgstr "один "
 
-#: main.c:89
+#: main.c:90
 msgid "two "
 msgstr "два "
 
-#: main.c:89
+#: main.c:90
 msgid "three "
 msgstr "три "
 
-#: main.c:89
+#: main.c:90
 msgid "four "
 msgstr "четыре "
 
-#: main.c:89
+#: main.c:90
 msgid "five "
 msgstr "пять "
 
-#: main.c:89
+#: main.c:90
 msgid "six "
 msgstr "шесть "
 
-#: main.c:89
+#: main.c:90
 msgid "seven "
 msgstr "семь "
 
-#: main.c:89
+#: main.c:90
 msgid "eight "
 msgstr "восемь "
 
-#: main.c:89
+#: main.c:90
 msgid "nine "
 msgstr "девять "
 
-#: main.c:90
+#: main.c:91
 msgid "one thousands "
 msgstr "одна тысяча "
 
-#: main.c:90
+#: main.c:91
 msgid "two thousands "
 msgstr "две тысячи "
 
-#: main.c:90
+#: main.c:91
 msgid "three thousands "
 msgstr "три тысячи "
 
-#: main.c:90
+#: main.c:91
 msgid "four thousands "
 msgstr "четыре тысячи "
 
-#: main.c:90
+#: main.c:91
 msgid "five thousands "
 msgstr "пять тысяч "
 
-#: main.c:90
+#: main.c:91
 msgid "six thousands "
 msgstr "шесть тысяч "
 
-#: main.c:90
+#: main.c:91
 msgid "seven thousands "
 msgstr "семь тысяч "
 
-#: main.c:90
+#: main.c:91
 msgid "eight thousands "
 msgstr "восемь тысяч "
 
-#: main.c:90
+#: main.c:91
 msgid "nine thousands "
 msgstr "девять тысяч "
 
-#: main.c:91
+#: main.c:92
 msgid "one hundred "
 msgstr "сто "
 
-#: main.c:91
+#: main.c:92
 msgid "two hundred "
 msgstr "двести "
 
-#: main.c:91
+#: main.c:92
 msgid "three hundred "
 msgstr "тристо "
 
-#: main.c:91
+#: main.c:92
 msgid "four hundred "
 msgstr "четыресто "
 
-#: main.c:91
+#: main.c:92
 msgid "five hundred "
 msgstr "пятьсот "
 
-#: main.c:91
+#: main.c:92
 msgid "six hundred "
 msgstr "шестьсот "
 
-#: main.c:91
+#: main.c:92
 msgid "seven hundred "
 msgstr "семьсот "
 
-#: main.c:91
+#: main.c:92
 msgid "eight hundred "
 msgstr "восемьсот "
 
-#: main.c:91
+#: main.c:92
 msgid "nine hundred "
 msgstr "девятьсот "
 
-#: main.c:92
+#: main.c:93
 msgid "twenty "
 msgstr "двадцать "
 
-#: main.c:92
+#: main.c:93
 msgid "thirty "
 msgstr "тридцать "
 
-#: main.c:92
+#: main.c:93
 msgid "forty "
 msgstr "сорок "
 
-#: main.c:92
+#: main.c:93
 msgid "fifty "
 msgstr "пятьдесят "
 
-#: main.c:92
+#: main.c:93
 msgid "sixty "
 msgstr "шестьдесят "
 
-#: main.c:92
+#: main.c:93
 msgid "seventy "
 msgstr "семьдесят "
 
-#: main.c:92
+#: main.c:93
 msgid "eighty "
 msgstr "восемьдесят "
 
-#: main.c:92
+#: main.c:93
 msgid "ninety "
 msgstr "девяносто "
 
-#: main.c:93
+#: main.c:94
 msgid "ten"
 msgstr "десять "
 
-#: main.c:93
+#: main.c:94
 msgid "eleven"
 msgstr "одинадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "twelve"
 msgstr "двенадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "thirteen"
 msgstr "тринадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "fourteen"
 msgstr "четырнадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "fifteen"
 msgstr "пятнадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "sixteen"
 msgstr "шеснадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "seventeen"
 msgstr "семнадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "eighteen"
 msgstr "восемнадцать "
 
-#: main.c:93
+#: main.c:94
 msgid "nineteen"
 msgstr "девятнадцать "
 
-#: main.c:94
+#: main.c:95
 msgid "rubel "
 msgstr "рубль "
 
-#: main.c:94
+#: main.c:95
 msgid "rubels "
 msgstr "рубля "
 
-#: main.c:94
+#: main.c:95
 msgid "rurubels"
-msgstr "рублей"
+msgstr "рублей "
 
-#: main.c:117
+#: main.c:118
 msgid "1 - working in the console"
 msgstr "1 - работа в консоли"
 
-#: main.c:118
+#: main.c:119
 msgid "2 - working with a file"
 msgstr "2 - работа с файлами"
 
-#: main.c:119
+#: main.c:120
 msgid "3 - shutdown"
 msgstr "3 - завершение работы"
 
-#: main.c:131
+#: main.c:132
 msgid "enter a number from 0 to 9999"
 msgstr "введите число от 0 до 9999"
 
-#: main.c:198 main.c:272
+#: main.c:181 main.c:253
+msgid "zero "
+msgstr "ноль "
+
+#: main.c:199 main.c:273
 msgid "press any key to continue"
 msgstr "нажмите Enter для продолжения"
 
-#: main.c:269
+#: main.c:270
 msgid "the file with the answer is in a directory called output.txt"
 msgstr "файл с ответом находится в корневой папке с названием output.txt"

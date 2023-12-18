@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-18 11:39+0300\n"
+"POT-Creation-Date: 2023-12-18 17:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,218 +21,222 @@ msgstr ""
 msgid "enter the path to the file"
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "one "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "two "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "three "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "four "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "five "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "six "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "seven "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "eight "
 msgstr ""
 
-#: main.c:89
+#: main.c:90
 msgid "nine "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "one thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "two thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "three thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "four thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "five thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "six thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "seven thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "eight thousands "
 msgstr ""
 
-#: main.c:90
+#: main.c:91
 msgid "nine thousands "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "one hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "two hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "three hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "four hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "five hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "six hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "seven hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "eight hundred "
 msgstr ""
 
-#: main.c:91
+#: main.c:92
 msgid "nine hundred "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "twenty "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "thirty "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "forty "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "fifty "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "sixty "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "seventy "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "eighty "
 msgstr ""
 
-#: main.c:92
+#: main.c:93
 msgid "ninety "
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "ten"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "eleven"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "twelve"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "thirteen"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "fourteen"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "fifteen"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "sixteen"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "seventeen"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "eighteen"
 msgstr ""
 
-#: main.c:93
+#: main.c:94
 msgid "nineteen"
 msgstr ""
 
-#: main.c:94
+#: main.c:95
 msgid "rubel "
 msgstr ""
 
-#: main.c:94
+#: main.c:95
 msgid "rubels "
 msgstr ""
 
-#: main.c:94
+#: main.c:95
 msgid "rurubels"
 msgstr ""
 
-#: main.c:117
+#: main.c:118
 msgid "1 - working in the console"
 msgstr ""
 
-#: main.c:118
+#: main.c:119
 msgid "2 - working with a file"
 msgstr ""
 
-#: main.c:119
+#: main.c:120
 msgid "3 - shutdown"
 msgstr ""
 
-#: main.c:131
+#: main.c:132
 msgid "enter a number from 0 to 9999"
 msgstr ""
 
-#: main.c:198 main.c:272
+#: main.c:181 main.c:253
+msgid "zero "
+msgstr ""
+
+#: main.c:199 main.c:273
 msgid "press any key to continue"
 msgstr ""
 
-#: main.c:269
+#: main.c:270
 msgid "the file with the answer is in a directory called output.txt"
 msgstr ""

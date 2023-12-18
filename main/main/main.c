@@ -44,12 +44,12 @@ struct hundreds
 	const char* Hundred[50];
 };
 
-char * openinput(char * inputNumber[MAX_LEN_STRING_NUMBER])
+char* openinput(char inputNumber[MAX_LEN_STRING_NUMBER])
 {
 	FILE* f;
 	int lenPathToFile;
 	char pathToFile[300];
-	puts("enter the path to the file");
+	puts(_("enter the path to the file"));
 
 	fgets(pathToFile, 300, stdin);
 
@@ -62,7 +62,7 @@ char * openinput(char * inputNumber[MAX_LEN_STRING_NUMBER])
 		return 1;
 
 	fgets(inputNumber, MAX_LEN_STRING_NUMBER, f);
-	
+
 	fclose(f);
 	return inputNumber;
 }
@@ -84,14 +84,15 @@ int main()
 	setlocale(LC_ALL, "");
 	bindtextdomain("main", "locale");
 	textdomain("main");
+	bind_textdomain_codeset("main", "UTF-8");
 	//declaration of variables
 	size_t endInputNunber;
-	struct numbers num[] = { "", "one ", "two ", "three ", "four ", "five ", "six ", "seven ", "eight ", "nine " };
-	struct thousands thousands[] = { "", "one thousands ", "two thousands ", "three thousands ", "four thousands ", "five thousands ", "six thousands ", "seven thousands ", "eight thousands ", "nine thousands " };
-	struct hundreds Hundred[] = { "", "one hundred ", "two hundred ", "three hundred ", "four hundred ", "five hundred ", "six hundred ", "seven hundred ", "eight hundred ", "nine hundred " };
-	struct declensions numDeclensions[] = { "", "", "twenty ", "thirty ", "forty ", "fifty ", "sixty ", "seventy ", "eighty ", "ninety " };
-	struct numbersFromTenToNineteen numNumbersFromTenToNineteen[] = { "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
-	struct rubel rub[] = { "rubel ", "rubels ", "rurubels" };
+	struct numbers num[] = { "", _("one "), _("two "), _("three "), _("four "), _("five "), _("six "), _("seven "), _("eight "), _("nine ") };
+	struct thousands thousands[] = { "", _("one thousands "), _("two thousands "), _("three thousands "), _("four thousands "), _("five thousands "), _("six thousands "), _("seven thousands "), _("eight thousands "), _("nine thousands ") };
+	struct hundreds Hundred[] = { "", _("one hundred "), _("two hundred "), _("three hundred "), _("four hundred "), _("five hundred "), _("six hundred "), _("seven hundred "), _("eight hundred "), _("nine hundred ") };
+	struct declensions numDeclensions[] = { "", "", _("twenty "), _("thirty "), _("forty "), _("fifty "), _("sixty "), _("seventy "), _("eighty "), _("ninety ") };
+	struct numbersFromTenToNineteen numNumbersFromTenToNineteen[] = { _("ten"), _("eleven"), _("twelve"), _("thirteen"), _("fourteen"), _("fifteen"), _("sixteen"), _("seventeen"), _("eighteen"), _("nineteen") };
+	struct rubel rub[] = { _("rubel "), _("rubels "), _("rurubels") };
 	char inputNumber[MAX_LEN_STRING_NUMBER] = { '\0' };
 	char outputStringNumber[300];
 	char variableJinFor;
@@ -101,7 +102,7 @@ int main()
 	int workWhile = 20;
 	int next;
 
-	
+
 	//create an endless loop
 	while (1)
 	{
@@ -111,16 +112,16 @@ int main()
 		digitOfTheNumber = 0;
 		lenInputNumber = 0;
 		variableJinFor = '\0';
-		
+
 		//program menu
 		puts("#===============================#");
-		puts("1 - working in the console");
-		puts("2 - working with a file");
-		puts("3 - shutdown");
+		puts(_("1 - working in the console"));
+		puts(_("2 - working with a file"));
+		puts(_("3 - shutdown"));
 		puts("#===============================#");
-		
+
 		//transition to a new one switch
-		scanf_s("%d", &next);
+		scanf("%d", &next);
 		while ((getchar()) != '\n');
 
 		clear(); //clearing the console
@@ -128,7 +129,7 @@ int main()
 		switch (next)
 		{
 		case 1:
-			puts("enter a number from 0 to 9999");
+			puts(_("enter a number from 0 to 9999"));
 			fgets(inputNumber, MAX_LEN_STRING_NUMBER, stdin); //request to enter a number
 
 			//search for penultimate element
@@ -154,7 +155,7 @@ int main()
 							{
 								strcat(outputStringNumber, thousands->thousands[j]);
 							}
-						
+
 							if (digitOfTheNumber == 3) //if 3 characters
 							{
 								strcat(outputStringNumber, Hundred->Hundred[j]);
@@ -177,11 +178,11 @@ int main()
 							if (digitOfTheNumber == 1) //if 1 characters
 								strcat(outputStringNumber, num->num[j]);
 							if (inputNumber[0] == '0') //if 0
-								strcat(outputStringNumber, "zero ");
-					
+								strcat(outputStringNumber, _("zero "));
+
 						}
 
-				
+
 					}
 					digitOfTheNumber--;
 				}
@@ -193,9 +194,9 @@ int main()
 			else
 				strcat(outputStringNumber, rub->rub[2]);
 
-			puts(outputStringNumber); //output result
+			printf("%s\n", outputStringNumber); //output result
 
-			puts("press any key to continue");
+			puts(_("press any key to continue"));
 			getchar();
 			clear();
 			break;
@@ -249,7 +250,7 @@ int main()
 							if (digitOfTheNumber == 1) //if 1 characters
 								strcat(outputStringNumber, num->num[j]);
 							if (inputNumber[0] == '0') //if 0
-								strcat(outputStringNumber, "zero ");
+								strcat(outputStringNumber, _("zero "));
 
 						}
 
@@ -264,12 +265,12 @@ int main()
 				strcat(outputStringNumber, rub->rub[1]);
 			else
 				strcat(outputStringNumber, rub->rub[2]);
-			
+
 			//function to output the response to a file
-			puts("the file with the answer is in a directory called output.txt");
+			puts(_("the file with the answer is in a directory called output.txt"));
 			output(outputStringNumber);
 
-			puts("press any key to continue");
+			puts(_("press any key to continue"));
 			getchar();
 			clear();
 			break;
