@@ -84,7 +84,7 @@ int main()
 	setlocale(LC_ALL, "");
 	bindtextdomain("main", "locale");
 	textdomain("main");
-	bind_textdomain_codeset("main", "UTF-8");
+	bind_textdomain_codeset("main", "CP1251");
 	//declaration of variables
 	size_t endInputNunber;
 	struct numbers num[] = { "", _("one "), _("two "), _("three "), _("four "), _("five "), _("six "), _("seven "), _("eight "), _("nine ") };
