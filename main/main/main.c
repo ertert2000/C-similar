@@ -85,7 +85,7 @@ int main()
 	bindtextdomain("main", "locale");
 	textdomain("main");
 	bind_textdomain_codeset("main", "UTF-8");
-	//declaration of variables
+	/*declaration of variables*/
 	size_t endInputNunber;
 	struct numbers num[] = { "", _("one "), _("two "), _("three "), _("four "), _("five "), _("six "), _("seven "), _("eight "), _("nine ") };
 	struct thousands thousands[] = { "", _("one thousands "), _("two thousands "), _("three thousands "), _("four thousands "), _("five thousands "), _("six thousands "), _("seven thousands "), _("eight thousands "), _("nine thousands ") };
