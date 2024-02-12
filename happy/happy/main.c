@@ -2,7 +2,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <time.h>
-#include "func.h"
+//#include "func.h"
 
 //struct MyStruct
 //{

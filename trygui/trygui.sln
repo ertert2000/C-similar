@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "trygui", "trygui\trygui.vcxproj", "{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Debug|x64.ActiveCfg = Debug|x64
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Debug|x64.Build.0 = Debug|x64
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Debug|x86.ActiveCfg = Debug|Win32
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Debug|x86.Build.0 = Debug|Win32
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Release|x64.ActiveCfg = Release|x64
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Release|x64.Build.0 = Release|x64
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Release|x86.ActiveCfg = Release|Win32
+		{DD53F205-03AF-4ABA-A397-BBF32D3AEC33}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55A6759B-666C-490A-9FB1-0F5538C2A8E6}
+	EndGlobalSection
+EndGlobal
