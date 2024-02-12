@@ -5,14 +5,14 @@
 #define MAXLEN 100
 #define MAXPERSON 200
 
-struct NOTE2 // вообще нисколько не похоже)
+struct NOTE2 // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
 {
 	char Name[MAXLEN];
 	char TELE[MAXLEN];
 	char DATE[MAXLEN];
 }BLOCKNOTE[MAXPERSON];
 
-int comparison(const void* v1, const void* v2); //это прототип функция внизу
+int comparison(const void* v1, const void* v2); //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
 int main()
 {
@@ -56,8 +56,8 @@ int main()
         if (strcmp(numbePhone, BLOCKNOTE[i].TELE) == 0)
             printf("%s %s %s", BLOCKNOTE[i].Name, BLOCKNOTE[i].TELE, BLOCKNOTE[i].DATE);
 
-    puts(""); //тоже служебное........... КАК ПРОТЕСТИШЬ ВСЕ УБРАТЬ
-    for (i = 0; i < temp; i++) //для проверки сортировки
+    puts(""); //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ........... пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    for (i = 0; i < temp; i++) //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         printf("%s %s %s", BLOCKNOTE[i].Name, BLOCKNOTE[i].TELE, BLOCKNOTE[i].DATE);
 
 

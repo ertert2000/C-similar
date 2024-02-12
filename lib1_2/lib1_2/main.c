@@ -13,6 +13,7 @@ struct Car
 	float Price;
 }SHOP[MAX_CARS];
 
+
 int case_struct_comparison_function(const void* v1, const void* v2) {
     const struct Car* case_1 = v1;
     const struct Car* case_2 = v2;
