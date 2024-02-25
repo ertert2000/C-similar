@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 double min(double a, double b)
 {
     if (a>=b) return b;
@@ -53,3 +57,30 @@ int bin(int n)
         return B[j];
 }
 
+char* mystrtok(char* str, const char* delim) {
+    static char* next;
+
+    if (str) {
+        next = str;
+        while (*next && strchr(delim, *next))
+            *next++ = '\0';
+    }
+
+    if (!*next) {
+        str = NULL;
+
+    }
+    else {
+        str = next;
+
+        while (*next && !strchr(delim, *next)) {
+            ++next;
+        }
+
+        while (*next && strchr(delim, *next))
+            *next++ = '\0';
+
+    }
+
+    return str;
+}
