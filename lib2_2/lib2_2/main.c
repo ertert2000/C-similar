@@ -27,26 +27,36 @@
 #include <stdlib.h>
 
 
-typedef struct PERSON
+
+typedef struct
 {
 	char *name;
-}PERSON;
+	int socket;
+	int technologicalProcess;
+	float frequency; //частота
+	float frequencyInTurboBoost;
+	float *cache;
+}PROCESSOR;
 
 int main()
 {
-	PERSON *person;
-	int size = 2;
+	PROCESSOR*pricessor;
+	int size = 3;
 
-	person = (PERSON*)malloc(size * sizeof(PERSON));
+	pricessor = (PROCESSOR*)malloc(size * sizeof(PROCESSOR));
+	if (pricessor)
+	{
+		for (int i = 0; i<size; i++)
+			pricessor[i].name = (char*)malloc(50 * sizeof(char));
+		for (int i = 0; i < size; i++)
+			pricessor[i].cache = (float*)malloc(50 * sizeof(float));
+		
 
 
-	person[0].name = (char*)malloc(50 * sizeof(char));
-	person[1].name = (char*)malloc(50 * sizeof(char));
 
-	strcpy(person[0].name, "gsafsahjdfb");
-	strcpy(person[1].name, "sjfaasiusafdfb");
+		free(pricessor);
+	}
 
-	printf("%s\n%s", person[0].name,person[1].name);
-
+	
 	return 0;
 }
