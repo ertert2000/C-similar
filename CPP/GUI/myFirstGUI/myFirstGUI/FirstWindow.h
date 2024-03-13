@@ -61,7 +61,7 @@ namespace myFirstGUI {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(78, 30);
+			this->label1->Location = System::Drawing::Point(196, 92);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(35, 13);
 			this->label1->TabIndex = 0;
@@ -69,7 +69,7 @@ namespace myFirstGUI {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(72, 205);
+			this->button1->Location = System::Drawing::Point(169, 254);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(97, 51);
 			this->button1->TabIndex = 1;

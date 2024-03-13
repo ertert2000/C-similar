@@ -80,6 +80,7 @@ void addInFile()
 		scanf(" %c", &yesNo);
 		if (yesNo == 'N' || yesNo == 'n')
 			flag = 0;
+		system("cls");
 	}
 
 	fclose(file);

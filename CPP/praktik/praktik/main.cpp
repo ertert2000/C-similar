@@ -1,4 +1,5 @@
 #include <iostream>
+#include <curl/curl.h>
 #include "main.h"
 
 using namespace std;

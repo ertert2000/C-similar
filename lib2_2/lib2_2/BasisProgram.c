@@ -7,6 +7,21 @@
 #include <stdlib.h>
 #include <assert.h>
 
+int cmp(const void* v1, const void* v2)
+{
+	int flag;
+	const PROCESSOR_STRUCT* case_v1 = v1;
+	const PROCESSOR_STRUCT* case_v2 = v2;
+
+	if (case_v1->frequencyInTurboBoost < case_v2->frequencyInTurboBoost)
+		flag = -1;
+	else if (case_v1->frequencyInTurboBoost > case_v2->frequencyInTurboBoost)
+		flag = 1;
+	else
+		flag = 0;
+	return (-1)*flag;
+}
+
 PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 {
 	int size = 3;
@@ -75,6 +90,10 @@ PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 		}
 
 		fclose(file);
+
+		TMP = processor->TMP;
+		qsort(processor, TMP, sizeof(PROCESSOR_STRUCT), cmp);
+		processor->TMP = TMP;
 	}
 	return processor;
 
