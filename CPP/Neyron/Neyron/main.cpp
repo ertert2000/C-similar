@@ -26,7 +26,7 @@ double rightProp(double inputs[wiegts])
 
 void traing(int data[4][3], int exp[4])
 {
-	const double LR = 0.1, EPCH = 50; //скорость ; кол-во итераций
+	const double LR = 0.1, EPCH = 50; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ; пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	double error;
 	for (int i = 0; i < EPCH; i++)
 		for (int j = 0; j < 4; j++)
@@ -35,7 +35,7 @@ void traing(int data[4][3], int exp[4])
 			for (int n = 0; n < wiegts; n++) {
 				w[n] += LR * error * data[j][n];
 
-				cout << i << ") interation generations " << j << ") wiegts" << w[n] << endl;
+				cout << i << ") interation generations " << j << ") wiegts " << w[n] << endl;
 			}
 		}
 }

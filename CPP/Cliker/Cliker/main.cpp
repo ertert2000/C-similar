@@ -5,8 +5,8 @@
 using namespace std;
 void clikWindow(HWND window)
 {
-	SendMessage(window, WM_LBUTTONDOWN, 0, 0);
-	SendMessage(window, WM_LBUTTONUP, 0, 0);
+	SendMessage(HWND_BROADCAST, WM_LBUTTONDOWN, 500, 500);
+	SendMessage(HWND_BROADCAST, WM_LBUTTONUP, 500, 500);
 }
 
 int main()
@@ -15,7 +15,7 @@ int main()
 	while (true)
 	{
 		int onIn = 0;
-		int infinity = 1;
+		int infinity = 1;1
 		int delay, changeDelay;
 		bool clik;
 		puts("#----------------------------#");
