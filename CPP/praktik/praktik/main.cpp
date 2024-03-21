@@ -1,6 +1,7 @@
 #include <iostream>
 //#include <curl/curl.h>
 #include "main.h"
+#include <bits/stdc++.h>
 
 using namespace std;
 

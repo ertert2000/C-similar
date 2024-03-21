@@ -68,7 +68,6 @@ void addFront(PROCESSOR_STRUCT** processor,
         temp = temp->next;
 
     temp->next = newNode;
-
 }
 
 void printNode(PROCESSOR_STRUCT* processor)
@@ -80,50 +79,84 @@ void printNode(PROCESSOR_STRUCT* processor)
     }
 }
 
-PROCESSOR_STRUCT* copyNodes(PROCESSOR_STRUCT* processor, int copyElements[])
+PROCESSOR_STRUCT* countNode(PROCESSOR_STRUCT** processor, int serchNumber)
 {
-    int qualytyCopyElements = 0;
-    int i = 0;
+    int flag = 1;
+    PROCESSOR_STRUCT* temp = *processor;
+    PROCESSOR_STRUCT* TMP = NULL;
+    while (temp != NULL)
+    {
+        if (flag == serchNumber) 
+            TMP = temp;
 
-    while (copyElements != NULL)
-        qualytyCopyElements += 1;
+        temp = temp->next;
+        flag++;
+    }
+
+    return TMP;
+
+}
+
+void* copyNodes(PROCESSOR_STRUCT* processor, int copyElements[], int qualityCopyElements)
+{
+    int i = 1;
+    int flag = 0;
+
+    char* name;
+    char* nameGenerations;
+    int socket;
+    int technologicalProcess;
+    float frequency;
+    float frequencyInTurboBoost;
+    int* cache;
+
+    name = (char*)malloc(50 * sizeof(char));
+    nameGenerations = (char*)malloc(100 * sizeof(char));
+    cache = (int*)malloc(3 * sizeof(int));
     
-    COPY_PROCESSOR_STRUCT* copyProcessor = (COPY_PROCESSOR_STRUCT*)malloc(qualytyCopyElements * sizeof(COPY_PROCESSOR_STRUCT));
+    COPY_PROCESSOR_STRUCT* copyProcessor = (COPY_PROCESSOR_STRUCT*)malloc(qualityCopyElements * sizeof(COPY_PROCESSOR_STRUCT));
     if (!copyProcessor)
         exit(1);
 
-    /*copyProcessor->name = (char*)malloc(100 * sizeof(char));
-    if (!copyProcessor->name)
+    while (processor)
     {
-        free(copyProcessor);
-        exit(1);
-    }
+        for (int j = 0; j < qualityCopyElements; j++)
+            if (copyElements[j] == i)
+            {
+                
+                strcpy(name, processor->name);
 
-    copyProcessor->nameGenerations = (char*)malloc(50 * sizeof(char));
-    if (!copyProcessor->nameGenerations)
-    {
-        free(copyProcessor->name);
-        free(copyProcessor);
-        exit(1);
-    }
+                
+                strcpy(nameGenerations,processor->nameGenerations);
 
-    copyProcessor->cache = (int*)malloc(MAXCACHE * sizeof(int));
-    if (!copyProcessor->cache)
-    {
-        free(copyProcessor->cache);
-        free(copyProcessor);
-        exit(1);
-    }*/
+                
+                socket = processor->socket;
 
-    while (processor != NULL)
-    {
-        if (copyElements[i])//эту хуетень тоже переделать
-        {
-            //использовать инит и добавить во фронт
+                
+                technologicalProcess = processor->technologicalProcess;
 
-        }
-        i++;
+                
+                frequency = processor->frequency;
+
+                
+                frequencyInTurboBoost = processor->frequencyInTurboBoost;
+
+                for (int n = 0; n < MAXCACHE; n++)
+                    cache[n] = processor->cache[n];
+
+                if(!flag)
+                    copyProcessor = init(name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
+                else
+                    addFront(&copyProcessor, name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
+
+                flag++;
+            }
+            
         processor = processor->next;
+        i++;
+        
     }
 
+
+    return copyProcessor;
 }

@@ -9,7 +9,7 @@ typedef struct PROCESSOR_STRUCT
     char* nameGenerations;
     int socket;
     int technologicalProcess;
-    float frequency; //частота
+    float frequency; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     float frequencyInTurboBoost;
     int* cache;
     int TMP;
@@ -22,7 +22,7 @@ typedef struct COPY_PROCESSOR_STRUCT
     char* nameGenerations;
     int socket;
     int technologicalProcess;
-    float frequency; //частота
+    float frequency; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     float frequencyInTurboBoost;
     int* cache;
     int TMP;

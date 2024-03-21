@@ -1,28 +1,29 @@
-//— использованием структуры, созданной при выполнении лабораторной работы є7(по выбранной предметной области), 
-// создать односв€зный линейный список и выполнить задание в соответствии с вариантом.
-
-
-//–азработать подалгоритм создани€ односв€зного списка из имеющегос€ односв€зного списка путем копировани€ заданных элементов.
-//  Ќомера копируемых элементов содержатс€ в полученном массиве.
-//  ѕор€док копируемых элементов должен соответствовать их пор€дку в исходном списке.
-//  ¬ случае отсутстви€ элемента с заданным номером вывести сообщение.
-
 #include <stdio.h>
-#include <time.h>
 #include "Struct.h"
 #include "ControlNode.h"
 #include "ReadInStruct.h"
 
 int main()
 {
+	int search[] = { 4, 1, 3 };
 
 	PROCESSOR_STRUCT* processor = NULL;
+	COPY_PROCESSOR_STRUCT* copyProcessor = NULL;
 
 	processor = addInSruct(processor);
 
 	printNode(processor);
 
+	int qualytyCopyElements = sizeof(search) / sizeof(search[0]);
+
+	copyProcessor = copyNodes(processor, search, qualytyCopyElements);
+
+	puts("");
+
+	printNode(copyProcessor);
+
 	free(processor);
+	free(copyProcessor);
 
 	return 0;
 }

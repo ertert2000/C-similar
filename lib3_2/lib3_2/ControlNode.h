@@ -19,4 +19,4 @@ void addFront(PROCESSOR_STRUCT** processor,
 	float frequencyInTurboBoost,
 	int* cache);
 
-void printNode(PROCESSOR_STRUCT* processor);
+void* copyNodes(PROCESSOR_STRUCT* processor, int copyElements[], int qualityCopyElements);
