@@ -61,6 +61,7 @@ PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 		else
 			addFront(&processor, name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
 
+
 		TMP++;
 	}
 

@@ -12,7 +12,7 @@ typedef struct PROCESSOR_STRUCT
     float frequency; //�������
     float frequencyInTurboBoost;
     int* cache;
-    int TMP;
+    int* TMP;
     struct PROCESSOR_STRUCT* next;
 } PROCESSOR_STRUCT;
 
