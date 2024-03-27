@@ -5,6 +5,7 @@
 #include "Struct.h"
 
 
+
 PROCESSOR_STRUCT* init(char* name, 
     char* nameGenerations, 
     int socket, 
@@ -88,18 +89,17 @@ void printNode(PROCESSOR_STRUCT* processor)
             printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", processor->name, processor->nameGenerations,
                 processor->socket, processor->technologicalProcess, processor->frequency,
                 processor->frequencyInTurboBoost);
-            for (int i = 0; i < 3; i++) {
-                if (i == 2) {
+            for (int i = 0; i < 3; i++) 
+            {
+                if (i == 2)
                     printf("%-4d|", processor->cache[i]);
-                }
-                else {
+                else
                     printf("%d, ", processor->cache[i]);
-                }
+
             }
             puts("");
         }
 
-        //printf("%d\n", processor->socket);
         processor = processor->next;
     }
 }
@@ -127,7 +127,6 @@ int countQualityNode(PROCESSOR_STRUCT** processor)
 {
     int flag = 0;
     PROCESSOR_STRUCT* temp = *processor;
-    PROCESSOR_STRUCT* TMP = NULL;
     while (temp != NULL)
     {
         temp = temp->next;
@@ -138,34 +137,72 @@ int countQualityNode(PROCESSOR_STRUCT** processor)
 
 }
 
-void* copyNodes(PROCESSOR_STRUCT* processor, int copyElements[], int qualityCopyElements)
+void* copyNodes(PROCESSOR_STRUCT* processor)
 {
     int i = 1;
     int flag = 0;
+    int flagEnter = 1;
+    int* search = NULL;
+    int size = 1;
+    int u = 0;
+    int input;
+    int count = 0;
+
+    search = (int*)malloc(size * sizeof(int));
+    if (!search)
+        exit(1);
+
+    printf("Enter integers (enter a newline character to complete the entry):\n");
+
+    while (flagEnter) 
+    {
+        if (scanf("%d", &input) != 1)
+            flagEnter = 0;
+
+        search[u++] = input; 
+
+        if (u == size) 
+        {
+            size *= 2;
+            int* temp = (int*)realloc(search, size * sizeof(int));
+
+            if (temp)
+                search = temp;
+
+            else 
+            {
+                free(search);
+                exit(1);
+            }
+        }
+        count++;
+        if (getchar() == '\n')
+            flagEnter = 0;
+    }
+
+    search = (int*)realloc(search, u * sizeof(int)); 
+    if (!search)
+        exit(1);
+
+    int qualityCopyElements;
+    qualityCopyElements = count;
 
     int* cache;
     cache = (int*)malloc(3 * sizeof(int));
     if (!cache)
         exit(1);
     
-    COPY_PROCESSOR_STRUCT* copyProcessor = (COPY_PROCESSOR_STRUCT*)malloc(qualityCopyElements * sizeof(COPY_PROCESSOR_STRUCT));
-    if (!copyProcessor)
-        exit(1);
+    COPY_PROCESSOR_STRUCT* copyProcessor = NULL;
 
     for (int i = 0; i < qualityCopyElements; i++)
-    {
-        if (copyElements[i] > countQualityNode(&processor))
-        {
-            printf("element number %d not found\n", copyElements[i]);
-        }
-    }
+        if (search[i] > countQualityNode(&processor))
+            printf("element number %d not found\n", search[i]);
+
 
     while (processor)
     {
         for (int j = 0; j < qualityCopyElements; j++)
-        {
-            
-            if (copyElements[j] == i)
+            if (search[j] == i)
             {
                 for (int n = 0; n < MAXCACHE; n++)
                     cache[n] = processor->cache[n];
@@ -177,24 +214,11 @@ void* copyNodes(PROCESSOR_STRUCT* processor, int copyElements[], int qualityCopy
 
                 flag++;
             }
-        }
             
         processor = processor->next;
         i++;
     }
 
-
+    free(search);
     return copyProcessor;
 }
-
-/*strcpy(name, processor->name);
-
-                strcpy(nameGenerations,processor->nameGenerations);
-
-                socket = processor->socket;
-
-                technologicalProcess = processor->technologicalProcess;
-
-                frequency = processor->frequency;
-
-                frequencyInTurboBoost = processor->frequencyInTurboBoost;*/

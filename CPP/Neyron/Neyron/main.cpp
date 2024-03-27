@@ -27,7 +27,7 @@ double rightProp(double inputs[wiegts])
 
 void traing(int data[4][3], int exp[4])
 {
-	const double LR = 0.1, EPCH = 5; //скорость ; кол-во итераций
+	const double LR = 0.1, EPCH = 50; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ; пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	double error;
 	for (int i = 0; i < EPCH; i++)
 		for (int j = 0; j < 4; j++)
@@ -43,7 +43,7 @@ void traing(int data[4][3], int exp[4])
 
 int main()
 {
-	int traingData[4][3] = { {0, 12548, 1}, {0, 10, 1}, {1, 0, 24}, {0, 1, 3547} }, expResultat[4] = {0, 0, 1, 0};
+	int traingData[4][3] = { {1, 0, 0}, {0, 1, 0}, {1, 0, 1}, {0, 1, 0} }, expResultat[4] = {0, 0, 1, 0};
 
 	int answer;
 	cout << "solve a problem:" << endl;
@@ -68,7 +68,7 @@ int main()
 	else
 		cout << "the neural network is smarter than you, fool :)" << endl;
 
-	/*cout << "and now she will learn" << endl;
+	cout << "and now she will learn" << endl;
 	Sleep(4000);
 	system("cls");
 
@@ -77,7 +77,7 @@ int main()
 		cout << i+1 << endl;
 		Sleep(3000);
 		system("cls");
-	}*/
+	}
 	
 	srand(1);
 	for (int i = 0; i < wiegts; i++)

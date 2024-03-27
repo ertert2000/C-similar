@@ -15,16 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\Иван\Downloads\Telegram Desktop\function.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\Иван\Downloads\Telegram Desktop\main.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="C:\Users\Иван\Downloads\Telegram Desktop\header.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
