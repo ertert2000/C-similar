@@ -29,6 +29,5 @@ headBoard::~headBoard()
 int main()
 {
 	palyMusic();
-	system("pause");
 	return 0;
 }

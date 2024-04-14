@@ -11,6 +11,7 @@ typedef std::map < std::string, HSTREAM > MusicMap;
 void palyMusic()
 {
 	int Volume;
+	bool flag = true;
 	std::string Music_Name;
 
 	std::cout << "enter patch to file" << std::endl;
@@ -28,13 +29,16 @@ void palyMusic()
 	MusicMap::iterator _findReturn = Music.find(Music_Name);
 	Init = BASS_StreamCreateFile(FALSE, Music_Name.c_str(), 0, 0, BASS_SAMPLE_LOOP);//Get stream handle
 	Music.insert(make_pair(Music_Name, Init));//Write to the list
+	
 	BASS_ChannelPlay(Init, TRUE);//Play
 
-	system("pause");
+	while (flag)
+		if (GetAsyncKeyState(VK_NUMPAD1))
+			flag = false;
+
 	for (MusicMap::iterator i = Music.begin(); i != Music.end(); i++)
-	{
-		BASS_StreamFree(i->second);
-	}
+			BASS_StreamFree(i->second);
+
 	Music.clear();
 	BASS_Free();
 }
