@@ -10,7 +10,7 @@ typedef struct
 	char* nameGenerations;
 	int socket;
 	int technologicalProcess;
-	float frequency; //частота
+	float frequency; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	float frequencyInTurboBoost;
 	int* cache;
 	int TMP;
