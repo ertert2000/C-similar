@@ -217,15 +217,41 @@ void deleteElementFromEnd(head* head, int num)
 	int count = 0;
 
 	health_record* current = head->first_pos;
-	while (current != NULL) {
+	while (current != NULL) 
+	{
 		current = current->next;
 		count++;
 	}
 
-	if (num > count) {
-		printf("Index out of range\n");
+	if (count == 0)
+	{
+		printf("Error, the list is null\n");
 		return;
 	}
+
+	if (num >= count || num < 0) 
+	{
+		temp = head->first_pos;
+
+		if (temp->next != NULL) 
+		{
+			head->first_pos = temp->next;
+			head->first_pos->prev = NULL;
+		}
+		else 
+		{
+			head->first_pos = NULL;
+			head->last_pos = NULL;
+		}
+
+		free(temp->name);
+		free(temp->last_visit_date);
+		free(temp->medical_tests_results);
+		free(temp);
+
+		return;
+	}
+
 	for (int i = 0; i < num; i++)
 		temp = temp->prev;
 
@@ -241,6 +267,7 @@ void deleteElementFromEnd(head* head, int num)
 		if (temp->next != NULL)
 			temp->next->prev = temp->prev;
 	}
+
 	free(temp->name);
 	free(temp->last_visit_date);
 	free(temp->medical_tests_results);
@@ -280,7 +307,7 @@ void printList(health_record* health)
 
 int main()
 {
-	system("cls");
+	//system("cls");
 	int choice;
 
 	head* Head = (head*)malloc(sizeof(head));
@@ -300,7 +327,7 @@ int main()
 
 	deleteElementFromEnd(Head, choice);
 
-	system("cls");
+	//system("cls");
 
 	printList(Head->first_pos);
 
