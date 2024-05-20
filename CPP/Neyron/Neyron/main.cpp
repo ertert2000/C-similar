@@ -98,6 +98,8 @@ int main()
 		for (int i = 0; i < wiegts; i++)
 			cin >> enterMy[i];
 
+		set1 >> 10;
+
 		cout << "answer: " << activate(rightProp(enterMy)) << endl;
 
 		cout << "do you want to continue? (Y/N)" << endl;

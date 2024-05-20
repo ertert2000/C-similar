@@ -297,6 +297,14 @@ int main() {
     }
     system("cls");
 
+    fgets(buffer, 1000, file);
+    if (buffer[0] == '\n')
+    {
+        puts("error");
+        exit(1);
+    }
+
+
     while (fgets(buffer, 1000, file) != NULL)
     {
 
