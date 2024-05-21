@@ -1,40 +1,19 @@
 #include <iostream>
-//#include <curl/curl.h>
-#include "main.h"
-#include <bits/stdc++.h>
+#include <string>
+
 
 using namespace std;
-
-class Car
+void strhashing()
 {
-public:
-	float speed;
-	char model[100];
-
-private:
-
-};
-
+	string h1 = "Educba";
+	cout << "The string given to get the hash value is " << h1 << "\n" << endl;
+	hash<string> hash_obj;
+	cout << "The hash value of the given string is : " << hash_obj(h1) << endl;
+}
 int main()
 {
-	int x = 0;
-	Car CAR;
-	CAR.speed = 230.5f;
-	//CAR.model = "BMW";
-	int length = 10;
+	cout << "Program to demonstrate the string hash values that are returned using hash class and its objects." << "\n" << endl;
+	strhashing();
 
-	for (int i = 0; i < length; i++)
-	{
-		for (int n = 0; n < length; n++)
-		{
-			for(int j = 0; j< length;j++)
-				for (int b = 0; b < length; b++)
-				{
-					x += 1;
-					cout << x <<endl;
-				}
-		}
-	}
-	printf("max speed: %f, model: ", CAR.speed);
 	return 0;
 }

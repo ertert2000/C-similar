@@ -180,14 +180,17 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 
 	char name[50];
 	char nameGenerations[100];
-	int socket;
-	int technologicalProcess;
+	char tempSocket[50];
+	char tempTechnologicalProcess[50];
 	char tempFrequency[50]; //       
 	char tempFrequencyInTurboBoost[50];
-	int cache[3];
+	char tempCache[3];
 
+	int socket;
+	int technologicalProcess;
 	float frequency;
 	float frequencyInTurboBoost;
+	int cache[3];
 
 	PROCESSOR_STRUCT* temp = *b;
 
@@ -196,54 +199,117 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 	switch (choose)
 	{
 	case 1:
-		/*--------одно начало--------*/
+		while ((getchar()) != '\n');
 		puts("name");
-		fgets(name, 50, stdin);
-		fputs(name, file);
-		fputs(";", file); // поменять потом
+		fgets(name, sizeof(name), stdin);
+		name[strcspn(name, "\n")] = "\0";  // Удаление символа новой строки
+		fprintf(file, "%s;", name);
 
-		/*--------одно конц--------*/
 		puts("nameGenerations");
-		fgets(nameGenerations, 100, stdin);
-		fputs(nameGenerations, file);
-		fputs(";", file); // поменять потом
-
+		fgets(nameGenerations, sizeof(nameGenerations), stdin);
+		nameGenerations[strcspn(nameGenerations, "\n")] = "\0";  // Удаление символа новой строки
+		fprintf(file, "%s;", nameGenerations);
 
 		puts("socket");
-		scanf("%d", &socket);
-		fputs(socket, file);
-		fputs(";", file); // поменять потом
-
+		fgets(tempSocket, sizeof(tempSocket), stdin);
+		tempSocket[strcspn(tempSocket, "\n")] = "\0";  // Удаление символа новой строки
+		fprintf(file, "%s;", tempSocket);
+		socket = atoi(tempSocket);
 
 		puts("technologicalProcess");
-		scanf("%d", &technologicalProcess);
-		fputs(technologicalProcess, file);
-		fputs(";", file); // поменять потом
-
+		fgets(tempTechnologicalProcess, sizeof(tempTechnologicalProcess), stdin);
+		tempTechnologicalProcess[strcspn(tempTechnologicalProcess, "\n")] = "\0";  // Удаление символа новой строки
+		fprintf(file, "%s;", tempTechnologicalProcess);
+		technologicalProcess = atoi(tempTechnologicalProcess);
 
 		puts("frequency");
-		fgets(tempFrequency, 50, stdin);
-		fputs(tempFrequency, file);
-		fputs(";", file); // поменять потом
+		fgets(tempFrequency, sizeof(tempFrequency), stdin);
+		tempFrequency[strcspn(tempFrequency, "\n")] = "\0";  // Удаление символа новой строки
+		fprintf(file, "%s;", tempFrequency);
 		frequency = atof(tempFrequency);
 
 		puts("frequencyInTurboBoost");
-		fgets(tempFrequencyInTurboBoost, 50, stdin);
-		fputs(tempFrequencyInTurboBoost, file);
-		fputs(";", file); // поменять потом
+		fgets(tempFrequencyInTurboBoost, sizeof(tempFrequencyInTurboBoost), stdin);
+		tempFrequencyInTurboBoost[strcspn(tempFrequencyInTurboBoost, "\n")] = "\0";  // Удаление символа новой строки
+		fprintf(file, "%s;", tempFrequencyInTurboBoost);
 		frequencyInTurboBoost = atof(tempFrequencyInTurboBoost);
 
 		puts("cache");
-		for (int i = 0; i < 3; i++)
-		{
-			scanf("%d", &cache[i]);
-			fputs(cache[i], file);
-			if (i != 2)
-				fputs(",", file);
-		}
-		fputs("\n", file);
+		for (int i = 0; i < 3; i++) {
+			memset(&tempCache[0], 0, sizeof(tempCache));
+			fgets(tempCache, sizeof(tempCache), stdin);
+			tempCache[strcspn(tempCache, "\n")] = "\0";  // Удаление символа новой строки
+			fprintf(file, "%s", tempCache);
+			if (i != 2) {
+				fprintf(file, ",");
+				while ((getchar()) != '\n');
+			}
 
-		addFront(&b, name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
+			cache[i] = atoi(tempCache);
+		}
+		fprintf(file, "\n");
+		//while ((getchar()) != '\n');
+		///*--------одно начало--------*/
+		//puts("name");
+		//fgets(name, 50, stdin);
+		//fprintf(file, name);
+		//fputs(";", file); // поменять потом
+
+		////while ((getchar()) != '\n');
+		///*--------одно конц--------*/
+		//puts("nameGenerations");
+		//fgets(nameGenerations, 100, stdin);
+		//fputs(nameGenerations, file);
+		//fputs(";", file); // поменять потом
+
+
+		//puts("socket");
+		//fgets(tempSocket, 50, stdin);
+		//fputs(tempSocket, file);
+		//fputs(";", file); // поменять потом
+		//socket = atoi(tempSocket);
+
+		//puts("technologicalProcess");
+		//fgets(tempTechnologicalProcess, 50, stdin);
+		//fputs(tempTechnologicalProcess, file);
+		//fputs(";", file); // поменять потом
+		//technologicalProcess = atoi(tempTechnologicalProcess);
+
+		////while ((getchar()) != '\n');
+		//puts("frequency");
+		//fgets(tempFrequency, 50, stdin);
+		//fputs(tempFrequency, file);
+		//fputs(";", file); // поменять потом
+		//frequency = atof(tempFrequency);
+
+
+		////while ((getchar()) != '\n');
+		//puts("frequencyInTurboBoost");
+		//fgets(tempFrequencyInTurboBoost, 50, stdin);
+		//fputs(tempFrequencyInTurboBoost, file);
+		//fputs(";", file); // поменять потом
+		//frequencyInTurboBoost = atof(tempFrequencyInTurboBoost);
+
+		//puts("cache");
+		//for (int i = 0; i < 3; i++)
+		//{
+		//	//char tempCache[3];
+		//	memset(&tempCache[0], 0, sizeof(tempCache));
+		//	fgets(tempCache, 3, stdin);
+		//	fputs(tempCache, file);
+		//	if (i != 2)
+		//	{
+		//		fputs(",", file);
+		//		while ((getchar()) != '\n');
+		//	}
+
+		//	cache[i] = atoi(tempCache);
+		//	//*tempCache = NULL;
+		//	//free(tempCache);
+		//}
+		//fputs("\n", file);
+
+		addFront(&temp, name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
 		break;
 	case 2:
 		remove(file);
@@ -371,7 +437,7 @@ void printHelp()
 void reactStruct(PROCESSOR_STRUCT** b, int serch)
 {
 	PROCESSOR_STRUCT* temp = *b;
-	int i = 0;
+	int i = 1;
 
 	char name[50];
 	char nameGenerations[100];
@@ -381,7 +447,7 @@ void reactStruct(PROCESSOR_STRUCT** b, int serch)
 	float frequencyInTurboBoost;
 	int cache[3];
 
-	while (temp->next != NULL)
+	while (temp != NULL)
 	{
 		if (i == serch)
 		{
@@ -389,12 +455,16 @@ void reactStruct(PROCESSOR_STRUCT** b, int serch)
 			free(temp->nameGenerations);
 			free(temp->cache);
 
+			while ((getchar()) != '\n');
 			puts("name");
-			scanf("%s", &name);
+			fgets(name, 50, stdin);
+			name[strcspn(name, "\n")] = "\0";
 			strcpy(temp->name, name);
 
+			//while ((getchar()) != '\n');
 			puts("nameGenerations");
-			scanf("%s", &nameGenerations);
+			fgets(nameGenerations, 100, stdin);
+			nameGenerations[strcspn(nameGenerations, "\n")] = "\0";
 			strcpy(temp->nameGenerations, nameGenerations);
 
 			puts("socket");
@@ -428,14 +498,57 @@ void reactStruct(PROCESSOR_STRUCT** b, int serch)
 
 void removeChoseCard(PROCESSOR_STRUCT** processor, int remove)
 {
-	PROCESSOR_STRUCT* temp = *processor;
-	int serchRemoveCard = 1;
+	/*PROCESSOR_STRUCT* temp = *processor;
+	int serchRemoveCard = -1;
+	int TMP = remove - 3;
 
-	while (serchRemoveCard != remove)
+	while (serchRemoveCard != TMP)
 	{
 		temp = temp->next;
 		serchRemoveCard++;
 	}
+	
+	free(temp->next->name);
+	free(temp->next->nameGenerations);
+	free(temp->next->cache);
+	free(temp->next);
+
+
+	temp->next = temp->next->next;*/
+
+	if (processor == NULL || *processor == NULL)
+		return;  // List is empty or invalid pointer
+
+	PROCESSOR_STRUCT* temp = *processor;
+	PROCESSOR_STRUCT* prev = NULL;
+	int searchRemoveCard = 1;
+
+	// If the node to be removed is the head node
+	if (remove == 0) {
+		*processor = temp->next;
+		free(temp->name);
+		free(temp->nameGenerations);
+		free(temp->cache);
+		free(temp);
+		return;
+	}
+
+	// Traverse the list to find the node to remove
+	while (temp != NULL && searchRemoveCard != remove) 
+	{
+		prev = temp;
+		temp = temp->next;
+		searchRemoveCard++;
+	}
+
+	// If the node to remove was not found
+	if (temp == NULL)
+		return;
+
+	// Remove the node
+	if (prev != NULL) 
+		prev->next = temp->next;
+
 
 	free(temp->name);
 	free(temp->nameGenerations);
@@ -444,7 +557,7 @@ void removeChoseCard(PROCESSOR_STRUCT** processor, int remove)
 
 	//возможно понадобится изменение файла
 
-	writeInFileAndStruct(&processor, 2);
+	//writeInFileAndStruct(&processor, 2);
 }
 
 
@@ -539,26 +652,26 @@ int main()
 
 		switch (choice)
 		{
-		case 0: //help
+		case 0: //help  ^
 			printHelp();
 			break;
-		case 1://Добавление карточек об объектах предметной области
+		case 1://Добавление карточек об объектах предметной области ^
 			writeInFileAndStruct(&B, 1);
 			break;
-		case 2://Редактирование карточек
+		case 2://Редактирование карточек +-
 			scanf("%d", &serch);
 
-			reactStruct(B, serch);
+			reactStruct(&B, serch);
 			break;
-		case 3://Удаление карточек
+		case 3://Удаление карточек   ^
 			scanf("%d", &remove);
 
 			removeChoseCard(&B, remove);
 			break;
-		case 4://Вывод картотеки
+		case 4://Вывод картотеки    ^
 			printNode(B);
 			break;
-		case 5://Поиск карточек по параметру
+		case 5://Поиск карточек по параметру    
 			scanf("%d", &choiceFound);
 			switch (choiceFound)
 			{ //кол-во параметров
