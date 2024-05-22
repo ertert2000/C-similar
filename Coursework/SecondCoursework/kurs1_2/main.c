@@ -72,10 +72,24 @@ typedef struct PROCESSOR_STRUCT
 	float frequency; //       
 	float frequencyInTurboBoost;
 	int* cache;
-	int* TMP;
+	int TMP;
 	struct PROCESSOR_STRUCT* next;
 	struct PROCESSOR_STRUCT* prev;
 } PROCESSOR_STRUCT;
+
+struct PROCESSOR_STRUCT_TEMP
+{
+	char* name;
+	char* nameGenerations;
+	int socket;
+	int technologicalProcess;
+	float frequency; //       
+	float frequencyInTurboBoost;
+	int* cache;
+	int TMP;
+	struct PROCESSOR_STRUCT* next;
+	struct PROCESSOR_STRUCT* prev;
+} PROCESSOR_STRUCT_TEMP[200];
 
 char* mystrtok(char* str, const char* delim) {
 	static char* next;
@@ -585,7 +599,6 @@ PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 	file = fopen("pros.csv", "r");
 	if (file == NULL)
 		exit(1);
-
 	while (fgets(buffer, 1000, file) != NULL)
 	{
 
@@ -613,13 +626,16 @@ PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 			cache[i] = atoi(token);
 		}
 
-		if (TMP == 0)
+		if (TMP == 0) 
+		{
 			processor = init(name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
+			processor->TMP = 0;
+		}
 		else
 			addFront(&processor, name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
 
-
 		TMP++;
+		processor->TMP++;
 	}
 
 	fclose(file);
@@ -630,7 +646,128 @@ PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 
 }
 
+int cmpNameLineal(const void* v1, const void* v2)
+{
+	const struct PROCESSOR_STRUCT* case_1 = v1;
+	const struct PROCESSOR_STRUCT* case_2 = v2;
+	return strcmp(case_1->name, case_2->name);
+}
+//
+//int cmpNameGenerationsLineal(const void* v1, const void* v2)
+//{
+//	const struct PROCESSOR_STRUCT* case_1 = v1;
+//	const struct PROCESSOR_STRUCT* case_2 = v2;
+//	return strcmp(case_1->nameGenerations, case_2->nameGenerations);
+//}
+//
+//int cmpSoketLineal(const void* v1, const void* v2)
+//{
+//	int cmp = 0;
+//	const struct PROCESSOR_STRUCT* case_1 = v1;
+//	const struct PROCESSOR_STRUCT* case_2 = v2;
+//	
+//	if (case_1->socket > case_2->socket)
+//		cmp = 1;
+//	else if (case_1->socket < case_2->socket)
+//		cmp = -1;
+//	else
+//		cmp = 0;
+//	
+//	return cmp;
+//}
+//
+//int cmpFrequencyLineal(const void* v1, const void* v2)
+//{
+//	int cmp = 0;
+//	const struct PROCESSOR_STRUCT* case_1 = v1;
+//	const struct PROCESSOR_STRUCT* case_2 = v2;
+//
+//	if (case_1->frequency > case_2->frequency)
+//		cmp = 1;
+//	else if (case_1->frequency < case_2->frequency)
+//		cmp = -1;
+//	else
+//		cmp = 0;
+//
+//	return cmp;
+//}
+//
+//int cmpFrequencyInTurboBoostLineal(const void* v1, const void* v2)
+//{
+//	int cmp = 0;
+//	const struct PROCESSOR_STRUCT* case_1 = v1;
+//	const struct PROCESSOR_STRUCT* case_2 = v2;
+//
+//	if (case_1->frequencyInTurboBoost > case_2->frequencyInTurboBoost)
+//		cmp = 1;
+//	else if (case_1->frequencyInTurboBoost < case_2->frequencyInTurboBoost)
+//		cmp = -1;
+//	else
+//		cmp = 0;
+//
+//	return cmp;
+//}
+//
+//int cmpSoketLineal(const void* v1, const void* v2)
+//{
+//	int cmp = 0;
+//	const struct PROCESSOR_STRUCT* case_1 = v1;
+//	const struct PROCESSOR_STRUCT* case_2 = v2;
+//
+//	if (case_1->technologicalProcess > case_2->technologicalProcess)
+//		cmp = 1;
+//	else if (case_1->technologicalProcess < case_2->technologicalProcess)
+//		cmp = -1;
+//	else
+//		cmp = 0;
+//
+//	return cmp;
+//}
 
+void destroyList(PROCESSOR_STRUCT* processor)
+{
+	PROCESSOR_STRUCT* temp = processor;
+	int i = 0;
+	
+	while (temp != NULL)
+	{
+		PROCESSOR_STRUCT_TEMP[i].name = malloc((strlen(PROCESSOR_STRUCT_TEMP[i].name) + 1) * sizeof(char));
+		if (!PROCESSOR_STRUCT_TEMP[i].name)
+			exit(1);
+
+		PROCESSOR_STRUCT_TEMP[i].nameGenerations = malloc((strlen(PROCESSOR_STRUCT_TEMP[i].nameGenerations) + 1) * sizeof(char));
+		if (!PROCESSOR_STRUCT_TEMP[i].nameGenerations) 
+		{
+			free(PROCESSOR_STRUCT_TEMP[i].name);
+			exit(1);
+		}
+
+		PROCESSOR_STRUCT_TEMP[i].cache = (int*)malloc(3 * sizeof(int));
+		if (!PROCESSOR_STRUCT_TEMP[i].cache)
+		{
+			free(PROCESSOR_STRUCT_TEMP[i].cache);
+			exit(1);
+		}
+
+		strcpy(PROCESSOR_STRUCT_TEMP[i].name, temp->name);
+
+		strcpy(PROCESSOR_STRUCT_TEMP[i].nameGenerations, temp->nameGenerations);
+
+		PROCESSOR_STRUCT_TEMP[i].socket = temp->socket;
+		PROCESSOR_STRUCT_TEMP[i].technologicalProcess = temp->technologicalProcess;
+		PROCESSOR_STRUCT_TEMP[i].frequency = temp->frequency;
+		PROCESSOR_STRUCT_TEMP[i].frequencyInTurboBoost = temp->frequencyInTurboBoost;
+
+		for (int i = 0; i < MAXCACHE; i++)
+			PROCESSOR_STRUCT_TEMP[i].cache[i] = temp->cache[i];
+
+		temp = temp->next;
+		i++;
+	}
+
+
+
+}
 
 int main()
 {
@@ -683,7 +820,21 @@ int main()
 			scanf("%d", &choiceSort);
 			switch (choiceSort)
 			{ //кол-во параметров
-			default:
+			case 1:
+				
+				qsort(B,B->TMP,sizeof(B), cmpNameLineal);
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 7:
 				break;
 			}
 			break;
