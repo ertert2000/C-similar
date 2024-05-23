@@ -1,0 +1,11 @@
+This program is written in the C language
+The program is a database management system with the ability to perform any actions with the database.
+namely adding           (1)
+editing                 (2)
+removing cards          (3)
+displaying a card index (4)
+search by parameter     (5)
+sorting                 (6)
+
+exit program            (7)
+All rights reserved@

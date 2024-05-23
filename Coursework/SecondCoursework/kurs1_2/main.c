@@ -60,8 +60,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <signal.h>
 
 #define MAXCACHE 3
+
+#ifdef _WIN32
+#define clear() system("cls");
+#else
+#define clear() system("clear");
+#endif // linux
 
 typedef struct PROCESSOR_STRUCT
 {
@@ -77,7 +84,7 @@ typedef struct PROCESSOR_STRUCT
 	struct PROCESSOR_STRUCT* prev;
 } PROCESSOR_STRUCT;
 
-struct PROCESSOR_STRUCT_TEMP
+struct PROCESSOR_STRUCT_TEMPP
 {
 	char* name;
 	char* nameGenerations;
@@ -206,6 +213,8 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 	float frequencyInTurboBoost;
 	int cache[3];
 
+	char buffer[50];
+
 	PROCESSOR_STRUCT* temp = *b;
 
 	FILE* newFile;
@@ -249,12 +258,14 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 		frequencyInTurboBoost = atof(tempFrequencyInTurboBoost);
 
 		puts("cache");
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++) 
+		{
 			memset(&tempCache[0], 0, sizeof(tempCache));
 			fgets(tempCache, sizeof(tempCache), stdin);
 			tempCache[strcspn(tempCache, "\n")] = "\0";  // Удаление символа новой строки
 			fprintf(file, "%s", tempCache);
-			if (i != 2) {
+			if (i != 2) 
+			{
 				fprintf(file, ",");
 				while ((getchar()) != '\n');
 			}
@@ -262,102 +273,34 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 			cache[i] = atoi(tempCache);
 		}
 		fprintf(file, "\n");
-		//while ((getchar()) != '\n');
-		///*--------одно начало--------*/
-		//puts("name");
-		//fgets(name, 50, stdin);
-		//fprintf(file, name);
-		//fputs(";", file); // поменять потом
-
-		////while ((getchar()) != '\n');
-		///*--------одно конц--------*/
-		//puts("nameGenerations");
-		//fgets(nameGenerations, 100, stdin);
-		//fputs(nameGenerations, file);
-		//fputs(";", file); // поменять потом
-
-
-		//puts("socket");
-		//fgets(tempSocket, 50, stdin);
-		//fputs(tempSocket, file);
-		//fputs(";", file); // поменять потом
-		//socket = atoi(tempSocket);
-
-		//puts("technologicalProcess");
-		//fgets(tempTechnologicalProcess, 50, stdin);
-		//fputs(tempTechnologicalProcess, file);
-		//fputs(";", file); // поменять потом
-		//technologicalProcess = atoi(tempTechnologicalProcess);
-
-		////while ((getchar()) != '\n');
-		//puts("frequency");
-		//fgets(tempFrequency, 50, stdin);
-		//fputs(tempFrequency, file);
-		//fputs(";", file); // поменять потом
-		//frequency = atof(tempFrequency);
-
-
-		////while ((getchar()) != '\n');
-		//puts("frequencyInTurboBoost");
-		//fgets(tempFrequencyInTurboBoost, 50, stdin);
-		//fputs(tempFrequencyInTurboBoost, file);
-		//fputs(";", file); // поменять потом
-		//frequencyInTurboBoost = atof(tempFrequencyInTurboBoost);
-
-		//puts("cache");
-		//for (int i = 0; i < 3; i++)
-		//{
-		//	//char tempCache[3];
-		//	memset(&tempCache[0], 0, sizeof(tempCache));
-		//	fgets(tempCache, 3, stdin);
-		//	fputs(tempCache, file);
-		//	if (i != 2)
-		//	{
-		//		fputs(",", file);
-		//		while ((getchar()) != '\n');
-		//	}
-
-		//	cache[i] = atoi(tempCache);
-		//	//*tempCache = NULL;
-		//	//free(tempCache);
-		//}
-		//fputs("\n", file);
 
 		addFront(&temp, name, nameGenerations, socket, technologicalProcess, frequency, frequencyInTurboBoost, cache);
 		break;
 	case 2:
 		remove(file);
 		newFile = fopen("pros.csv", "w+");
-		while (temp->next != NULL)
+		while (temp != NULL)
 		{
-			fputs(temp->name, newFile);
-			fputs(";", newFile); // поменять потом
+			fprintf(newFile, "%s;", temp->name);
 
-			/*--------одно конц--------*/
-			fputs(temp->nameGenerations, newFile);
-			fputs(";", newFile); // поменять потом
+			fprintf(newFile, "%s;", temp->nameGenerations);
 
+			fprintf(newFile, "%d;", temp->socket);
 
-			fputs(temp->socket, newFile);
-			fputs(";", newFile); // поменять потом
+			fprintf(newFile, "%d;", temp->technologicalProcess);
 
-			fputs(temp->technologicalProcess, newFile);
-			fputs(";", newFile); // поменять потом
+			fprintf(newFile,"%.3f;", temp->frequency);
 
-
-			fprintf(newFile,"%f", temp->frequency);
-			fputs(";", newFile); // поменять потом
-
-			fprintf(newFile, "%f", temp->frequencyInTurboBoost);
-			fputs(";", newFile); // поменять потом
+			fprintf(newFile, "%.3f;", temp->frequencyInTurboBoost);
 
 			for (int i = 0; i < 3; i++)
 			{
-				fputs(cache[i], newFile);
+				fprintf(newFile, "%d", temp->cache[i]);
 				if (i != 2)
-					fputs(",", newFile);
+					fprintf(newFile, ",");
 			}
-			fputs("\n", newFile);
+
+			fprintf(newFile, "\n");
 
 			temp = temp->next;
 		}
@@ -401,51 +344,286 @@ void printNode(PROCESSOR_STRUCT* processor)
 	}
 }
 
-void serchByA(PROCESSOR_STRUCT** b, char* serch)
+void serchByName(PROCESSOR_STRUCT** b, char* serch, int choose)
 {
 	int flag = 0;
 	PROCESSOR_STRUCT* temp = *b;
 
-
-
-	while (temp->next != NULL)
+	char tempName[50];
+	char serchName[50];
+	serch[strcspn(serch, "\n")] = '\0';
+	for(int i = 0; serch[i]; i++)
+		serch[i] = tolower(serch[i]);
+	switch (choose)
 	{
-		if (tolower(serch) == tolower(temp->name))
+	case 1:
+		while (temp != NULL)
 		{
-			flag += 1;
-			if (flag == 1)
+			memset(&tempName[0], 0, 50);
+			strcpy(tempName, temp->name);
+			for (int i = 0; tempName[i]; i++)
+				tempName[i] = tolower(tempName[i]);
+			if (!strcmp(serch, tempName))
 			{
-				puts("|-----------------------------------------------------------------------------------------------|");
-				puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
-				puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
-			}
-			if (flag)
-			{
-				printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
-					temp->socket, temp->technologicalProcess, temp->frequency,
-					temp->frequencyInTurboBoost);
-				for (int i = 0; i < 3; i++)
+				flag += 1;
+				if (flag == 1)
 				{
-					if (i == 2)
-						printf("%-4d|", temp->cache[i]);
-					else
-						printf("%d, ", temp->cache[i]);
+					puts("|-----------------------------------------------------------------------------------------------|");
+					puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
+					puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
+				}
+				if (flag)
+				{
+					printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
+						temp->socket, temp->technologicalProcess, temp->frequency,
+						temp->frequencyInTurboBoost);
+					for (int i = 0; i < 3; i++)
+					{
+						if (i == 2)
+							printf("%-4d|", temp->cache[i]);
+						else
+							printf("%d, ", temp->cache[i]);
+
+					}
+					puts("");
+				}
+
+			}
+			temp = temp->next;
+		}
+		break;
+	case 2:
+		while (temp != NULL)
+		{
+			memset(&tempName[0], 0, 50);
+			strcpy(tempName, temp->nameGenerations);
+			for (int i = 0; tempName[i]; i++)
+				tempName[i] = tolower(tempName[i]);
+			if (!strcmp(serch, tempName))
+			{
+				flag += 1;
+				if (flag == 1)
+				{
+					puts("|-----------------------------------------------------------------------------------------------|");
+					puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
+					puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
+				}
+				if (flag)
+				{
+					printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
+						temp->socket, temp->technologicalProcess, temp->frequency,
+						temp->frequencyInTurboBoost);
+					for (int i = 0; i < 3; i++)
+					{
+						if (i == 2)
+							printf("%-4d|", temp->cache[i]);
+						else
+							printf("%d, ", temp->cache[i]);
+
+					}
+					puts("");
+				}
+
+			}
+			temp = temp->next;
+		}
+		break;
+	}
+}
+void serchByCharacterFerqu(PROCESSOR_STRUCT** b, float serch, int choose)
+{
+	int flag = 0;
+	PROCESSOR_STRUCT* temp = *b;
+
+	switch (choose)
+	{
+	case 3:
+		while (temp != NULL)
+		{
+			if (choose == temp->frequency)
+			{
+				flag += 1;
+				if (flag == 1)
+				{
+					puts("|-----------------------------------------------------------------------------------------------|");
+					puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
+					puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
+				}
+				if (flag)
+				{
+					printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
+						temp->socket, temp->technologicalProcess, temp->frequency,
+						temp->frequencyInTurboBoost);
+					for (int i = 0; i < 3; i++)
+					{
+						if (i == 2)
+							printf("%-4d|", temp->cache[i]);
+						else
+							printf("%d, ", temp->cache[i]);
+
+					}
+					puts("");
+				}
+
+			}
+			temp = temp->next;
+		}
+		break;
+	case 4:
+		while (temp != NULL)
+		{
+			if (choose == temp->frequencyInTurboBoost)
+			{
+				flag += 1;
+				if (flag == 1)
+				{
+					puts("|-----------------------------------------------------------------------------------------------|");
+					puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
+					puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
+				}
+				if (flag)
+				{
+					printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
+						temp->socket, temp->technologicalProcess, temp->frequency,
+						temp->frequencyInTurboBoost);
+					for (int i = 0; i < 3; i++)
+					{
+						if (i == 2)
+							printf("%-4d|", temp->cache[i]);
+						else
+							printf("%d, ", temp->cache[i]);
+
+					}
+					puts("");
+				}
+
+			}
+			temp = temp->next;
+		}
+		break;
+	}
+}
+
+void serchByCharacter(PROCESSOR_STRUCT** b, int serch, int choose)
+{
+	int flag = 0;
+	PROCESSOR_STRUCT* temp = *b;
+
+	switch (choose)
+	{
+	case 5:
+		while (temp != NULL)
+		{
+			if (choose == temp->socket)
+			{
+				flag += 1;
+				if (flag == 1)
+				{
+					puts("|-----------------------------------------------------------------------------------------------|");
+					puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
+					puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
+				}
+				if (flag)
+				{
+					printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
+						temp->socket, temp->technologicalProcess, temp->frequency,
+						temp->frequencyInTurboBoost);
+					for (int i = 0; i < 3; i++)
+					{
+						if (i == 2)
+							printf("%-4d|", temp->cache[i]);
+						else
+							printf("%d, ", temp->cache[i]);
+
+					}
+					puts("");
+				}
+
+			}
+			temp = temp->next;
+		}
+		break;
+	case 6:
+		while (temp != NULL)
+		{
+			if (choose == temp->technologicalProcess)
+			{
+				flag += 1;
+				if (flag == 1)
+				{
+					puts("|-----------------------------------------------------------------------------------------------|");
+					puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
+					puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
+				}
+				if (flag)
+				{
+					printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
+						temp->socket, temp->technologicalProcess, temp->frequency,
+						temp->frequencyInTurboBoost);
+					for (int i = 0; i < 3; i++)
+					{
+						if (i == 2)
+							printf("%-4d|", temp->cache[i]);
+						else
+							printf("%d, ", temp->cache[i]);
+
+					}
+					puts("");
+				}
+
+			}
+			temp = temp->next;
+		}
+		break;
+	case 7:
+		while (temp != NULL)
+		{
+			for(int i = 0; i < 3; i++)
+				if (choose == temp->cache[i])
+				{
+					flag += 1;
+					if (flag == 1)
+					{
+						puts("|-----------------------------------------------------------------------------------------------|");
+						puts("|Name processor         |Generations |Socket    |Tech.Proc.|Frequency   |Turbo Boost |Cache     |");//!!!!!!!!!!!!!!!!! id !!!!!!!!!!!!!!!!!
+						puts("|-----------------------+------------+----------+----------+------------+------------+----------|");
+					}
+					if (flag)
+					{
+						printf("|%-22s | %-10s | %-8d | %-8d | %-10.3f | %-10.3f |", temp->name, temp->nameGenerations,
+							temp->socket, temp->technologicalProcess, temp->frequency,
+							temp->frequencyInTurboBoost);
+						for (int i = 0; i < 3; i++)
+						{
+							if (i == 2)
+								printf("%-4d|", temp->cache[i]);
+							else
+								printf("%d, ", temp->cache[i]);
+
+						}
+						puts("");
+					}
 
 				}
-				puts("");
-			}
 
 			temp = temp->next;
 		}
+		break;
 	}
 }
 
 void printHelp()
 {
+	char textAboutProgram[1000];
+	FILE* fileAbout;
+	fileAbout = fopen("AdoutProgram.txt", "r");
+	if (!fileAbout)
+		exit(1);
+	while(fgets(textAboutProgram, 1000, fileAbout) != NULL)
+		printf("%s", textAboutProgram);
 	puts("");
-	puts("");
-	puts("");
-
+	system("pause");
+	
 }
 
 void reactStruct(PROCESSOR_STRUCT** b, int serch)
@@ -512,24 +690,6 @@ void reactStruct(PROCESSOR_STRUCT** b, int serch)
 
 void removeChoseCard(PROCESSOR_STRUCT** processor, int remove)
 {
-	/*PROCESSOR_STRUCT* temp = *processor;
-	int serchRemoveCard = -1;
-	int TMP = remove - 3;
-
-	while (serchRemoveCard != TMP)
-	{
-		temp = temp->next;
-		serchRemoveCard++;
-	}
-	
-	free(temp->next->name);
-	free(temp->next->nameGenerations);
-	free(temp->next->cache);
-	free(temp->next);
-
-
-	temp->next = temp->next->next;*/
-
 	if (processor == NULL || *processor == NULL)
 		return;  // List is empty or invalid pointer
 
@@ -571,7 +731,7 @@ void removeChoseCard(PROCESSOR_STRUCT** processor, int remove)
 
 	//возможно понадобится изменение файла
 
-	//writeInFileAndStruct(&processor, 2);
+	writeInFileAndStruct(&processor, 2);
 }
 
 
@@ -648,94 +808,94 @@ PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 
 int cmpNameLineal(const void* v1, const void* v2)
 {
-	const struct PROCESSOR_STRUCT* case_1 = v1;
-	const struct PROCESSOR_STRUCT* case_2 = v2;
+	const struct PROCESSOR_STRUCT_TEMPP* case_1 = v1;
+	const struct PROCESSOR_STRUCT_TEMPP* case_2 = v2;
 	return strcmp(case_1->name, case_2->name);
 }
-//
-//int cmpNameGenerationsLineal(const void* v1, const void* v2)
-//{
-//	const struct PROCESSOR_STRUCT* case_1 = v1;
-//	const struct PROCESSOR_STRUCT* case_2 = v2;
-//	return strcmp(case_1->nameGenerations, case_2->nameGenerations);
-//}
-//
-//int cmpSoketLineal(const void* v1, const void* v2)
-//{
-//	int cmp = 0;
-//	const struct PROCESSOR_STRUCT* case_1 = v1;
-//	const struct PROCESSOR_STRUCT* case_2 = v2;
-//	
-//	if (case_1->socket > case_2->socket)
-//		cmp = 1;
-//	else if (case_1->socket < case_2->socket)
-//		cmp = -1;
-//	else
-//		cmp = 0;
-//	
-//	return cmp;
-//}
-//
-//int cmpFrequencyLineal(const void* v1, const void* v2)
-//{
-//	int cmp = 0;
-//	const struct PROCESSOR_STRUCT* case_1 = v1;
-//	const struct PROCESSOR_STRUCT* case_2 = v2;
-//
-//	if (case_1->frequency > case_2->frequency)
-//		cmp = 1;
-//	else if (case_1->frequency < case_2->frequency)
-//		cmp = -1;
-//	else
-//		cmp = 0;
-//
-//	return cmp;
-//}
-//
-//int cmpFrequencyInTurboBoostLineal(const void* v1, const void* v2)
-//{
-//	int cmp = 0;
-//	const struct PROCESSOR_STRUCT* case_1 = v1;
-//	const struct PROCESSOR_STRUCT* case_2 = v2;
-//
-//	if (case_1->frequencyInTurboBoost > case_2->frequencyInTurboBoost)
-//		cmp = 1;
-//	else if (case_1->frequencyInTurboBoost < case_2->frequencyInTurboBoost)
-//		cmp = -1;
-//	else
-//		cmp = 0;
-//
-//	return cmp;
-//}
-//
-//int cmpSoketLineal(const void* v1, const void* v2)
-//{
-//	int cmp = 0;
-//	const struct PROCESSOR_STRUCT* case_1 = v1;
-//	const struct PROCESSOR_STRUCT* case_2 = v2;
-//
-//	if (case_1->technologicalProcess > case_2->technologicalProcess)
-//		cmp = 1;
-//	else if (case_1->technologicalProcess < case_2->technologicalProcess)
-//		cmp = -1;
-//	else
-//		cmp = 0;
-//
-//	return cmp;
-//}
 
-void destroyList(PROCESSOR_STRUCT* processor)
+int cmpNameGenerationsLineal(const void* v1, const void* v2)
 {
-	PROCESSOR_STRUCT* temp = processor;
+	const struct PROCESSOR_STRUCT* case_1 = v1;
+	const struct PROCESSOR_STRUCT* case_2 = v2;
+	return strcmp(case_1->nameGenerations, case_2->nameGenerations);
+}
+
+int cmpSoketLineal(const void* v1, const void* v2)
+{
+	int cmp = 0;
+	const struct PROCESSOR_STRUCT* case_1 = v1;
+	const struct PROCESSOR_STRUCT* case_2 = v2;
+	
+	if (case_1->socket > case_2->socket)
+		cmp = 1;
+	else if (case_1->socket < case_2->socket)
+		cmp = -1;
+	else
+		cmp = 0;
+	
+	return cmp;
+}
+PROCESSOR_STRUCT* B;
+int cmpFrequencyLineal(const void* v1, const void* v2)
+{
+	int cmp = 0;
+	const struct PROCESSOR_STRUCT* case_1 = v1;
+	const struct PROCESSOR_STRUCT* case_2 = v2;
+
+	if (case_1->frequency > case_2->frequency)
+		cmp = 1;
+	else if (case_1->frequency < case_2->frequency)
+		cmp = -1;
+	else
+		cmp = 0;
+
+	return cmp;
+}
+
+int cmpFrequencyInTurboBoostLineal(const void* v1, const void* v2)
+{
+	int cmp = 0;
+	const struct PROCESSOR_STRUCT* case_1 = v1;
+	const struct PROCESSOR_STRUCT* case_2 = v2;
+
+	if (case_1->frequencyInTurboBoost > case_2->frequencyInTurboBoost)
+		cmp = 1;
+	else if (case_1->frequencyInTurboBoost < case_2->frequencyInTurboBoost)
+		cmp = -1;
+	else
+		cmp = 0;
+
+	return cmp;
+}
+
+int cmpTechnologicalProcessLineal(const void* v1, const void* v2)
+{
+	int cmp = 0;
+	const struct PROCESSOR_STRUCT* case_1 = v1;
+	const struct PROCESSOR_STRUCT* case_2 = v2;
+
+	if (case_1->technologicalProcess > case_2->technologicalProcess)
+		cmp = 1;
+	else if (case_1->technologicalProcess < case_2->technologicalProcess)
+		cmp = -1;
+	else
+		cmp = 0;
+
+	return cmp;
+}
+
+int destroyList(PROCESSOR_STRUCT** processor)
+{
+	PROCESSOR_STRUCT* temp = *processor;
 	int i = 0;
 	
 	while (temp != NULL)
 	{
-		PROCESSOR_STRUCT_TEMP[i].name = malloc((strlen(PROCESSOR_STRUCT_TEMP[i].name) + 1) * sizeof(char));
+		PROCESSOR_STRUCT_TEMP[i].name = malloc(50 * sizeof(char));
 		if (!PROCESSOR_STRUCT_TEMP[i].name)
 			exit(1);
 
-		PROCESSOR_STRUCT_TEMP[i].nameGenerations = malloc((strlen(PROCESSOR_STRUCT_TEMP[i].nameGenerations) + 1) * sizeof(char));
+		PROCESSOR_STRUCT_TEMP[i].nameGenerations = malloc(100 * sizeof(char));
 		if (!PROCESSOR_STRUCT_TEMP[i].nameGenerations) 
 		{
 			free(PROCESSOR_STRUCT_TEMP[i].name);
@@ -758,88 +918,229 @@ void destroyList(PROCESSOR_STRUCT* processor)
 		PROCESSOR_STRUCT_TEMP[i].frequency = temp->frequency;
 		PROCESSOR_STRUCT_TEMP[i].frequencyInTurboBoost = temp->frequencyInTurboBoost;
 
-		for (int i = 0; i < MAXCACHE; i++)
-			PROCESSOR_STRUCT_TEMP[i].cache[i] = temp->cache[i];
+		for (int j = 0; j < MAXCACHE; j++)
+			PROCESSOR_STRUCT_TEMP[i].cache[j] = temp->cache[j];
 
 		temp = temp->next;
 		i++;
 	}
 
 
-
+	return i;
 }
 
-int main()
+PROCESSOR_STRUCT* createSortList(PROCESSOR_STRUCT* processor)
+{
+	int qualityNode = 0;
+	int TMP = 0;
+	int j = 0;
+	//PROCESSOR_STRUCT* sortedList = NULL;
+
+	while (PROCESSOR_STRUCT_TEMP[j].name != NULL)
+	{
+		qualityNode++;
+		j++;
+	}
+
+	for (int i = 0; i < qualityNode; i++)
+	{
+		if (TMP == 0)
+		{
+			processor = init(PROCESSOR_STRUCT_TEMP[i].name, PROCESSOR_STRUCT_TEMP[i].nameGenerations, PROCESSOR_STRUCT_TEMP[i].socket, 
+				PROCESSOR_STRUCT_TEMP[i].technologicalProcess, PROCESSOR_STRUCT_TEMP[i].frequency, PROCESSOR_STRUCT_TEMP[i].frequencyInTurboBoost, PROCESSOR_STRUCT_TEMP[i].cache);
+		}
+		else
+		{
+			addFront(&processor, PROCESSOR_STRUCT_TEMP[i].name, PROCESSOR_STRUCT_TEMP[i].nameGenerations, PROCESSOR_STRUCT_TEMP[i].socket,
+				PROCESSOR_STRUCT_TEMP[i].technologicalProcess, PROCESSOR_STRUCT_TEMP[i].frequency, PROCESSOR_STRUCT_TEMP[i].frequencyInTurboBoost, PROCESSOR_STRUCT_TEMP[i].cache);
+		}
+
+		TMP++;
+	}
+
+
+	return processor;
+}
+
+void SigBreak_Handler(int n_signal)
+{
+	writeInFileAndStruct(&B, 2);
+}
+
+
+
+int main(int n_arg_num, const char** p_arg_list)
 {
 
-	PROCESSOR_STRUCT* B = NULL;
+	B = NULL;
 	int serch;
 	int remove;
+	int i;
+	int serchTechAndSoket;
+
+	char serchNameOrGeneration[100];
+
+	float serchferqu;
 
 	B = addInSruct(B);
 
 	int choice, choiceFound, choiceSort;
 
+	void(*m) (int);
 
 	while (1)
 	{
-
+		signal(SIGBREAK, &SigBreak_Handler);
+		
+		puts("#========================================#");
+		puts("0 - Help");
+		puts("1 - Adding cards about domain objects");
+		puts("2 - Editing cards");
+		puts("3 - Removing cards");
+		puts("4 - Card index output");
+		puts("5 - Search for cards by parameter");
+		puts("6 - Sorting a file cabinet by parameter");
+		puts("7 - Exit");
+		puts("#========================================#");
 
 		scanf("%d", &choice);
 
+		clear();
 		switch (choice)
 		{
 		case 0: //help  ^
 			printHelp();
+			clear();
 			break;
-		case 1://Добавление карточек об объектах предметной области ^
+		case 1://Adding cards about domain objects ^
 			writeInFileAndStruct(&B, 1);
+			clear();
 			break;
-		case 2://Редактирование карточек +-
+		case 2://Editing cards +-
 			scanf("%d", &serch);
 
 			reactStruct(&B, serch);
+			clear();
 			break;
-		case 3://Удаление карточек   ^
+		case 3://Removing cards   ^
 			scanf("%d", &remove);
 
 			removeChoseCard(&B, remove);
+			clear();
 			break;
-		case 4://Вывод картотеки    ^
+		case 4://Card index output    ^
 			printNode(B);
+			system("pause");
+			clear();
 			break;
-		case 5://Поиск карточек по параметру    
+		case 5://Search for cards by parameter
+
+			puts("#======================================#");
+			puts("1 - Search by name");
+			puts("2 - Search by generation");
+			puts("3 - Search by base frequency");
+			puts("4 - Search by frequency in turbo boost");
+			puts("5 - Search by socket");
+			puts("6 - Search by process");
+			puts("7 - Search by cache");
+			puts("#======================================#");
+
 			scanf("%d", &choiceFound);
+
 			switch (choiceFound)
-			{ //кол-во параметров
-			default:
-				break;
-			}
-			break;
-		case 6://Сортировка картотеки по параметру
-			scanf("%d", &choiceSort);
-			switch (choiceSort)
-			{ //кол-во параметров
+			{ //number of parameters
 			case 1:
+				while ((getchar()) != '\n');
+				fgets(serchNameOrGeneration, 100, stdin);
 				
-				qsort(B,B->TMP,sizeof(B), cmpNameLineal);
+				//serchNameOrGeneration[strcspn(serchNameOrGeneration, "\n")] = '\0';
+				serchByName(&B, serchNameOrGeneration, choiceFound);
 				break;
 			case 2:
+				while ((getchar()) != '\n');
+				fgets(serchNameOrGeneration, 100, stdin);
+
+				serchByName(&B, serchNameOrGeneration, choiceFound);
 				break;
 			case 3:
+				scanf("%f", &serchferqu);
+				serchByCharacterFerqu(&B, serchferqu, choiceFound);
 				break;
 			case 4:
+				scanf("%f", &serchferqu);
+				serchByCharacterFerqu(&B, serchferqu, choiceFound);
 				break;
 			case 5:
+				scanf("%d", &serchTechAndSoket);
+				serchByCharacter(&B, serchTechAndSoket, choiceFound);
 				break;
 			case 6:
+				scanf("%d", &serchTechAndSoket);
+				serchByCharacter(&B, serchTechAndSoket, choiceFound);
 				break;
 			case 7:
+				scanf("%d", &serchTechAndSoket);
+				serchByCharacter(&B, serchTechAndSoket, choiceFound);
 				break;
 			}
+			clear();
 			break;
-		case 7://Выход
+		case 6://Sorting a file cabinet by parameter +-
 
+			puts("#======================================#");
+			puts("1 - Sort by name");
+			puts("2 - Sort by generation");
+			puts("3 - Sort by base frequency");
+			puts("4 - Sort by frequency in turbo boost");
+			puts("5 - Sort by socket");
+			puts("6 - Sort by process");
+			puts("7 - Sort by cache");
+			puts("#======================================#");
+
+			scanf("%d", &choiceSort);
+
+			switch (choiceSort)
+			{ //number of parameters
+			case 1:
+				i = destroyList(&B);
+				qsort(PROCESSOR_STRUCT_TEMP,i,sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpNameLineal);
+				B = createSortList(B);
+				break;
+			case 2:
+				i = destroyList(&B);
+				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpNameGenerationsLineal);
+				B = createSortList(B);
+				break;
+			case 3:
+				i = destroyList(&B);
+				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpSoketLineal);
+				B = createSortList(B);
+				break;
+			case 4:
+				i = destroyList(&B);
+				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpFrequencyLineal);
+				B = createSortList(B);
+				break;
+			case 5:
+				i = destroyList(&B);
+				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpFrequencyInTurboBoostLineal);
+				B = createSortList(B);
+				break;
+			case 6:
+				i = destroyList(&B);
+				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpTechnologicalProcessLineal);
+				B = createSortList(B);
+				break;
+			case 7: //тута еще
+				i = destroyList(&B);
+				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpNameLineal);
+				B = createSortList(B);
+				break;
+			}
+			clear();
+			break;
+		case 7://Exit
+			writeInFileAndStruct(&B, 2);
 			return 0;
 			break;
 		default://
