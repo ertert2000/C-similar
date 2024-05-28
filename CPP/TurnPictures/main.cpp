@@ -8,9 +8,10 @@
 
 const char* smtp_server = "smtp://smtp.gmail.com:587";
 const char* from_email = "alekseipoliakoff@gmail.com";
-const char* to_email = "ertert2000@yandex.ru";
+const char* to_email = "schahov.kirill2017@yandex.ru";
+//const char* to_email = "ertert2000@yandex.ru";
 //const char* to_mail2 = "artem.pavlenko.05@mail.ru";
-const char* subject = "письмо с распознаванием лица";
+const char* subject = "а это не я";
 const char* email_body = "В кадре появился человек";
 const char* password = "kcnw bsbb eyvt aspu";
 

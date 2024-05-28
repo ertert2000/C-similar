@@ -62,6 +62,7 @@
 #include <ctype.h>
 #include <signal.h>
 
+
 #define MAXCACHE 3
 
 #ifdef _WIN32
@@ -97,6 +98,13 @@ struct PROCESSOR_STRUCT_TEMPP
 	struct PROCESSOR_STRUCT* next;
 	struct PROCESSOR_STRUCT* prev;
 } PROCESSOR_STRUCT_TEMP[200];
+
+typedef struct 
+{
+	PROCESSOR_STRUCT* processor;
+	char pathFile[50];
+	int signal;
+} SIGNAL_DATA;
 
 char* mystrtok(char* str, const char* delim) {
 	static char* next;
@@ -192,10 +200,10 @@ void addFront(PROCESSOR_STRUCT** processor,
 	temp->next = newNode;
 }
 
-void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
+void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose, char* pathFile)
 {
 	FILE* file;
-	file = fopen("pros.csv", "a");
+	file = fopen(pathFile, "a");
 	if (file == NULL)
 		exit(1);
 
@@ -225,7 +233,7 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 		while ((getchar()) != '\n');
 		puts("name");
 		fgets(name, sizeof(name), stdin);
-		name[strcspn(name, "\n")] = "\0";  // Удаление символа новой строки
+		name[strcspn(name, "\n")] = "\0"; // Удаление символа новой строки
 		fprintf(file, "%s;", name);
 
 		puts("nameGenerations");
@@ -267,7 +275,7 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 			if (i != 2) 
 			{
 				fprintf(file, ",");
-				while ((getchar()) != '\n');
+				//while ((getchar()) != '\n');
 			}
 
 			cache[i] = atoi(tempCache);
@@ -278,7 +286,7 @@ void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose)
 		break;
 	case 2:
 		remove(file);
-		newFile = fopen("pros.csv", "w+");
+		newFile = fopen(pathFile, "w+");
 		while (temp != NULL)
 		{
 			fprintf(newFile, "%s;", temp->name);
@@ -440,7 +448,7 @@ void serchByCharacterFerqu(PROCESSOR_STRUCT** b, float serch, int choose)
 	case 3:
 		while (temp != NULL)
 		{
-			if (choose == temp->frequency)
+			if (serch == temp->frequency)
 			{
 				flag += 1;
 				if (flag == 1)
@@ -472,7 +480,7 @@ void serchByCharacterFerqu(PROCESSOR_STRUCT** b, float serch, int choose)
 	case 4:
 		while (temp != NULL)
 		{
-			if (choose == temp->frequencyInTurboBoost)
+			if (serch == temp->frequencyInTurboBoost)
 			{
 				flag += 1;
 				if (flag == 1)
@@ -514,7 +522,7 @@ void serchByCharacter(PROCESSOR_STRUCT** b, int serch, int choose)
 	case 5:
 		while (temp != NULL)
 		{
-			if (choose == temp->socket)
+			if (serch == temp->socket)
 			{
 				flag += 1;
 				if (flag == 1)
@@ -546,7 +554,7 @@ void serchByCharacter(PROCESSOR_STRUCT** b, int serch, int choose)
 	case 6:
 		while (temp != NULL)
 		{
-			if (choose == temp->technologicalProcess)
+			if (serch == temp->technologicalProcess)
 			{
 				flag += 1;
 				if (flag == 1)
@@ -579,7 +587,7 @@ void serchByCharacter(PROCESSOR_STRUCT** b, int serch, int choose)
 		while (temp != NULL)
 		{
 			for(int i = 0; i < 3; i++)
-				if (choose == temp->cache[i])
+				if (serch == temp->cache[i])
 				{
 					flag += 1;
 					if (flag == 1)
@@ -639,48 +647,80 @@ void reactStruct(PROCESSOR_STRUCT** b, int serch)
 	float frequencyInTurboBoost;
 	int cache[3];
 
+	char socketT[50];
+	char technologicalProcessT[50];
+	char frequencyT[50]; //       
+	char frequencyInTurboBoostT[50];
+	char cacheT[3];
+
 	while (temp != NULL)
 	{
 		if (i == serch)
 		{
-			free(temp->name);
+			/*free(temp->name);
 			free(temp->nameGenerations);
-			free(temp->cache);
+			free(temp->cache);*/
 
 			while ((getchar()) != '\n');
 			puts("name");
 			fgets(name, 50, stdin);
-			name[strcspn(name, "\n")] = "\0";
-			strcpy(temp->name, name);
+			name[strcspn(name, "\n")] = '\0';
+			if ( (name[0] != '-'))
+				strcpy(temp->name, name);
 
 			//while ((getchar()) != '\n');
 			puts("nameGenerations");
 			fgets(nameGenerations, 100, stdin);
-			nameGenerations[strcspn(nameGenerations, "\n")] = "\0";
-			strcpy(temp->nameGenerations, nameGenerations);
+			nameGenerations[strcspn(nameGenerations, "\n")] = '\0';
+			if ((nameGenerations[0] != '-'))
+				strcpy(temp->nameGenerations, nameGenerations);
 
 			puts("socket");
-			scanf("%d", &socket);
-			temp->socket = socket;
+			fgets(socketT, 100, stdin);
+			socketT[strcspn(socketT, "\n")] = '\0';
+			if ((socketT[0] != '-'))
+			{
+				socket = atoi(socketT);
+				temp->socket = socket;
+			}
 
 			puts("technologicalProcess");
-			scanf("%d", &technologicalProcess);
-			temp->technologicalProcess = technologicalProcess;
+			fgets(technologicalProcessT, 100, stdin);
+			technologicalProcessT[strcspn(technologicalProcessT, "\n")] = '\0';
+			if ((technologicalProcessT[0] != '-'))
+			{
+				technologicalProcess = atoi(technologicalProcessT);
+				temp->technologicalProcess = technologicalProcess;
+			}
 
 			puts("frequency");
-			scanf("%f", &frequency);
-			temp->frequency = frequency;
+			fgets(frequencyT, 100, stdin);
+			frequencyT[strcspn(frequencyT, "\n")] = '\0';
+			if ((frequencyT[0] != '-'))
+			{
+				frequency = atof(frequencyT);
+				temp->frequency = frequency;
+			}
 
 			puts("frequencyInTurboBoost");
-			scanf("%f", &frequencyInTurboBoost);
-			temp->frequencyInTurboBoost = frequencyInTurboBoost;
-
-			puts("cache");
-			for (int i = 0; i < 3; i++)
+			fgets(frequencyInTurboBoostT, 100, stdin);
+			frequencyInTurboBoostT[strcspn(frequencyInTurboBoostT, "\n")] = '\0';
+			if ((frequencyInTurboBoostT[0] != '-'))
 			{
-				scanf("%d", &cache[i]);
-				temp->cache[i] = cache[i];
+				frequencyInTurboBoost = atof(frequencyInTurboBoostT);
+				temp->frequencyInTurboBoost = frequencyInTurboBoost;
 			}
+			puts("cache");
+
+			puts("press the dash sign if you do not want to change this parameter, if not, then press any other button");
+			fgets(cacheT, 100, stdin);
+			cacheT[strcspn(cacheT, "\n")] = '\0';
+			if ((cacheT[0] != '-'))
+				for (int i = 0; i < 3; i++)
+				{
+					scanf("%d", &cache[i]);
+					temp->cache[i] = cache[i];
+				}
 		}
 
 		i++;
@@ -688,18 +728,20 @@ void reactStruct(PROCESSOR_STRUCT** b, int serch)
 	}
 }
 
-void removeChoseCard(PROCESSOR_STRUCT** processor, int remove)
+void removeChoseCard(PROCESSOR_STRUCT** record, int remove)
 {
-	if (processor == NULL || *processor == NULL)
-		return;  // List is empty or invalid pointer
+	if (record == NULL || *record == NULL)
+		return;  /*List is empty or invalid pointer*/
 
-	PROCESSOR_STRUCT* temp = *processor;
+	PROCESSOR_STRUCT* temp = *record;
 	PROCESSOR_STRUCT* prev = NULL;
-	int searchRemoveCard = 1;
+	int searchRemoveCard;
 
-	// If the node to be removed is the head node
-	if (remove == 0) {
-		*processor = temp->next;
+	searchRemoveCard = 1;
+
+	/*If the node to be removed is the head node*/
+	if (remove == 1) {
+		*record = temp->next;
 		free(temp->name);
 		free(temp->nameGenerations);
 		free(temp->cache);
@@ -707,36 +749,43 @@ void removeChoseCard(PROCESSOR_STRUCT** processor, int remove)
 		return;
 	}
 
-	// Traverse the list to find the node to remove
-	while (temp != NULL && searchRemoveCard != remove) 
+	/*Traverse the list to find the node to remove*/
+	while (temp != NULL && searchRemoveCard != remove)
 	{
 		prev = temp;
 		temp = temp->next;
 		searchRemoveCard++;
 	}
 
-	// If the node to remove was not found
 	if (temp == NULL)
-		return;
+	{
+		puts("there is no such element");
+		system("pause");
+	}
+	else if (temp->next == NULL)
+	{
+		free(temp->name);
+		free(temp->nameGenerations);
+		free(temp->cache);
+		free(temp);
+		prev->next = NULL;
+	}
+	else
+	{
+		temp = temp->next;  /*Moving to the next element*/
 
-	// Remove the node
-	if (prev != NULL) 
-		prev->next = temp->next;
+		free(prev->next->name);
+		free(prev->next->nameGenerations);
+		free(prev->next->cache);
+		free(prev->next);
 
-
-	free(temp->name);
-	free(temp->nameGenerations);
-	free(temp->cache);
-	free(temp);
-
-	//возможно понадобится изменение файла
-
-	writeInFileAndStruct(&processor, 2);
+		prev->next = temp;
+	}
 }
 
 
 
-PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
+PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor, char* pathFile)
 {
 	int TMP = 0;
 	char buffer[1000];
@@ -756,7 +805,7 @@ PROCESSOR_STRUCT* addInSruct(PROCESSOR_STRUCT* processor)
 
 
 	FILE* file;
-	file = fopen("pros.csv", "r");
+	file = fopen(pathFile, "r");
 	if (file == NULL)
 		exit(1);
 	while (fgets(buffer, 1000, file) != NULL)
@@ -835,7 +884,7 @@ int cmpSoketLineal(const void* v1, const void* v2)
 	
 	return cmp;
 }
-PROCESSOR_STRUCT* B;
+
 int cmpFrequencyLineal(const void* v1, const void* v2)
 {
 	int cmp = 0;
@@ -877,6 +926,22 @@ int cmpTechnologicalProcessLineal(const void* v1, const void* v2)
 	if (case_1->technologicalProcess > case_2->technologicalProcess)
 		cmp = 1;
 	else if (case_1->technologicalProcess < case_2->technologicalProcess)
+		cmp = -1;
+	else
+		cmp = 0;
+
+	return cmp;
+}
+
+int cmpCacheLineal(const void* v1, const void* v2)
+{
+	int cmp = 0;
+	const struct PROCESSOR_STRUCT* case_1 = v1;
+	const struct PROCESSOR_STRUCT* case_2 = v2;
+
+	if (case_1->cache[0] > case_2->cache[0])
+		cmp = 1;
+	else if (case_1->cache[0] < case_2->cache[0])
 		cmp = -1;
 	else
 		cmp = 0;
@@ -964,34 +1029,78 @@ PROCESSOR_STRUCT* createSortList(PROCESSOR_STRUCT* processor)
 
 void SigBreak_Handler(int n_signal)
 {
-	writeInFileAndStruct(&B, 2);
+	FILE* tempFile = fopen("temp_signal_data.bin", "rb");
+	if (tempFile == NULL) 
+	{
+		perror("fopen");
+		return;
+	}
+
+	SIGNAL_DATA signal_data;
+	fread(&signal_data, sizeof(SIGNAL_DATA), 1, tempFile);
+	fclose(tempFile);
+
+	if (signal_data.processor != NULL)
+	{
+		writeInFileAndStruct(signal_data.processor, 2, signal_data.pathFile);
+		remove("temp_signal_data.bin");
+	}
+
 }
 
-
-
-int main(int n_arg_num, const char** p_arg_list)
+int main()
 {
+	PROCESSOR_STRUCT* B = NULL;
 
-	B = NULL;
+
 	int serch;
-	int remove;
+	int removeNode;
 	int i;
 	int serchTechAndSoket;
 
 	char serchNameOrGeneration[100];
-
+	char pathfile[100];
 	float serchferqu;
+	FILE* file;
 
-	B = addInSruct(B);
+	printf("Hello! Enter the name of the file you want to start working with:\n");
+	fgets(pathfile, 100, stdin);
+	pathfile[strcspn(pathfile, "\n")] = '\0';
+
+	file = fopen(pathfile, "r");    /*Opening a file*/
+
+	while (!file)   /*Checking to open a file*/
+	{
+		printf("Invalid file name \nPlease, enter the path to the file again:\n");
+		fgets(pathfile, 100, stdin);
+		pathfile[strcspn(pathfile, "\n")] = '\0';
+		file = fopen(pathfile, "r");
+		system("cls");
+	}
+
+	fclose(file);
+	system("cls");
+
+	B = addInSruct(B, pathfile);
 
 	int choice, choiceFound, choiceSort;
 
-	void(*m) (int);
+	SIGNAL_DATA signal_data = { .processor = &B, .signal = SIGBREAK };
+	strcpy(signal_data.pathFile, pathfile);
+
+	FILE* tempFile = fopen("temp_signal_data.bin", "wb");
+	if (tempFile == NULL) 
+	{
+		perror("fopen");
+		return EXIT_FAILURE;
+	}
+	fwrite(&signal_data, sizeof(SIGNAL_DATA), 1, tempFile);
+	fclose(tempFile);
+
+	signal(SIGBREAK, SigBreak_Handler);
 
 	while (1)
 	{
-		signal(SIGBREAK, &SigBreak_Handler);
-		
 		puts("#========================================#");
 		puts("0 - Help");
 		puts("1 - Adding cards about domain objects");
@@ -1013,19 +1122,31 @@ int main(int n_arg_num, const char** p_arg_list)
 			clear();
 			break;
 		case 1://Adding cards about domain objects ^
-			writeInFileAndStruct(&B, 1);
+			writeInFileAndStruct(&B, 1, pathfile);
 			clear();
 			break;
 		case 2://Editing cards +-
+			puts("Enter the id of the element you want to change");
 			scanf("%d", &serch);
-
+			while (!(serch >= 1 && serch <= B->TMP)) {
+				puts("Please, rewrite your choice\n");
+				scanf("%d", &serch);
+			}
 			reactStruct(&B, serch);
 			clear();
 			break;
 		case 3://Removing cards   ^
-			scanf("%d", &remove);
+			puts("Enter the id of the element you want to delete");
+			scanf("%d", &removeNode);
+			while (!(removeNode >= 1 && removeNode <= B->TMP))
+			{
+				puts("Please, rewrite your choice\n");
+				scanf("%d", &removeNode);
+			}
 
-			removeChoseCard(&B, remove);
+			removeChoseCard(&B, removeNode);
+			puts("The element was successfully deleted\n");
+			clear();
 			clear();
 			break;
 		case 4://Card index output    ^
@@ -1046,7 +1167,11 @@ int main(int n_arg_num, const char** p_arg_list)
 			puts("#======================================#");
 
 			scanf("%d", &choiceFound);
-
+			while (!(choiceFound >= 1 && choiceFound <= 7)) 
+			{
+				puts("Please, rewrite your choice\n");
+				scanf("%d", &choiceFound);
+			}
 			switch (choiceFound)
 			{ //number of parameters
 			case 1:
@@ -1083,6 +1208,7 @@ int main(int n_arg_num, const char** p_arg_list)
 				serchByCharacter(&B, serchTechAndSoket, choiceFound);
 				break;
 			}
+			system("pause");
 			clear();
 			break;
 		case 6://Sorting a file cabinet by parameter +-
@@ -1090,15 +1216,19 @@ int main(int n_arg_num, const char** p_arg_list)
 			puts("#======================================#");
 			puts("1 - Sort by name");
 			puts("2 - Sort by generation");
-			puts("3 - Sort by base frequency");
+			puts("3 - Sort by socket");
 			puts("4 - Sort by frequency in turbo boost");
-			puts("5 - Sort by socket");
+			puts("5 - Sort by base frequency");
 			puts("6 - Sort by process");
 			puts("7 - Sort by cache");
 			puts("#======================================#");
 
 			scanf("%d", &choiceSort);
-
+			while (!(choiceSort >= 1 && choiceSort <= 7)) 
+			{
+				puts("Please, rewrite your choice\n");
+				scanf("%d", &choiceSort);
+			}
 			switch (choiceSort)
 			{ //number of parameters
 			case 1:
@@ -1133,14 +1263,15 @@ int main(int n_arg_num, const char** p_arg_list)
 				break;
 			case 7: //тута еще
 				i = destroyList(&B);
-				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpNameLineal);
+				qsort(PROCESSOR_STRUCT_TEMP, i, sizeof(struct PROCESSOR_STRUCT_TEMPP), cmpCacheLineal);
 				B = createSortList(B);
 				break;
 			}
 			clear();
 			break;
 		case 7://Exit
-			writeInFileAndStruct(&B, 2);
+			remove("temp_signal_data.bin");
+			writeInFileAndStruct(&B, 2, pathfile);
 			return 0;
 			break;
 		default://

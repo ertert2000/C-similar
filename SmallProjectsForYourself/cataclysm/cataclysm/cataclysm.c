@@ -19,6 +19,7 @@
 
 //bind_textdomain_codeset(PACKAGE, "WINDOWS-1251");
 
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h> 
 #include <string.h> 
 #include <ctype.h> 

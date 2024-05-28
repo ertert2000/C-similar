@@ -98,7 +98,7 @@ int main()
 		for (int i = 0; i < wiegts; i++)
 			cin >> enterMy[i];
 
-		set1 >> 10;
+		//set1 >> 10;
 
 		cout << "answer: " << activate(rightProp(enterMy)) << endl;
 
