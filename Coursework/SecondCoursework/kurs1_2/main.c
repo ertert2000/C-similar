@@ -200,7 +200,7 @@ void addFront(PROCESSOR_STRUCT** processor,
 	temp->next = newNode;
 }
 
-void writeInFileAndStruct(PROCESSOR_STRUCT** b, int choose, char* pathFile)
+void writeInFile(PROCESSOR_STRUCT** b, int choose, char* pathFile)
 {
 	FILE* file;
 	file = fopen(pathFile, "a");
@@ -1033,7 +1033,7 @@ void SigBreak_Handler(int n_signal)
 	if (tempFile == NULL) 
 	{
 		perror("fopen");
-		return;
+		exit(3);
 	}
 
 	SIGNAL_DATA signal_data;
@@ -1042,7 +1042,7 @@ void SigBreak_Handler(int n_signal)
 
 	if (signal_data.processor != NULL)
 	{
-		writeInFileAndStruct(signal_data.processor, 2, signal_data.pathFile);
+		writeInFile(signal_data.processor, 2, signal_data.pathFile);
 		remove("temp_signal_data.bin");
 	}
 
@@ -1063,7 +1063,7 @@ int main()
 	float serchferqu;
 	FILE* file;
 
-	printf("Hello! Enter the name of the file you want to start working with:\n");
+	printf("Enter the name of the file you want to start working with:\n");
 	fgets(pathfile, 100, stdin);
 	pathfile[strcspn(pathfile, "\n")] = '\0';
 
@@ -1122,7 +1122,7 @@ int main()
 			clear();
 			break;
 		case 1://Adding cards about domain objects ^
-			writeInFileAndStruct(&B, 1, pathfile);
+			writeInFile(&B, 1, pathfile);
 			clear();
 			break;
 		case 2://Editing cards +-
@@ -1271,7 +1271,7 @@ int main()
 			break;
 		case 7://Exit
 			remove("temp_signal_data.bin");
-			writeInFileAndStruct(&B, 2, pathfile);
+			writeInFile(&B, 2, pathfile);
 			return 0;
 			break;
 		default://
