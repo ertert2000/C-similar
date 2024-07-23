@@ -23,39 +23,44 @@ public:
 		im = 0;
 	}
 
-	Complex operator+ (Complex other)
+	Complex operator+ (Complex& other)
 	{
 		return Complex(re + other.re, im + other.im);
 	}
 
-	Complex operator- (Complex other)
+	Complex operator- (Complex& other)
 	{
 		return Complex(re - other.re, im - other.im);
 	}
 
-	Complex operator* (Complex other)
+	Complex operator* (Complex& other)
 	{
 		return Complex(re * other.re + im * other.im * (-1), re * other.im + im * other.re);
 	}
 
-	Complex operator/ (Complex other)
+	Complex operator/ (Complex& other)
 	{
-		float tempIm = other.im;
-		Complex temp = Complex(other.re, tempIm);
-
-		Complex denominator = Complex * other; // не работать
-
-		return
-	}
-	void absComplexF()
-	{
-		absComplex = sqrt(pow(re, 2) + pow(im, 2));
+		return Complex((this->re * other.re + this->im * other.im) / (pow(other.re, 2) + pow(other.im, 2)), (this->im * other.re - this->re * other.im) / (pow(other.re, 2) + pow(other.im, 2)));
 	}
 
-	void argComplex()
+	friend std::ostream& operator<< (std::ostream& sys, Complex& complex)
 	{
-		argsComplex = atan(im / re);
+		sys << complex.printComplex(1);
+		return sys;
 	}
+
+	friend std::istream& operator>> (std::istream& sys, Complex& complex)
+	{
+		float a, b;
+
+		sys >> a;
+		sys >> b;
+
+		complex.setValue(a, b);
+
+		return sys;
+	}
+
 
 	std::string printComplex(int i)
 	{
@@ -89,6 +94,15 @@ public:
 		return str;
 	}
 
+	float getRe()
+	{
+		return re;
+	}
+
+	float getIm()
+	{
+		return im;
+	}
 
 	~Complex()
 	{
@@ -99,6 +113,22 @@ private:
 	float im;
 	float absComplex;
 	float argsComplex;
+
+	void absComplexF()
+	{
+		absComplex = sqrt(pow(re, 2) + pow(im, 2));
+	}
+
+	void argComplex()
+	{
+		argsComplex = atan(im / re);
+	}
+
+	void setValue(float a, float b)
+	{
+		re = a;
+		im = b;
+	}
 };
 
 int main()
@@ -106,13 +136,21 @@ int main()
 	Complex com = Complex(1,2);
 	Complex com2 = Complex(5, 4);
 
+	Complex com3 = Complex();
+
 	Complex res;
 
 	res = com + com2;
 
 	std::cout << res.printComplex(1) << std::endl;
 
-	std::cout << com.printComplex(1);
+	std::cout << com.printComplex(1) << std::endl;
+
+	std::cout << com << std::endl;
+
+	std::cin >> com3;
+
+	std::cout << com3 << std::endl;
 
 	return 0;
 }
