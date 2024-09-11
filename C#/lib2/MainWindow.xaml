@@ -1,0 +1,44 @@
+﻿<Window x:Class="lib2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av"
+        xmlns:local="clr-namespace:lib2"
+        Title="MainWindow" Height="450" Width="800">
+
+        <Window.Style>
+            <Style TargetType="{x:Type Window}">
+                <Setter Property="WindowChrome.WindowChrome">
+                    <Setter.Value>
+                        <WindowChrome CaptionHeight="30"
+                                      GlassFrameThickness="0"
+                                      CornerRadius="20"
+                                      ResizeBorderThickness="10"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Window.Style>
+
+
+    <Grid x:Name = "parentGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width ="650" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="320"/> 
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+
+        <Label  Grid.Row="0" Width="100" HorizontalAlignment="Left" Content="My prgram" Foreground="Aqua"/>
+        <ToolBar Grid.Row="1" Background="Peru"/>
+
+
+        <Button HorizontalAlignment="Right" Grid.Column="1" Background="Black" WindowChrome.IsHitTestVisibleInChrome="True" Height="25" VerticalAlignment="Top" Width="25" Click="CloseButtonClick"/>
+    </Grid>
+</Window>
