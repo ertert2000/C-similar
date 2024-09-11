@@ -9,6 +9,9 @@ public:
 	{
 		re = a;
 		im = b;
+
+		absComplex = 0;
+		argsComplex = 0;
 	}
 
 	Complex(Complex& sourse)
