@@ -14,6 +14,12 @@ namespace serialization
         public string Name { get; }
         public int Id { get; set; }
 
+        public Person()
+        {
+            Name = "Alex";
+            Id = 1;
+        }
+
         public Person(string name, int id)
         {
             Name = name;
@@ -36,9 +42,6 @@ namespace serialization
 
     internal class Program
     {
-
-        
-
         static void Main(string[] args)
         {
             var name = Console.ReadLine();

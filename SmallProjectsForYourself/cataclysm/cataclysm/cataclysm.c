@@ -24,30 +24,32 @@
 #include <string.h> 
 #include <ctype.h> 
 
-int isVowel(char c) {
+int isVowel(char c) 
+{
     char vowels[] = "aeiouAEIOU";
-    for (int i = 0; i < strlen(vowels); i++) {
-        if (c == vowels[i]) {
+    for (int i = 0; i < strlen(vowels); i++)
+        if (c == vowels[i])
             return 1;
-        }
-    }
+
     return 0;
 }
 
-void sortWords(char words[][50], int count) {
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = i + 1; j < count; j++) {
-            if (strlen(words[i]) > strlen(words[j])) {
+void sortWords(char words[][50], int count) 
+{
+    for (int i = 0; i < count - 1; i++) 
+        for (int j = i + 1; j < count; j++) 
+            if (strlen(words[i]) > strlen(words[j])) 
+            {
                 char temp[50];
                 strcpy(temp, words[i]);
                 strcpy(words[i], words[j]);
                 strcpy(words[j], temp);
             }
-        }
-    }
+
 }
 
-int main() {
+int main() 
+{
     char delimiters[100];
     char text[1000];
 
@@ -64,8 +66,10 @@ int main() {
 
     char* word = strtok(text, delimiters);
 
-    while (word != NULL && wordCount < 100) {
-        if (isVowel(word[0])) {
+    while (word != NULL && wordCount < 100) 
+    {
+        if (isVowel(word[0])) 
+        {
             strcpy(words[wordCount], word);
             wordCount++;
         }
@@ -75,9 +79,8 @@ int main() {
     sortWords(words, wordCount);
 
     printf("Words starting with a vowel letter in non-decreasing order of length:\n");
-    for (int i = 0; i < wordCount; i++) {
+    for (int i = 0; i < wordCount; i++)
         printf("%s\n", words[i]);
-    }
 
     return 0;
 }
