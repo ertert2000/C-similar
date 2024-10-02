@@ -3,6 +3,7 @@
 #include <chrono>
 #include <random>
 #include <stdlib.h>
+#include <set>
 
 int Aarr[16], Barr[16], Carr[16], Darr[16];
 
@@ -10,10 +11,10 @@ int globalResPower = 0;
 
 using namespace std;
 
-struct set 
+struct setS 
 {
     char value;
-    set* next;
+    setS* next;
 };
 
 void prinset(char* toout)
@@ -49,9 +50,15 @@ char* buildSet(int powerOfset)
 {
     char* res = new char[powerOfset + 1];
     const char* digital = "0123456789ABCDEF";
+    std::set<char> setNumbers;
 
-    for (int i = 0; i < powerOfset; i++)
-        res[i] = digital[rand() & 15];
+    while (setNumbers.size() < powerOfset)
+        setNumbers.insert(digital[rand() & 15]);
+
+
+    int index = 0;
+    for (int num : setNumbers)
+        res[index++] = num;
 
     res[powerOfset] = '\0';
     return res;
@@ -84,11 +91,11 @@ bool inSet(char n, char* set)
 }
 
 
-bool isinlist(char n, set* first)
+bool isinlist(char n, setS* first)
 {
     bool res = false;
 
-    for (set* tamp = first; tamp != nullptr; tamp = tamp->next) 
+    for (setS* tamp = first; tamp != nullptr; tamp = tamp->next) 
         if (n == tamp->value) 
             res = true;
 
@@ -97,16 +104,16 @@ bool isinlist(char n, set* first)
 }
 
 
-void print_list(set* toout)
+void print_list(setS* toout)
 {
     for (; toout != nullptr; toout = toout->next)
         cout << toout->value;
 }
 
-set* creatingASeparateNode(char data)
+setS* creatingASeparateNode(char data)
 {
-    set* node = nullptr;
-    node = new set;
+    setS* node = nullptr;
+    node = new setS;
 
     node->value = data;
     node->next = nullptr;
@@ -114,15 +121,15 @@ set* creatingASeparateNode(char data)
     return node;
 }
 
-void begin(set*& pattern, char data)
+void begin(setS*& pattern, char data)
 {
-    set* temp = creatingASeparateNode(data);
+    setS* temp = creatingASeparateNode(data);
     if (pattern == nullptr)
     {
         pattern = temp;
         return;
     }
-    set* tmp = pattern;
+    setS* tmp = pattern;
     while (tmp->next != nullptr)
         tmp = tmp->next;
 
@@ -130,9 +137,9 @@ void begin(set*& pattern, char data)
 
 }
 
-set* buildLists(set* A, set* B, set* C, set* D, char* universe)
+setS* buildLists(setS* A, setS* B, setS* C, setS* D, char* universe)
 {
-    set* elbefore = nullptr, * resfirst = nullptr, * restamp;
+    setS* resfirst = nullptr;
     for (int elem = 0; elem < 16; elem++)
         if (((isinlist(universe[elem], A) || isinlist(universe[elem], C))) && (!(isinlist(universe[elem], B) || isinlist(universe[elem], D))))
         {
@@ -170,10 +177,10 @@ int main()
     char universe[]{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
     char res[17];
 
-    set* sA = nullptr;
-    set* sB = nullptr;
-    set* sC = nullptr;
-    set* sD = nullptr;
+    setS* sA = nullptr;
+    setS* sB = nullptr;
+    setS* sC = nullptr;
+    setS* sD = nullptr;
 
     cout << "Enter poer of set: ";
     cin >> poerOfSet;
@@ -249,7 +256,7 @@ int main()
 
     auto startLists = chrono::high_resolution_clock::now();
 
-    set* sE = buildLists(sA, sB, sC, sD, universe);
+    setS* sE = buildLists(sA, sB, sC, sD, universe);
 
     auto endLists = chrono::high_resolution_clock::now();
     chrono::duration<double> durationLists = endLists - startLists;
