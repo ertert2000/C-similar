@@ -55,6 +55,7 @@ int main()
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Error" << std::endl;
+                initialNumber = 0;
             }
 
             bitInit = std::bitset<16>(initialNumber);
