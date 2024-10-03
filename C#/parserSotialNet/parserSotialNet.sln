@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "parserSotialNet", "parserSotialNet.csproj", "{40A8BCB3-DBDD-4145-A34B-927E43633C5B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40A8BCB3-DBDD-4145-A34B-927E43633C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40A8BCB3-DBDD-4145-A34B-927E43633C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40A8BCB3-DBDD-4145-A34B-927E43633C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40A8BCB3-DBDD-4145-A34B-927E43633C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {699ED4F8-A383-4E97-B83F-F9C7FC47A9FB}
+	EndGlobalSection
+EndGlobal

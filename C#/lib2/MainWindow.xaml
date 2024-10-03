@@ -3,42 +3,297 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av"
-        xmlns:local="clr-namespace:lib2"
+        xmlns:local = "clr-namespace:lib2"
         Title="MainWindow" Height="450" Width="800">
 
-        <Window.Style>
-            <Style TargetType="{x:Type Window}">
-                <Setter Property="WindowChrome.WindowChrome">
-                    <Setter.Value>
-                        <WindowChrome CaptionHeight="30"
-                                      GlassFrameThickness="0"
-                                      CornerRadius="20"
-                                      ResizeBorderThickness="10"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </Window.Style>
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome CaptionHeight="30"
+                                    GlassFrameThickness="0"
+                                    CornerRadius="20"
+                                    ResizeBorderThickness="10"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Style>
+
+    <Window.Resources>
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="testButtonTemplate2">
+            <Border x:Name="RootElement">
+                <Border.Background>
+                    <SolidColorBrush x:Name="BorderBrush" Color="Transparent"/>
+                </Border.Background>
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal"/>
+                        <VisualState x:Name="MouseOver">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="ButtonBackground" Storyboard.TargetProperty="Color" To="#5858584d" Duration="0:0:0" FillBehavior="HoldEnd"/>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+
+                <Grid Margin="4" >
+                    <Grid.Background>
+                        <SolidColorBrush x:Name="ButtonBackground" Color="Transparent"/>
+                    </Grid.Background>
+                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="0,0,0,0"/>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent" />
+            <!-- Темный фон -->
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="RowHeight" Value="30" />
+            <Setter Property="AlternatingRowBackground" Value="Aqua" />
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="10" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="10" />
+                        <Setter Property="BorderBrush" Value="Aqua" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontWeight" Value="Normal" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#333333" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#333333" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#333333" />
+                                <Setter Property="Foreground" Value="#FFFFFF" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#444444" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Padding" Value="5" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#555555" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent">
+                            <Track Name="PART_Track" IsDirectionReversed="True">
+                                <Track.Thumb>
+                                    <Thumb Background="#444444" Height="50" Margin="0">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="8"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ScrollViewer">
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </Window.Resources>
+
 
 
     <Grid x:Name = "parentGrid">
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width ="650" />
             <ColumnDefinition />
+            <ColumnDefinition Width ="200"/>
         </Grid.ColumnDefinitions>
 
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="32"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="320"/> 
-            <RowDefinition />
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
+        <Border Grid.Row="0" Grid.Column="0" Background="#333333" />
+        <Border Grid.Row="1" Grid.Column="0" Background="#333333" />
+        <Border Grid.Row="2" Grid.Column="0" Background="#262626" />
+        <Border Grid.Row="3" Grid.Column="0" Background="#333333" />
+        <Border Grid.Row="0" Grid.Column="1" Background="#333333" />
+        <Border Grid.Row="1" Grid.Column="1" Background="#333333" />
+        <Border Grid.Row="2" Grid.Column="1" Background="#333333" />
+        <Border Grid.Row="3" Grid.Column="1" Background="#333333" />
 
-        <Label  Grid.Row="0" Width="100" HorizontalAlignment="Left" Content="My prgram" Foreground="Aqua"/>
-        <ToolBar Grid.Row="1" Background="Peru"/>
+        <Label Grid.Row="1" 
+               Grid.Column="1" 
+               Width="110" 
+               HorizontalAlignment="Left" 
+               Content="Football manager" 
+               Foreground="Aqua"/>
+
+        <ToolBar Grid.Row="1" 
+                 Background="#333333"/>
 
 
-        <Button HorizontalAlignment="Right" Grid.Column="1" Background="Black" WindowChrome.IsHitTestVisibleInChrome="True" Height="25" VerticalAlignment="Top" Width="25" Click="CloseButtonClick"/>
+        <Button Template="{StaticResource testButtonTemplate2}" 
+                Grid.Column="1" 
+                Background="Black" 
+                Margin="0,3,10,5" 
+                WindowChrome.IsHitTestVisibleInChrome="True" 
+                Height="25" 
+                Width="25" 
+                Command="{Binding closeButton}" 
+                HorizontalAlignment="Right" >
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2"/>
+                </Style>
+            </Button.Resources>
+            <Image Source="x.png"/>
+        </Button>
+
+        <Button Template="{StaticResource testButtonTemplate2}" 
+                Grid.Column="1" 
+                Height="25" 
+                Width="25" 
+                Margin="0,3,40,5" 
+                WindowChrome.IsHitTestVisibleInChrome="True" 
+                Command="{Binding hideButton}" 
+                HorizontalAlignment="Right">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2"/>
+                </Style>
+            </Button.Resources>
+            <Image Source="maximize.png"/>
+        </Button>
+
+        <Button Template="{StaticResource testButtonTemplate2}" 
+                Grid.Column="1" 
+                Height="25" 
+                Width="25" 
+                Margin="0,3,70,5" 
+                WindowChrome.IsHitTestVisibleInChrome="True" 
+                Command="{Binding fullScreanButton}" 
+                HorizontalAlignment="Right">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="2"/>
+                </Style>
+            </Button.Resources>
+            <Image Source="minus.png"/>
+        </Button>
+
+        <Button
+                Template="{StaticResource testButtonTemplate2}"
+                x:Name="MainButton"
+                WindowChrome.IsHitTestVisibleInChrome="True"
+                Height="25" 
+                Width="60"
+                Margin="0,3,0,5" 
+                HorizontalAlignment="Left" 
+                Grid.Row="0"
+                Content="File">
+
+
+            <Button.ContextMenu>
+                <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Mode=Self}}" Background="#1e1e1e" BorderBrush="#1e1e1e">
+                    <MenuItem Header="Open" BorderThickness="0" Background="#1e1e1e" Foreground="White" />
+                    <MenuItem Header="Save as" BorderThickness="0" Background="#1e1e1e" Foreground="White"/>
+                    <MenuItem Header="Settings" BorderThickness="0" Background="#1e1e1e" Foreground="White"/>
+                </ContextMenu>
+            </Button.ContextMenu>
+
+            <Button.Triggers>
+                <EventTrigger SourceName="MainButton" RoutedEvent="ButtonBase.Click">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainContextMenu" Storyboard.TargetProperty="(ContextMenu.IsOpen)">
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                    <DiscreteObjectKeyFrame.Value>
+                                        <sys:Boolean>True</sys:Boolean>
+                                    </DiscreteObjectKeyFrame.Value>
+                                </DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Button.Triggers>
+
+        </Button>
+
+
+
+
+
+
+
+        <DataGrid Name="fotbal" AutoGenerateColumns="False" Grid.Row="1" Grid.Column="0" Background="#262626" Margin="0,30,0,0" Grid.RowSpan="2">
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="DataGridRowHeader">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="1,0,1,1"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Width" Value="5"/>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding FirstName}" />
+                <DataGridTextColumn Header="Позиция" Binding="{Binding Position}" />
+            </DataGrid.Columns>
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+            </DataGrid.Resources>
+        </DataGrid>
     </Grid>
 </Window>
