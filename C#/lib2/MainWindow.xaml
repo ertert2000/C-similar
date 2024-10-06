@@ -48,7 +48,6 @@
         </ControlTemplate>
         <Style TargetType="DataGrid">
             <Setter Property="Background" Value="Transparent" />
-            <!-- Темный фон -->
             <Setter Property="Foreground" Value="White" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="RowHeight" Value="30" />
@@ -142,23 +141,24 @@
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
+
     </Window.Resources>
 
 
 
-    <Grid x:Name = "parentGrid">
+    <Grid x:Name="parentGrid">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width ="200"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-
 
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Grid.Column="0" Background="#333333" />
@@ -171,25 +171,36 @@
         <Border Grid.Row="3" Grid.Column="1" Background="#333333" />
 
         <Label Grid.Row="1" 
-               Grid.Column="1" 
-               Width="110" 
-               HorizontalAlignment="Left" 
-               Content="Football manager" 
-               Foreground="Aqua"/>
+           Grid.Column="1" 
+           Width="110" 
+           HorizontalAlignment="Left" 
+           Content="Football manager" 
+           Foreground="White"/>
 
-        <ToolBar Grid.Row="1" 
-                 Background="#333333"/>
+        <Button Template="{StaticResource testButtonTemplate2}" 
+                Grid.Row="1" 
+                Grid.Column="0"
+                Content="Add Player" 
+                Command="{Binding AddPlayerCommand}"
+                Margin="10,6,518,6" 
+                Foreground="White"/>
+        <Button Template="{StaticResource testButtonTemplate2}" 
+                Grid.Row="1" Grid.Column="0" 
+                Content="Save" 
+                Command="{Binding SaveCommand}" 
+                Margin="105,6,437,6"
+                Foreground="White"/>
 
 
         <Button Template="{StaticResource testButtonTemplate2}" 
-                Grid.Column="1" 
-                Background="Black" 
-                Margin="0,3,10,5" 
-                WindowChrome.IsHitTestVisibleInChrome="True" 
-                Height="25" 
-                Width="25" 
-                Command="{Binding closeButton}" 
-                HorizontalAlignment="Right" >
+            Grid.Column="1" 
+            Background="Black" 
+            Margin="0,3,10,5" 
+            WindowChrome.IsHitTestVisibleInChrome="True" 
+            Height="25" 
+            Width="25" 
+            Command="{Binding closeButton}" 
+            HorizontalAlignment="Right" >
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="2"/>
@@ -199,13 +210,13 @@
         </Button>
 
         <Button Template="{StaticResource testButtonTemplate2}" 
-                Grid.Column="1" 
-                Height="25" 
-                Width="25" 
-                Margin="0,3,40,5" 
-                WindowChrome.IsHitTestVisibleInChrome="True" 
-                Command="{Binding hideButton}" 
-                HorizontalAlignment="Right">
+            Grid.Column="1" 
+            Height="25" 
+            Width="25" 
+            Margin="0,3,40,5" 
+            WindowChrome.IsHitTestVisibleInChrome="True" 
+            Command="{Binding hideButton}" 
+            HorizontalAlignment="Right">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="2"/>
@@ -215,13 +226,13 @@
         </Button>
 
         <Button Template="{StaticResource testButtonTemplate2}" 
-                Grid.Column="1" 
-                Height="25" 
-                Width="25" 
-                Margin="0,3,70,5" 
-                WindowChrome.IsHitTestVisibleInChrome="True" 
-                Command="{Binding fullScreanButton}" 
-                HorizontalAlignment="Right">
+            Grid.Column="1" 
+            Height="25" 
+            Width="25" 
+            Margin="0,3,70,5" 
+            WindowChrome.IsHitTestVisibleInChrome="True" 
+            Command="{Binding fullScreanButton}" 
+            HorizontalAlignment="Right">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="2"/>
@@ -231,16 +242,16 @@
         </Button>
 
         <Button
-                Template="{StaticResource testButtonTemplate2}"
-                x:Name="MainButton"
-                WindowChrome.IsHitTestVisibleInChrome="True"
-                Height="25" 
-                Width="60"
-                Margin="0,3,0,5" 
-                HorizontalAlignment="Left" 
-                Grid.Row="0"
-                Content="File">
-
+            Template="{StaticResource testButtonTemplate2}"
+            x:Name="MainButton"
+            WindowChrome.IsHitTestVisibleInChrome="True"
+            Height="25" 
+            Width="60"
+            Margin="0,3,0,5" 
+            HorizontalAlignment="Left" 
+            Grid.Row="0"
+            Content="File"
+            Foreground="White">
 
             <Button.ContextMenu>
                 <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Mode=Self}}" Background="#1e1e1e" BorderBrush="#1e1e1e">
@@ -268,11 +279,19 @@
 
         </Button>
 
+        <TextBox Grid.Row="1" Grid.Column="0" Width="195" Height="20" Margin="235,10,170,10" 
+                 Text="{Binding SearchText}" 
+                 Background="#262626" 
+                 Foreground="White"/>
 
-
-
-
-
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="10" Background="#262626">
+            <TextBlock Text="Информация об игроке" Foreground="White" FontSize="14" FontWeight="Bold"/>
+            <TextBlock Text="Имя: {Binding SelectedPlayer.Name}" Foreground="White" />
+            <TextBlock Text="Возраст: {Binding SelectedPlayer.Age}" Foreground="White" />
+            <TextBlock Text="Позиция: {Binding SelectedPlayer.Position}" Foreground="White" />
+            <TextBlock Text="Уровень: {Binding SelectedPlayer.SkillLevel}" Foreground="White" />
+        </StackPanel>
+        <GridSplitter Grid.Row="3" Grid.ColumnSpan="2" Height="5" VerticalAlignment="Top" Background="#333333" HorizontalAlignment="Stretch" />
 
         <DataGrid Name="fotbal" AutoGenerateColumns="False" Grid.Row="1" Grid.Column="0" Background="#262626" Margin="0,30,0,0" Grid.RowSpan="2">
             <DataGrid.RowHeaderStyle>
@@ -288,12 +307,17 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Фамилия" Binding="{Binding FirstName}" />
-                <DataGridTextColumn Header="Позиция" Binding="{Binding Position}" />
+                <DataGridComboBoxColumn Header="Позиция" 
+                                SelectedItemBinding="{Binding Position}" 
+                                ItemsSource="{Binding PositionsList}" />
             </DataGrid.Columns>
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
             </DataGrid.Resources>
         </DataGrid>
+
+
     </Grid>
+
 </Window>
