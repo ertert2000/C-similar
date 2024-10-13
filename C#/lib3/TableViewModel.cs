@@ -28,6 +28,7 @@ namespace lib2
 
         public ICommand AddEmployeeCommand { get; set; }
         public ICommand RemoveEmployeeCommand { get; set; }
+        public ICommand AddPlayerCommand { get; set; }
 
         public TableViewModel()
         {
@@ -46,6 +47,7 @@ namespace lib2
 
             AddEmployeeCommand = new RelayCommandControl(AddEmployee);
             RemoveEmployeeCommand = new RelayCommandControl(RemoveEmployee, CanRemoveEmployee);
+            AddPlayerCommand = new RelayCommandControl(AddPlayer);
         }
 
         private void AddEmployee()
@@ -66,6 +68,9 @@ namespace lib2
             }
         }
 
-
+        private void AddPlayer()
+        {
+            
+        }
     }
 }

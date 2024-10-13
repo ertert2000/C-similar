@@ -137,6 +137,13 @@ void begin(setS*& pattern, char data)
 
 }
 
+void front(setS*& pattern, char data)
+{
+    setS* temp = creatingASeparateNode(data);
+    temp->next = pattern;
+    pattern = temp;
+}
+
 setS* buildLists(setS* A, setS* B, setS* C, setS* D, char* universe)
 {
     setS* resfirst = nullptr;
@@ -149,7 +156,7 @@ setS* buildLists(setS* A, setS* B, setS* C, setS* D, char* universe)
             }
             else
             {
-                begin(resfirst, universe[elem]);
+                front(resfirst, universe[elem]);
             }
         }
 
