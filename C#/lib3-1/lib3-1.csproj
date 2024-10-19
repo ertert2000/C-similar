@@ -68,7 +68,6 @@
     <Compile Include="AddPlayerWindow.xaml.cs">
       <DependentUpon>AddPlayerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddPlayerWindowFlyoutMenuItem.cs" />
     <Compile Include="Serialization.cs" />
     <Compile Include="SettingsControl.cs" />
     <Page Include="AddPlayerWindow.xaml">
@@ -124,6 +123,9 @@
     <Resource Include="minus.png" />
     <Resource Include="window.png" />
     <Resource Include="x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="exLib3.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

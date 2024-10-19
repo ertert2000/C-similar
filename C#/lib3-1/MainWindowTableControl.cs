@@ -11,10 +11,7 @@ namespace lib3_1
 {
     public partial class MainWindow
     {
-        private void buttonRemoveClick(object sender, RoutedEventArgs e)
-        {
-            FootballPlayers.deletePlaers(fotbal);
-        }
+        private void buttonRemoveClick(object sender, RoutedEventArgs e) => FootballPlayers.deletePlaers(fotbal);
 
         private void fotbalKeyDelete(object sender, KeyEventArgs e)
         {
@@ -22,18 +19,14 @@ namespace lib3_1
                 FootballPlayers.deletePlaers(fotbal);
         }
 
-        private void DeleteMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            FootballPlayers.deletePlaers(fotbal);
-        }
+        private void DeleteMenuItemClick(object sender, RoutedEventArgs e) => FootballPlayers.deletePlaers(fotbal);
 
         private void CellEditEndingClick(object sender, DataGridCellEditEndingEventArgs e)
         {
             var editElement = e.EditingElement as TextBox;
             if (editElement != null)
-            {
-                MessageBox.Show($"Новое значение: {editElement.Text}");
-            }
+                MessageBox.Show($"New meaning: {editElement.Text}");
+
         }
 
         private void AddPlayerClick(object sender, RoutedEventArgs e)

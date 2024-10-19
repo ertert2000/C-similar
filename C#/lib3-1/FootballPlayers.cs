@@ -45,9 +45,7 @@ namespace lib3_1
                 }
             }
             else
-            {
-                MessageBox.Show("Idi nakchuy");
-            }
+                MessageBox.Show("error");
         }
 
         public static void addPlaers(AddPlayerWindow AddPlayerWindow, MainWindow MainWindow)

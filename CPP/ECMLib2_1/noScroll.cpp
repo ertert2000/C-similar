@@ -1,5 +1,8 @@
 #include <windows.h>
+#include <iostream>
 #include <stdio.h>
+#include <vector>
+#include <string>
 
 void SetColor(int textColor, int bgColor) 
 {
@@ -16,9 +19,30 @@ void gotoxy(int x, int y)
 
 int main() 
 {
-    int x1 = 10, y1 = 5, x2 = 40, y2 = 20;
-    int stepT = 1000;
-    int stepS = 1;
+
+    std::vector<std::string> color
+    {
+        "BLACK",
+        "BLUE",
+        "GREEN",
+        "CYAN",
+        "RED",
+        "MAGENTA",
+        "BROWN",
+        "LIGHTGRAY",
+        "DARKGRAY",
+        "LIGHTBLUE",
+        "LIGHTGREEN",
+        "LIGHTCYAN",
+        "LIGHTRED",
+        "LIGHTMAG",
+        "YELLOW",
+        "WHITE"
+    };
+
+    int x1 = 10, y1 = 15, x2 = 70, y2 = 20;
+    int stepT = 700;
+    int stepS = 2;
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     for (int bgColor = 0; bgColor < 16; bgColor++)
@@ -30,11 +54,11 @@ int main()
             system("cls");
 
             for (int y = y1; y <= y2; y += stepS)
-                for (int x = x1; x <= x2; x += 10) 
+                for (int x = x1; x <= x2; x += 25) 
                 {
                     gotoxy(x, y);
                     SetColor(textColor, bgColor);
-                    printf("F:%d T:%d", bgColor, textColor);
+                    std::cout << "B:" << color[bgColor] << " T:" << color[textColor];
                 }
 
             Sleep(stepT);
@@ -43,3 +67,4 @@ int main()
 
     return 0;
 }
+
