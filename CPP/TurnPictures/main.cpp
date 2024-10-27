@@ -6,14 +6,14 @@
 #include <opencv2/core.hpp>
 #include <curl/curl.h>
 
-//const char* smtp_server = "smtp://smtp.gmail.com:587";
-//const char* from_email = "alekseipoliakoff@gmail.com";
+const char* smtp_server = "smtp://smtp.gmail.com:587";
+const char* from_email = "alekseipoliakoff@gmail.com";
 //const char* to_email = "schahov.kirill2017@yandex.ru";
-//const char* to_email = "ertert2000@yandex.ru";
-//const char* to_mail2 = "artem.pavlenko.05@mail.ru";
-//const char* subject = "а это не я";
-//const char* email_body = "В кадре появился человек";
-//const char* password = "kcnw bsbb eyvt aspu";
+const char* to_email = "ertert2000@yandex.ru";
+const char* to_mail2 = "artem.pavlenko.05@mail.ru";
+const char* subject = "а это не я";
+const char* email_body = "В кадре появился человек";
+const char* password = "kcnw bsbb eyvt aspu";
 
     
 void turnImage()
@@ -245,48 +245,65 @@ size_t payload_source(void* ptr, size_t size, size_t nmemb, void* userp)
     return len;
 }
 
-//void letterSender()
-//{
-//    CURL* curl;
-//    CURLcode res = CURLE_OK;
-//    struct curl_slist* recipients = nullptr;
-//    const char* payload = email_body;
-//
-//    curl = curl_easy_init();
-//    if (curl) {
-//        curl_easy_setopt(curl, CURLOPT_URL, smtp_server);
-//        curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_ALL);
-//
-//        curl_easy_setopt(curl, CURLOPT_USERNAME, from_email);
-//        curl_easy_setopt(curl, CURLOPT_PASSWORD, password);
-//
-//        recipients = curl_slist_append(recipients, to_email);
-//        curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
-//
-//        curl_easy_setopt(curl, CURLOPT_MAIL_FROM, to_email);
-//        //curl_easy_setopt(curl, CURLOPT_MAIL_FROM, to_mail2);
-//
-//        std::string full_email = "To: " + std::string(to_email) + "\r\n" +
-//            "From: " + std::string(from_email) + "\r\n" +
-//            "Subject: " + subject + "\r\n\r\n" + email_body;
-//        const char* payload_ptr = full_email.c_str();
-//
-//        curl_easy_setopt(curl, CURLOPT_READFUNCTION, payload_source);
-//        curl_easy_setopt(curl, CURLOPT_READDATA, &payload_ptr);
-//        curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
-//
-//        res = curl_easy_perform(curl);
-//
-//        if (res != CURLE_OK)
-//            std::cerr << "Error sending email:" << curl_easy_strerror(res) << std::endl;
-//        else
-//            std::cout << "The letter has been sent successfully!" << std::endl;
-//
-//
-//        curl_slist_free_all(recipients);
-//        curl_easy_cleanup(curl);
-//    }
-//}
+std::string saveFaceImage(const cv::Mat& frame, const cv::Rect& faceRect, const std::string& filename) {
+    cv::Mat face = frame(faceRect);
+    cv::imwrite(filename, face);
+
+    if (cv::imread(filename).empty()) {
+        std::cerr << "Error: Failed to save image." << std::endl;
+    }
+
+    return filename; 
+}
+
+void letterSender(const std::string& imagePath) {
+    CURL* curl;
+    CURLcode res = CURLE_OK;
+    struct curl_slist* recipients = nullptr;
+    const char* payload = email_body;
+
+    curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, smtp_server);
+        curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_ALL);
+
+        curl_easy_setopt(curl, CURLOPT_USERNAME, from_email);
+        curl_easy_setopt(curl, CURLOPT_PASSWORD, password);
+
+        recipients = curl_slist_append(recipients, to_email);
+        curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
+
+        curl_easy_setopt(curl, CURLOPT_MAIL_FROM, from_email);
+
+        struct curl_mime* mime = curl_mime_init(curl);
+
+        struct curl_mimepart* text_part = curl_mime_addpart(mime);
+        curl_mime_name(text_part, "text");
+        curl_mime_data(text_part, email_body, CURL_ZERO_TERMINATED);
+
+        struct curl_mimepart* image_part = curl_mime_addpart(mime);
+        curl_mime_name(image_part, "file");
+        curl_mime_filedata(image_part, imagePath.c_str());
+        curl_mime_type(image_part, "image/jpg");
+
+        curl_easy_setopt(curl, CURLOPT_MIMEPOST, mime);
+
+        res = curl_easy_perform(curl);
+
+        if (res != CURLE_OK) {
+            std::cerr << "Error sending email: " << curl_easy_strerror(res) << std::endl;
+        }
+        else {
+            std::cout << "The letter has been sent successfully!" << std::endl;
+        }
+
+        curl_slist_free_all(recipients);
+        curl_easy_cleanup(curl);
+        curl_mime_free(mime);
+    }
+}
+
+
 
 size_t wdata(void* ptr, size_t size, size_t nmemb, FILE* stream)
 {
@@ -398,7 +415,10 @@ void cameraDetected()
         {
             if (flag == false)
             {
-                //letterSender();
+                std::string imagePath = "detected_face.jpg";
+                saveFaceImage(frame, newFaces[0], imagePath);
+
+                letterSender(imagePath);
                 flag = true;
             }
 
