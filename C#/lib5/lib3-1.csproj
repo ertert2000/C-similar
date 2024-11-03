@@ -70,7 +70,9 @@
     </Compile>
     <Compile Include="MenuControl.cs" />
     <Compile Include="PlayerNotFoundException.cs" />
-    <Compile Include="SaveSelectedWindowFlyoutMenuItem.cs" />
+    <Compile Include="SaveSelectedWindow.xaml.cs">
+      <DependentUpon>SaveSelectedWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Serialization.cs" />
     <Compile Include="SerializationException.cs" />
     <Compile Include="SettingsControl.cs" />
@@ -91,6 +93,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SaveSelectedWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowButtonControl.cs" />
