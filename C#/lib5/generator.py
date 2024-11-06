@@ -1,6 +1,5 @@
 import random
 
-
 name = ['Johnathon',
         'Anthony',
         'Erasmo',
@@ -50,7 +49,7 @@ name = ['Johnathon',
         'Larisa',
         'Lloyd',
         'Tyisha',
-        'Samatha',]
+        'Samatha']
 
 lastName = ['Mischke',
         'Serna',
@@ -101,7 +100,7 @@ lastName = ['Mischke',
         'Pekar',
         'Pecora',
         'Schewe',
-        'Ramage',]
+        'Ramage']
 
 pos = ['st',
        'lw',
