@@ -20,26 +20,27 @@ float maxX = MAX_X;
 float minY = -5.0f;
 float maxY = 5.0f;
 
-float func(float x) 
+float func(float x)
 {
     return pow(sin(x / 4), 2) - sqrt(x);
 }
 
-int scaleX(float x, float minX, float maxX, int width) 
+int scaleX(float x, float minX, float maxX, int width)
 {
     return (int)((x - minX) / (maxX - minX) * width);
 }
 
-int scaleY(float y, float minY, float maxY, int height) 
+int scaleY(float y, float minY, float maxY, int height)
 {
     return height - (int)((y - minY) / (maxY - minY) * height);
 }
 
-float FindMaxValue(float minX, float maxX) 
+float FindMaxValue(float minX, float maxX)
 {
-    float maxValue = func(minX);
 
-    for (float x = minX; x <= maxX; x += (maxX - minX) / 100) 
+
+    float maxValue = func(minX);
+    for (float x = minX; x <= maxX; x += (maxX - minX) / 100)
     {
         float y = func(x);
         if (y > maxValue)
@@ -48,7 +49,7 @@ float FindMaxValue(float minX, float maxX)
     return maxValue;
 }
 
-void DrawAxesAndLabels(HDC hdc, RECT rect, float minX, float maxX, float minY, float maxY) 
+void DrawAxesAndLabels(HDC hdc, RECT rect, float minX, float maxX, float minY, float maxY)
 {
     int zeroX = scaleX(0, minX, maxX, rect.right);
     int zeroY = scaleY(0, minY, maxY, rect.bottom);
@@ -65,12 +66,15 @@ void DrawAxesAndLabels(HDC hdc, RECT rect, float minX, float maxX, float minY, f
     HFONT hFont = CreateFont(18, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
         OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, L"Arial");
     SelectObject(hdc, hFont);
-    TextOut(hdc, rect.right - 30, zeroY + 10, L"X", 1);
 
+    TextOut(hdc, rect.right - 30, zeroY + 10, L"X", 1);
     TextOut(hdc, zeroX + 10, 10, L"Y", 1);
 
-    for (float x = minX; x <= maxX; x += (maxX - minX) / 10) 
+    for (float x = minX; x <= maxX; x += (maxX - minX) / 10)
     {
+        if (x < MIN_X || x > MAX_X)
+            continue;
+
         int px = scaleX(x, minX, maxX, rect.right);
 
         MoveToEx(hdc, px, zeroY - 5, NULL);
@@ -82,7 +86,7 @@ void DrawAxesAndLabels(HDC hdc, RECT rect, float minX, float maxX, float minY, f
         TextOut(hdc, px - 15, zeroY + 10, textX.c_str(), textX.size());
     }
 
-    for (float y = minY; y <= maxY; y += (maxY - minY) / 10) 
+    for (float y = minY; y <= maxY; y += (maxY - minY) / 10)
     {
         int py = scaleY(y, minY, maxY, rect.bottom);
 
@@ -99,26 +103,39 @@ void DrawAxesAndLabels(HDC hdc, RECT rect, float minX, float maxX, float minY, f
     DeleteObject(hFont);
 }
 
-void DrawGraph(HDC hdc, RECT rect, float minX, float maxX, float minY, float maxY) 
+void DrawGraph(HDC hdc, RECT rect, float minX, float maxX, float minY, float maxY)
 {
     HPEN hGraphPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
     SelectObject(hdc, hGraphPen);
 
-    MoveToEx(hdc, scaleX(minX, minX, maxX, rect.right), scaleY(func(minX), minY, maxY, rect.bottom), NULL);
+    bool isFirstPoint = true;
 
-    for (float x = minX; x <= maxX; x += (maxX - minX) / 100) 
+    for (float x = minX; x <= maxX; x += (maxX - minX) / 100)
     {
-        int px = scaleX(x, minX, maxX, rect.right);
-        int py = scaleY(func(x), minY, maxY, rect.bottom);
-        LineTo(hdc, px, py);
+        if (x >= MIN_X && x <= MAX_X)
+        {
+            int px = scaleX(x, minX, maxX, rect.right);
+            int py = scaleY(func(x), minY, maxY, rect.bottom);
+
+            if (isFirstPoint)
+            {
+                MoveToEx(hdc, px, py, NULL);
+                isFirstPoint = false;
+            }
+            else
+            {
+                LineTo(hdc, px, py);
+            }
+        }
     }
 
     DeleteObject(hGraphPen);
 }
 
-void HandleMouseMove(LPARAM lParam) 
+
+void HandleMouseMove(LPARAM lParam)
 {
-    if (isMousePressed) 
+    if (isMousePressed)
     {
         int mouseX = LOWORD(lParam);
         int mouseY = HIWORD(lParam);
@@ -136,57 +153,42 @@ void HandleMouseMove(LPARAM lParam)
 
         prevMouseX = mouseX;
         prevMouseY = mouseY;
-
     }
 }
 
-void HandleMouseButtonDown(LPARAM lParam) 
+
+void HandleMouseButtonDown(LPARAM lParam)
 {
     isMousePressed = true;
-
     prevMouseX = LOWORD(lParam);
     prevMouseY = HIWORD(lParam);
 }
 
-void HandleMouseButtonUp() 
+void HandleMouseButtonUp()
 {
     isMousePressed = false;
 }
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static float maxVal = FindMaxValue(minX, maxX);
     std::string text = "Max value: " + std::to_string(maxVal);
-    switch (uMsg) 
+
+    switch (uMsg)
     {
     case WM_PAINT:
-        HFONT hFont = CreateFont(
-            20,
-            0,
-            0,
-            0,
-            FW_NORMAL,
-            FALSE,
-            FALSE,
-            FALSE,
-            ANSI_CHARSET,
-            OUT_DEFAULT_PRECIS,
-            CLIP_DEFAULT_PRECIS,
-            DEFAULT_QUALITY,
-            DEFAULT_PITCH | FF_DONTCARE,
-            TEXT("Arial")
-        );
+    {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
         RECT rect;
         GetClientRect(hwnd, &rect);
         FillRect(hdc, &rect, (HBRUSH)(COLOR_WINDOW + 1));
-        SelectObject(hdc, hFont);
-        TextOutA(hdc, 50, 50, text.c_str(), text.length());
         DrawAxesAndLabels(hdc, rect, minX, maxX, minY, maxY);
         DrawGraph(hdc, rect, minX, maxX, minY, maxY);
+        TextOutA(hdc, 50, 50, text.c_str(), text.length());
         EndPaint(hwnd, &ps);
-        break;
+    }
+    break;
 
     case WM_LBUTTONDOWN:
         HandleMouseButtonDown(lParam);
@@ -211,7 +213,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-int main() 
+int main()
 {
     HINSTANCE hInstance = GetModuleHandle(NULL);
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WindowProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, L"GraphWindowClass", NULL };
@@ -222,7 +224,7 @@ int main()
     UpdateWindow(hwnd);
 
     MSG msg;
-    while (GetMessage(&msg, NULL, 0, 0)) 
+    while (GetMessage(&msg, NULL, 0, 0))
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
