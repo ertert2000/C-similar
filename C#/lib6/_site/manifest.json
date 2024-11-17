@@ -1,0 +1,224 @@
+{
+  "homepages": [],
+  "source_base_path": "F:/work/C/C#/lib6",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "FQ52pcwJddtMaL/ulJkJrSMrjlu0QIVnvCmVNv35r2k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "o4Yi1RzNZvigspSFrg4twxHpnkiv2jojy+h2WaIaSec="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "BlPxk5mtl2kgfcZUgkEguqiSAR/EUyUTT4EdebwkQvs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "9iseaixcmBoKU5X+5KQX22i/+FuDi9zO0GazMK3MFTk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.AddPlayerWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.AddPlayerWindow.html",
+          "hash": "rPSpwS9JMDydosQrytvJRzDzA0GkndLwDaW+657f+5E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.App.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.App.html",
+          "hash": "eWlgJj3tC4frB+0Wa1Q5KuF1S8++ty/VgLUoo6jqZdA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.FootballPlayers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.FootballPlayers.html",
+          "hash": "SFtRUlpAWsjdJSYikTBGNbqzeaLH7CBY9G3maNJHkpE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.MainWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.MainWindow.html",
+          "hash": "QsWYDr5SqTWYNc7sXjkLO74n6QDw0nGy5kytW9fV5fc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.PlayerNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.PlayerNotFoundException.html",
+          "hash": "9R6gYsuCl11OcSbQeLKCRaRsMDZo5ty/7Hn4zrug67o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.SaveSelectedWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.SaveSelectedWindow.html",
+          "hash": "YAwR+2SH3O9qHnqxTktLKn84vba0UbnP6TW7clZNs98="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.SerializationException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.SerializationException.html",
+          "hash": "87dadOvVceEVchPz0pI0cy3U/Rz0RsPJzLBTyJH1bGE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.html",
+          "hash": "VXKPBtU7yb+H8YnhluQJcLDpAYXtgUgWl0nyJFmDQ/Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "obj/api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "50oN7Ojm61PD71QfnIQJkQrCsrZGYLV2yoxIHwavchE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "Oa9PuD4E1hvZnCkVjUgzNBX6S00Zo5YilamTERTZo54="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 3,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 8,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
