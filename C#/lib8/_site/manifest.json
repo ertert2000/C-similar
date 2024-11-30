@@ -1,0 +1,222 @@
+{
+  "homepages": [],
+  "source_base_path": "F:/work/C/C#/lib8",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "HTdwRfxjEmuE4jA798Ot+Sm5iMUg4XnydoTaOZvM+C0="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "IqTKSWqWx4OBCbfAtvnRkAPamg9wR4QfYeFSmnvvPwc="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "BlPxk5mtl2kgfcZUgkEguqiSAR/EUyUTT4EdebwkQvs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "Bt7vTqMNDENHQdisztMJLTnxDq/DM+3v85ioRL8YMZY="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.AddPlayerWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.AddPlayerWindow.html",
+          "hash": "WbALeQU5xS40c1U/gvDD7yzGBFxKYwdFn8qmdXvZjTc="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.App.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.App.html",
+          "hash": "iG7NCKSd3JfQZ04+v+cjib+xyei2q8W/qvDVNWC62Bk="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.FootballPlayers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.FootballPlayers.html",
+          "hash": "FTdfspbUKzUnp+9ok9YZ28vagdswmrGp0Ho1r4Z5ju4="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.MainWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.MainWindow.html",
+          "hash": "+d8RCvUZVhQGMwf0sgwg8BToExfL17lA1tbKoPGTTcI="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.PlayerNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.PlayerNotFoundException.html",
+          "hash": "7rq7CYX1PhJLQzEuikp70PC7rflXxUSI3Nb1tCaxZGs="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.SaveSelectedWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.SaveSelectedWindow.html",
+          "hash": "BxUgm/FxeJ8p9U4g9wIKOF6sUAJpy7BqnRNtDoEJJZk="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.SerializationException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.SerializationException.html",
+          "hash": "oT71FCdKZ8N/qLwk9+Lwh0PkHJ1h3OAdNRWVhvgl52Y="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/lib3_1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/lib3_1.html",
+          "hash": "VXKPBtU7yb+H8YnhluQJcLDpAYXtgUgWl0nyJFmDQ/Q="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "obj/api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "50oN7Ojm61PD71QfnIQJkQrCsrZGYLV2yoxIHwavchE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "Oa9PuD4E1hvZnCkVjUgzNBX6S00Zo5YilamTERTZo54="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 3,
+          "skipped_file_count": 3
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 8,
+          "skipped_file_count": 8
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
