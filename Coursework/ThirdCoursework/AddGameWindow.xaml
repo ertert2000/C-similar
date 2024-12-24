@@ -1,0 +1,15 @@
+﻿<Window x:Class="lib3_1.AddGameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:lib3_1"
+        Title="Add Game" Height="150" Width="400">
+    <Grid Background="#333333">
+        <StackPanel Margin="10">
+            <TextBox x:Name="HomeTeamTextBox" Background="#333333"/>
+            <TextBox x:Name="AwayTeamTextBox" Background="#333333"/>
+            <DatePicker x:Name="GameDatePicker" Background="#333333"/>
+            <CheckBox x:Name="IsPlayedCheckBox" Content="Played?" Background="#333333"/>
+            <Button Content="Add Game" Click="AddGameButtonClick" Background="#333333"/>
+        </StackPanel>
+    </Grid>
+</Window>

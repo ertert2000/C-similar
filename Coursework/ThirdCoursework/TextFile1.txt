@@ -1,0 +1,1357 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows;
+using Ookii.Dialogs.Wpf;
+
+namespace lib3_1
+{
+    public partial class MainWindow
+    {
+        private void FolderBrowserDialogClick(object sender, RoutedEventArgs e)
+        {
+            using (var folderDialog = new FolderBrowserDialog())
+            {
+                var dialog = new VistaFolderBrowserDialog();
+                if (dialog.ShowDialog() == true)
+                {
+                    string selectedFolderPath = dialog.SelectedPath;
+                }
+            }
+        }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace lib3_1
+{
+    public class SerializationException : Exception
+    {
+        public SerializationException() : base ("Save/load error") {}
+
+        public SerializationException(string message) : base(message) { }
+    }
+}
+using Newtonsoft.Json;
+using NLog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+
+namespace lib3_1
+{
+    public partial class MainWindow
+    {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        private string patchToSave = "save.json";
+        private void WindowClose(object sender, EventArgs e) => saveData();
+
+        private void saveData()
+        {
+            try
+            {
+                List<FootballPlayers> list = fotbal.ItemsSource as List<FootballPlayers>; 
+                string jsonString = JsonConvert.SerializeObject(list);
+                if (string.IsNullOrEmpty(jsonString))
+                    throw new SerializationException("Failed to save data");
+
+                File.WriteAllText(patchToSave, jsonString);
+                logger.Info("Данные успешно сохранены в файл {0}", patchToSave);
+            }
+            catch (SerializationException ex)
+            {
+                logger.Error(ex, "Ошибка сериализации при сохранении данных");
+                MessageBox.Show(ex.Message, "Serialization error");
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка при сохранении данных");
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        public void saveData(string patchToSave)
+        {
+            try
+            {
+                List<FootballPlayers> list = fotbal.ItemsSource as List<FootballPlayers>;
+                string jsonString = JsonConvert.SerializeObject(list);
+                if (string.IsNullOrEmpty(jsonString))
+                    throw new SerializationException("Failed to save data");
+
+                File.WriteAllText(patchToSave, jsonString);
+                logger.Info("Данные успешно сохранены в файл {0}", patchToSave);
+            }
+            catch (SerializationException ex)
+            {
+                logger.Error(ex, "Ошибка сериализации при сохранении данных");
+                MessageBox.Show(ex.Message, "Serialization error");
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка при сохранении данных");
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        private void loadData(string patchSave)
+        {
+            try
+            {
+                if (!File.Exists(patchSave))
+                    return;
+
+                string jsonString = File.ReadAllText(patchSave);
+                List<FootballPlayers> loadData = JsonConvert.DeserializeObject<List<FootballPlayers>>(jsonString);
+                if (string.IsNullOrEmpty(jsonString))
+                    throw new SerializationException("Failed to load data");
+
+                fotbal.ItemsSource = loadData;
+                logger.Info("Данные успешно загружены из файла {0}", patchSave);
+            }
+            catch (SerializationException ex)
+            {
+                logger.Error(ex, "Ошибка сериализации при загрузке данных");
+                MessageBox.Show(ex.Message, "Serialization error");
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка при загрузке данных");
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+
+
+        public List<FootballPlayers> DeserializeCsv(string filePath)
+        {
+            var playersList = new List<FootballPlayers>();
+
+            using (var reader = new StreamReader(filePath))
+            {
+                string line;
+                reader.ReadLine();
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var values = line.Split(',');
+                    if (values.Length == 6)
+                    {
+                        var player = new FootballPlayers
+                        (
+                            values[1],
+                            values[2],
+                            values[3],
+                            int.Parse(values[0]),
+                            (int)decimal.Parse(values[4]),
+                            bool.Parse(values[5])
+                        );
+                        playersList.Add(player);
+                    }
+                }
+            }
+
+            logger.Info("Данные успешно десериализованы из CSV файла {0}", filePath);
+            return playersList;
+        }
+
+        public List<FootballPlayers> DeserializeTxt(string filePath)
+        {
+            var playersList = new List<FootballPlayers>();
+
+            using (var reader = new StreamReader(filePath))
+            {
+                string line;
+                reader.ReadLine();
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var values = line.Split('|').Select(v => v.Trim()).ToArray();
+
+                    if (values.Length == 6)
+                    {
+                        try
+                        {
+                            var player = new FootballPlayers
+                            (
+                                values[1],
+                                values[2],
+                                values[3],
+                                int.Parse(values[0]),
+                                decimal.ToInt32(decimal.Parse(values[4])),
+                                bool.Parse(values[5])
+                            );
+                            playersList.Add(player);
+                        }
+                        catch (FormatException ex)
+                        {
+                            logger.Error(ex, "Ошибка формата данных в TXT файле");
+                            MessageBox.Show($"Ошибка формата данных: {ex.Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex, "Ошибка при обработке TXT файла");
+                            MessageBox.Show($"Ошибка: {ex.Message}");
+                        }
+                    }
+                }
+            }
+
+            logger.Info("Данные успешно десериализованы из TXT файла {0}", filePath);
+            return playersList;
+        }
+
+        public void serializationXML(string filePath)
+        {
+            try
+            {
+                List<FootballPlayers> footballPlayers = fotbal.ItemsSource as List<FootballPlayers>;
+
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<FootballPlayers>));
+
+                using (FileStream file = new FileStream(filePath, FileMode.OpenOrCreate))
+                {
+                    xmlSerializer.Serialize(file, footballPlayers);
+                }
+
+                logger.Info("Данные успешно сериализованы в XML файл {0}", filePath);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка при сериализации в XML файл");
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+        public void deserializeXML(string filePath)
+        {
+            try
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<FootballPlayers>));
+
+                using (FileStream file = new FileStream(filePath, FileMode.OpenOrCreate))
+                {
+                    List<FootballPlayers> footballPlayers = xmlSerializer.Deserialize(file) as List<FootballPlayers>;
+
+                    fotbal.ItemsSource = footballPlayers;
+                }
+
+                logger.Info("Данные успешно десериализованы из XML файла {0}", filePath);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Ошибка при десериализации из XML файла");
+                MessageBox.Show(ex.Message, "Error");
+            }
+        }
+
+    }
+}
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Xml.Serialization;
+
+namespace lib3_1
+{
+    /// <summary>
+    /// Логика взаимодействия для SaveSelectedWindow.xaml
+    /// </summary>
+    public partial class SaveSelectedWindow : Window
+    {
+        private MainWindow MainWindow; 
+        private RenderTargetBitmap _prerenderedImage;
+        private bool fladWindwoState = false;
+
+        public SaveSelectedWindow(MainWindow MainWindow)
+        {
+            InitializeComponent();
+            this.MainWindow = MainWindow;
+        }
+
+        private void PrerenderTableImage(string format)
+        {
+            int width = (int)(600 / 1.3);
+            int height = (int)(800 / 1.3);
+            _prerenderedImage = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+
+            DrawingVisual visual = new DrawingVisual();
+            using (DrawingContext dc = visual.RenderOpen())
+            {
+                dc.DrawRectangle(Brushes.White, null, new Rect(0, 0, width, height));
+
+                double yOffset = 10;
+                string headerText = "";
+
+                if (format == "CSV")
+                {
+                    headerText = "Id,Имя,Фамилия,Позиция,Price,Main";
+                    FormattedText formattedHeader = new FormattedText(
+                        headerText,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        FlowDirection.LeftToRight,
+                        new Typeface("Consolas"),
+                        16,
+                        Brushes.Black,
+                        96);
+                    dc.DrawText(formattedHeader, new Point(10, yOffset));
+                    yOffset += 24;
+                }
+                else if (format == "TXT")
+                {
+                    headerText = "Id | Имя | Фамилия | Позиция | Price | Main";
+                    FormattedText formattedHeader = new FormattedText(
+                        headerText,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        FlowDirection.LeftToRight,
+                        new Typeface("Consolas"),
+                        16,
+                        Brushes.Black,
+                        96);
+                    dc.DrawText(formattedHeader, new Point(10, yOffset));
+                    yOffset += 24;
+                }
+                else if (format == "JSON")
+                {
+                    headerText = "JSON Representation";
+                    FormattedText formattedHeader = new FormattedText(
+                        headerText,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        FlowDirection.LeftToRight,
+                        new Typeface("Consolas"),
+                        16,
+                        Brushes.Black,
+                        96);
+                    dc.DrawText(formattedHeader, new Point(10, yOffset));
+                    yOffset += 24;
+
+                    if (MainWindow.fotbal.ItemsSource is List<FootballPlayers> list)
+                    {
+                        string jsonString = JsonConvert.SerializeObject(list, Formatting.Indented);
+                        var lines = jsonString.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+                        foreach (var line in lines)
+                        {
+                            FormattedText formattedText = new FormattedText(
+                                line,
+                                System.Globalization.CultureInfo.InvariantCulture,
+                                FlowDirection.LeftToRight,
+                                new Typeface("Consolas"),
+                                16,
+                                Brushes.Black,
+                                96);
+
+                            dc.DrawText(formattedText, new Point(10, yOffset));
+                            yOffset += 24;
+                        }
+                    }
+                }
+                else if (format == "XML")
+                {
+                    FormattedText formattedHeader = new FormattedText(
+                        "",
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        FlowDirection.LeftToRight,
+                        new Typeface("Consolas"),
+                        16,
+                        Brushes.Black,
+                        96);
+                    dc.DrawText(formattedHeader, new Point(10, yOffset));
+                    yOffset += 24;
+
+                    if (MainWindow.fotbal.ItemsSource is List<FootballPlayers> list)
+                    {
+                        // Сериализация данных в XML-строку
+                        XmlSerializer serializer = new XmlSerializer(typeof(List<FootballPlayers>));
+                        StringWriter stringWriter = new StringWriter();
+                        serializer.Serialize(stringWriter, list);
+                        string xmlString = stringWriter.ToString();
+
+                        // Разбиваем XML-строку на строки для отображения
+                        var lines = xmlString.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+                        foreach (var line in lines)
+                        {
+                            FormattedText formattedText = new FormattedText(
+                                line,
+                                System.Globalization.CultureInfo.InvariantCulture,
+                                FlowDirection.LeftToRight,
+                                new Typeface("Consolas"),
+                                16,
+                                Brushes.Black,
+                                96);
+
+                            dc.DrawText(formattedText, new Point(10, yOffset));
+                            yOffset += 24;
+                        }
+                    }
+                }
+
+                foreach (var item in MainWindow.fotbal.Items)
+                {
+                    if (item is FootballPlayers data)
+                    {
+                        string rowText;
+                        if (format == "CSV")
+                            rowText = $"{data.id},{data.name},{data.firstName},{data.position},{data.price},{data.mainOrSpare}";
+                        else if(format == "TXT")
+                            rowText = $"{data.id} | {data.name} | {data.firstName} | {data.position} | {data.price} | {data.mainOrSpare}";
+                        else
+                            break;
+
+                        FormattedText formattedText = new FormattedText(
+                            rowText,
+                            System.Globalization.CultureInfo.InvariantCulture,
+                            FlowDirection.LeftToRight,
+                            new Typeface("Consolas"),
+                            16,
+                            Brushes.Black,
+                            96);
+
+                        dc.DrawText(formattedText, new Point(10, yOffset));
+                        yOffset += 24;
+                    }
+                }
+                
+            }
+
+            _prerenderedImage.Render(visual);
+            fileImage.Source = _prerenderedImage;
+        }
+
+        private void SaveToCsv(string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.WriteLine("Id | Имя | Фамилия | Позиция | Price | Main");
+                foreach (var item in MainWindow.fotbal.Items)
+                {
+                    if (item is FootballPlayers data)
+                    {
+                        string line = $"{data.id},{data.name},{data.firstName},{data.position},{data.price},{data.mainOrSpare}";
+                        writer.WriteLine(line);
+                    }
+                }
+            }
+        }
+
+        private void SaveToTxt(string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                writer.WriteLine("Id,Имя,Фамилия,Позиция,Price,Main");
+                foreach (var item in MainWindow.fotbal.Items)
+                {
+                    if (item is FootballPlayers data)
+                    {
+                        string line = $"{data.id} | {data.name} | {data.firstName} | {data.position} | {data.price} | {data.mainOrSpare}";
+                        writer.WriteLine(line);
+                    }
+                }
+            }
+        }
+
+        private void SaveImage(string filePath)
+        {
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            {
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(_prerenderedImage));
+                encoder.Save(stream);
+            }
+        }
+
+        private void PrerenderButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (formatComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string format = selectedItem.Content.ToString();
+                PrerenderTableImage(format);
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (formatComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string format = selectedItem.Content.ToString();
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+                switch (format)
+                {
+                    case "CSV":
+                        saveFileDialog.FileName = "output.csv";
+                        saveFileDialog.DefaultExt = ".csv";
+                        saveFileDialog.Filter = "CSV Files (*.csv)|*.csv";
+                        break;
+                    case "TXT":
+                        saveFileDialog.FileName = "output.txt";
+                        saveFileDialog.DefaultExt = ".txt";
+                        saveFileDialog.Filter = "Text Files (*.txt)|*.txt";
+                        break;
+                    case "JSON":
+                        saveFileDialog.FileName = "output.json";
+                        saveFileDialog.DefaultExt = ".json";
+                        saveFileDialog.Filter = "Text Files (*.json)|*.json";
+                        break;
+                    case "XML":
+                        saveFileDialog.FileName = "output.xml";
+                        saveFileDialog.DefaultExt = ".xml";
+                        saveFileDialog.Filter = "Text Files (*.xml)|*.xml";
+                        break;
+                    case "Изображение":
+                        saveFileDialog.FileName = "output.png";
+                        saveFileDialog.DefaultExt = ".png";
+                        saveFileDialog.Filter = "Image Files (*.png)|*.png|JPEG Files (*.jpg)|*.jpg";
+                        break;
+                }
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    switch (format)
+                    {
+                        case "CSV":
+                            SaveToCsv(saveFileDialog.FileName);
+                            break;
+                        case "TXT":
+                            SaveToTxt(saveFileDialog.FileName);
+                            break;
+                        case "JSON":
+                            MainWindow.saveData(saveFileDialog.FileName);
+                            break;
+                        case "XML":
+                            MainWindow.serializationXML(saveFileDialog.FileName);
+                            break;
+                        case "Изображение":
+                            SaveImage(saveFileDialog.FileName);
+                            break;
+                    }
+
+                    MessageBox.Show("Файл успешно сохранен!");
+                }
+
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста, выберите формат для сохранения.");
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = formatComboBox.SelectedItem as ComboBoxItem;
+
+            if (selectedItem != null)
+                PrerenderTableImage(selectedItem.Content.ToString());
+        }
+
+        private void closeButtonClick(object sender, RoutedEventArgs e) => Close();
+
+        private void buttonFullSreanClick(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
+
+        private void hideButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (!fladWindwoState)
+            {
+                this.WindowState = WindowState.Maximized;
+                fladWindwoState = true;
+            }
+            else
+            {
+                this.WindowState = WindowState.Normal;
+                fladWindwoState = false;
+            }
+
+        }
+    }
+}
+//using iText.Kernel.Pdf;
+//using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
+using iText.Layout.Element;
+using iText.Layout;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Controls;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Drawing;
+using Org.BouncyCastle.Asn1.Pkcs;
+
+namespace lib3_1
+{
+    class ReportGenerator
+    {
+        private DataGrid dataGrid;
+
+        public ReportGenerator(DataGrid dataGrid) => this.dataGrid = dataGrid;
+
+        public void ExportDataGridToPdf(string filePath)
+        {
+            PdfDocument document = new PdfDocument();
+
+            document.Info.Title = "Отчет";
+
+            PdfPage page = document.AddPage();
+            page.Size = PdfSharpCore.PageSize.A4;
+
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+
+            XFont fontHeader = new XFont("Verdana", 12, XFontStyle.Bold);
+            XFont fontData = new XFont("Verdana", 10, XFontStyle.Regular);
+
+            double x = 40, y = 40;
+            double cellHeight = 15, cellWidth = 100;
+
+            foreach (var column in dataGrid.Columns)
+            {
+                gfx.DrawRectangle(XPens.Black, XBrushes.LightGray, x, y, cellWidth, cellHeight);
+                gfx.DrawString(column.Header.ToString(), fontHeader, XBrushes.Black, new XRect(x, y, cellWidth, cellHeight), XStringFormats.Center);
+                x += cellWidth;
+            }
+
+            x = 40;
+            y += cellHeight;
+
+            foreach (var item in dataGrid.Items)
+            {
+                x = 40;
+                foreach (var column in dataGrid.Columns)
+                {
+                    var cellContent = column.GetCellContent(item) as TextBlock;
+                    string cellText = cellContent?.Text ?? string.Empty;
+
+                    gfx.DrawRectangle(XPens.Black, XBrushes.White, x, y, cellWidth, cellHeight);
+                    gfx.DrawString(cellText, fontData, XBrushes.Black, new XRect(x, y, cellWidth, cellHeight), XStringFormats.Center);
+                    x += cellWidth;
+                }
+                y += cellHeight;
+
+                if (y + cellHeight > page.Height - 40)
+                {
+                    page = document.AddPage();
+                    gfx.Dispose();
+                    gfx = XGraphics.FromPdfPage(page);
+                    y = 40;
+                }
+            }
+
+            gfx.Dispose();
+
+            using (var output = File.Create(filePath))
+            {
+                document.Save(output);
+            }
+
+            System.Diagnostics.Process.Start("explorer", filePath);
+        }
+
+        public void ExportToHtml(string filePath)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append("<html><body><table border='1'>");
+
+            sb.Append("<tr>");
+            foreach (var column in dataGrid.Columns)
+                sb.Append($"<th>{column.Header}</th>");
+            sb.Append("</tr>");
+
+            foreach (var item in dataGrid.Items)
+            {
+                sb.Append("<tr>");
+                foreach (var column in dataGrid.Columns)
+                {
+                    var cellValue = column.GetCellContent(item) as TextBlock;
+                    sb.Append($"<td>{cellValue?.Text ?? string.Empty}</td>");
+                }
+                sb.Append("</tr>");
+            }
+
+            sb.Append("</table></body></html>");
+
+            File.WriteAllText(filePath, sb.ToString());
+        }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace lib3_1
+{
+    public class PlayerNotFoundException : Exception
+    {
+        public PlayerNotFoundException() : base("Selected player not found.")
+        {
+        }
+
+        public PlayerNotFoundException(string message) : base(message)
+        {
+        }
+    }
+}
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Threading;
+
+namespace lib3_1
+{
+    public partial class MainWindow
+    {
+        private void SaveAsButtonClick(object sender, RoutedEventArgs e)
+        {
+            ReportGenerator reportGenerator = new ReportGenerator(fotbal);
+
+            ManualResetEvent dataLoadedEvent = new ManualResetEvent(false);
+            ManualResetEvent xmlProcessedEvent = new ManualResetEvent(false);
+
+            Thread loadXmlThread = new Thread(() =>
+            {
+                try
+                {
+                    reportGenerator.ExportDataGridToPdf("sa.pdf");
+                    dataLoadedEvent.Set();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}");
+                }
+            });
+
+            Thread editAndSaveXmlThread = new Thread(() =>
+            {
+                dataLoadedEvent.WaitOne();
+
+                try
+                {
+                    reportGenerator.ExportToHtml("as.html");
+                    xmlProcessedEvent.Set();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при редактировании данных: {ex.Message}");
+                }
+            });
+
+            Thread generateHtmlReportThread = new Thread(() =>
+            {
+                xmlProcessedEvent.WaitOne();
+
+                try
+                {
+                    saveData();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при создании отчета: {ex.Message}");
+                }
+            });
+
+            loadXmlThread.Start();
+            editAndSaveXmlThread.Start();
+            generateHtmlReportThread.Start();
+
+
+            SaveSelectedWindow saveSelectedWindow = new SaveSelectedWindow(this);
+            saveSelectedWindow.Show();
+        }
+
+
+        private void OpenButtonClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "CSV Files (*.csv)|*.csv|Text Files (*.txt)|*.txt|Json Files (*.json)|*.json|Xml Files (*.xml)|*.xml",
+                Title = "Выберите файл"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFilePath = openFileDialog.FileName;
+                string format = "";
+                if (System.IO.Path.GetExtension(selectedFilePath).ToLower() == ".csv")
+                    format = "CSV";
+                else if(System.IO.Path.GetExtension(selectedFilePath).ToLower() == ".txt")
+                    format = "TXT";
+                else if(System.IO.Path.GetExtension(selectedFilePath).ToLower() == ".json")
+                    format = "JSON";
+                else if (System.IO.Path.GetExtension(selectedFilePath).ToLower() == ".xml")
+                    format = "XML";
+                else
+                    MessageBox.Show("sd");
+
+                List<FootballPlayers> players = null;
+                if (format == "CSV")
+                    players = DeserializeCsv(selectedFilePath);
+                else if (format == "TXT")
+                    players = DeserializeTxt(selectedFilePath);
+                else if (format == "JSON")
+                    loadData(selectedFilePath);
+                else if(format == "XML")
+                    deserializeXML(selectedFilePath);
+
+
+                if (players != null)
+                {
+                    fotbal.ItemsSource = players;
+                }
+            }
+        }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
+namespace lib3_1
+{
+    public partial class MainWindow
+    {
+        private void buttonRemoveClick(object sender, RoutedEventArgs e) => FootballPlayers.deletePlaers(fotbal);
+
+        private void fotbalKeyDelete(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+                FootballPlayers.deletePlaers(fotbal);
+        }
+
+        private void DeleteMenuItemClick(object sender, RoutedEventArgs e) => FootballPlayers.deletePlaers(fotbal);
+
+        private void CellEditEndingClick(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            var editElement = e.EditingElement as TextBox;
+            if (editElement != null)
+                MessageBox.Show($"New meaning: {editElement.Text}");
+
+        }
+
+        
+
+        private void AddPlayerClick(object sender, RoutedEventArgs e)
+        {
+            if (mainTabControl.SelectedItem is TabItem selectedTab)
+            {
+                if (selectedTab.Header.ToString() == "Футболисты")
+                {
+                    AddPlayerWindow addPlayer = new AddPlayerWindow(this);
+                    addPlayer.Show();
+                }
+                else if (selectedTab.Header.ToString() == "Матчи")
+                {
+                    AddGameWindow addGame = new AddGameWindow(this);
+                    addGame.Show();
+                }
+            }
+        }
+
+        private void fotbalSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (fotbal.SelectedItem is FootballPlayers selectedPlayers)
+            {
+                nameTextBlock.Text = "Name: " + selectedPlayers.name;
+                firstNameTextBlock.Text = "First name: " + selectedPlayers.firstName;
+                positionTextBlock.Text = "Position: " + selectedPlayers.position;
+                priceTextBlock.Text = "Price: " + selectedPlayers.price.ToString();
+            }
+        }
+
+        private void SaveButtonClick(object sender, RoutedEventArgs e) => saveData();
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace lib3_1
+{
+    public partial class MainWindow
+    {
+        private bool fladWindwoState = false;
+
+
+        private void closeButtonClick(object sender, RoutedEventArgs e) => Close();
+
+        private void buttonFullSreanClick(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
+
+        private void hideButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (!fladWindwoState)
+            {
+                this.WindowState = WindowState.Maximized;
+                fladWindwoState = true;
+            }
+            else
+            {
+                this.WindowState = WindowState.Normal;
+                fladWindwoState = false;
+            }
+
+        }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using SQLitePCL;
+
+namespace lib3_1
+{
+    /// <summary>
+    /// Логика взаимодействия для MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            Batteries.Init();
+            //serialization
+            DatabaseHelper.InitializeDatabase();
+
+            loadData(patchToSave);
+            
+            this.Closed += WindowClose;
+        }
+
+        public void LoadGames()
+        {
+            var games = DatabaseHelper.GetAllGamesFromDatabase();
+            gamesDataGrid.ItemsSource = games;
+        }
+
+        private void ShowSttingsPanelClick(object sender, RoutedEventArgs e)
+        {
+
+            ThicknessAnimation marginAnimation = new ThicknessAnimation();
+            marginAnimation.From = new Thickness(-1000, 0, 0, 0);
+            marginAnimation.To = new Thickness(0, 0, 0, 0);
+            marginAnimation.Duration = TimeSpan.FromSeconds(0.2);
+
+            SettingsPanel.BeginAnimation(MarginProperty, marginAnimation);
+            SettingsPanel.HorizontalAlignment = HorizontalAlignment.Stretch;
+        }
+
+        private void ClosePanel_Click(object sender, RoutedEventArgs e)
+        {
+            ThicknessAnimation marginAnimation = new ThicknessAnimation();
+            marginAnimation.From = new Thickness(0, 0, 0, 0);
+            marginAnimation.To = new Thickness(-1000, 0, 0, 0);
+            marginAnimation.Duration = TimeSpan.FromSeconds(0.4);
+
+            SettingsPanel.BeginAnimation(MarginProperty, marginAnimation);
+            SettingsPanel.HorizontalAlignment = HorizontalAlignment.Left;
+        }
+
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace lib3_1
+{
+    public class FootballPlayers
+    {
+        public int id {  get; set; }
+        public int price { get; set; }
+        public string name { get; set; }
+        public string firstName { get; set; }
+        public string position { get; set; }
+        public bool mainOrSpare { get; set; }
+
+        public FootballPlayers() {}
+
+        public FootballPlayers(string name, string firstName, string position, int id, int price, bool mainOrSpare)
+        {
+            this.name = name;
+            this.position = position;
+            this.firstName = firstName;
+            this.id = id;
+            this.price = price;
+            this.mainOrSpare = mainOrSpare;
+        }
+
+        public static void deletePlaers(DataGrid fotbal)
+        {
+            try
+            {
+                var selectedPlaers = fotbal.SelectedItem as FootballPlayers;
+
+                if (selectedPlaers == null)
+                    throw new PlayerNotFoundException();
+
+                List<FootballPlayers> newPlayers = fotbal.ItemsSource as List<FootballPlayers>;
+
+                if (newPlayers != null)
+                {
+                    newPlayers.Remove(selectedPlaers);
+
+                    fotbal.ItemsSource = null;
+                    fotbal.ItemsSource = newPlayers;
+                }
+                else
+                    throw new Exception("Failed to retrieve the list of players.");
+            }
+            catch (PlayerNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error");
+            }
+        }
+
+        public static void addPlaers(AddPlayerWindow AddPlayerWindow, MainWindow MainWindow)
+        {
+            try
+            {
+                List<FootballPlayers> newPlayers = MainWindow.fotbal.ItemsSource as List<FootballPlayers>;
+                if (newPlayers == null)
+                    newPlayers = new List<FootballPlayers>();
+
+                if (AddPlayerWindow.NameTextBox.Text.Equals("") || AddPlayerWindow.FirstNameTextBox.Text.Equals("") || AddPlayerWindow.PositionTextBox.Text.Equals("") || AddPlayerWindow.PriceTextBox.Text.Equals(""))
+                    throw new PlayerNotFoundException("Text fields are not filled");
+
+                newPlayers.Add(new FootballPlayers(AddPlayerWindow.NameTextBox.Text,
+                                    AddPlayerWindow.FirstNameTextBox.Text,
+                                    AddPlayerWindow.PositionTextBox.Text, 
+                                    1,
+                                    Convert.ToInt32(AddPlayerWindow.PriceTextBox.Text),
+                                    AddPlayerWindow.MainOrSpare.IsChecked ?? false));
+
+                MainWindow.fotbal.ItemsSource = null;
+                MainWindow.fotbal.ItemsSource = newPlayers;
+                DatabaseHelper.AddPlayerToDatabase(new FootballPlayers(AddPlayerWindow.NameTextBox.Text,
+                                    AddPlayerWindow.FirstNameTextBox.Text,
+                                    AddPlayerWindow.PositionTextBox.Text,
+                                    1,
+                                    Convert.ToInt32(AddPlayerWindow.PriceTextBox.Text),
+                                    AddPlayerWindow.MainOrSpare.IsChecked ?? false));
+            }
+            catch (PlayerNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error");
+            }
+        }
+    }
+}
+using System;
+
+namespace lib3_1
+{
+    public class FootbalGames
+    {
+        public int Id { get; set; }
+        public string HomeTeam { get; set; }
+        public string AwayTeam { get; set; }
+        public DateTime GameDate { get; set; }
+        public bool IsPlayed { get; set; }
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
+
+namespace lib3_1
+{
+    public static class DatabaseHelper
+    {
+        public const string ConnectionString = "Data Source=football.db";
+
+        public static void InitializeDatabase()
+        {
+            var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS Players (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Name TEXT NOT NULL,
+                    FirstName TEXT NOT NULL,
+                    Position TEXT NOT NULL,
+                    Price INTEGER NOT NULL,
+                    MainOrSpare INTEGER NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS Games (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    HomeTeam TEXT NOT NULL,
+                    AwayTeam TEXT NOT NULL,
+                    GameDate TEXT NOT NULL,
+                    IsPlayed INTEGER NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS PlayerGames (
+                    PlayerId INTEGER NOT NULL,
+                    GameId INTEGER NOT NULL,
+                    PRIMARY KEY (PlayerId, GameId),
+                    FOREIGN KEY (PlayerId) REFERENCES Players(Id),
+                    FOREIGN KEY (GameId) REFERENCES Games(Id)
+                );
+            ";
+            command.ExecuteNonQuery();
+        }
+
+        public static void AddPlayerToDatabase(FootballPlayers player)
+        {
+            var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+            INSERT INTO Players (Name, FirstName, Position, Price, MainOrSpare)
+            VALUES (@name, @firstName, @position, @price, @mainOrSpare)";
+            command.Parameters.AddWithValue("@name", player.name);
+            command.Parameters.AddWithValue("@firstName", player.firstName);
+            command.Parameters.AddWithValue("@position", player.position);
+            command.Parameters.AddWithValue("@price", player.price);
+            command.Parameters.AddWithValue("@mainOrSpare", player.mainOrSpare ? 1 : 0);
+            command.ExecuteNonQuery();
+        }
+
+        public static void AddGameToDatabase(FootbalGames game)
+        {
+            var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = @"INSERT INTO Games (HomeTeam, AwayTeam, GameDate, IsPlayed) 
+                            VALUES (@homeTeam, @awayTeam, @gameDate, @isPlayed)";
+            command.Parameters.AddWithValue("@homeTeam", game.HomeTeam);
+            command.Parameters.AddWithValue("@awayTeam", game.AwayTeam);
+            command.Parameters.AddWithValue("@gameDate", game.GameDate.ToString("yyyy-MM-dd"));
+            command.Parameters.AddWithValue("@isPlayed", game.IsPlayed ? 1 : 0);
+            command.ExecuteNonQuery();
+        }
+
+
+        public static List<FootbalGames> GetGamesForPlayer(int playerId)
+        {
+            var games = new List<FootbalGames>();
+
+            var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+        SELECT g.Id, g.HomeTeam, g.AwayTeam, g.GameDate, g.IsPlayed
+        FROM Games g
+        INNER JOIN PlayerGames pg ON g.Id = pg.GameId
+        WHERE pg.PlayerId = @playerId";
+            command.Parameters.AddWithValue("@playerId", playerId);
+
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                games.Add(new FootbalGames
+                {
+                    Id = reader.GetInt32(0),
+                    HomeTeam = reader.GetString(1),
+                    AwayTeam = reader.GetString(2),
+                    GameDate = DateTime.Parse(reader.GetString(3)),
+                    IsPlayed = reader.GetInt32(4) == 1
+                });
+            }
+
+            return games;
+        }
+
+        public static List<FootbalGames> GetAllGamesFromDatabase()
+        {
+            var games = new List<FootbalGames>();
+
+            var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+        SELECT Id, HomeTeam, AwayTeam, GameDate, IsPlayed
+        FROM Games";
+
+            var reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                games.Add(new FootbalGames
+                {
+                    Id = reader.GetInt32(0),
+                    HomeTeam = reader.GetString(1),
+                    AwayTeam = reader.GetString(2),
+                    GameDate = DateTime.Parse(reader.GetString(3)),
+                    IsPlayed = reader.GetInt32(4) == 1
+                });
+            }
+
+            return games;
+        }
+
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace lib3_1
+{
+    /// <summary>
+    /// Логика взаимодействия для AddPlayerWindow.xaml
+    /// </summary>
+    public partial class AddPlayerWindow : Window
+    {
+        private MainWindow MainWindow;
+
+        public AddPlayerWindow(MainWindow MainWindow)
+        {
+            InitializeComponent();
+            this.MainWindow = MainWindow;
+        }
+
+        private void CheckBoxChecked(object sender, RoutedEventArgs e) => MainOrSpare.Content = "Main";
+
+        private void CheckBoxUnchecked(object sender, RoutedEventArgs e) => MainOrSpare.Content = "Spare";
+
+        private void buttonOKClicl(object sender, RoutedEventArgs e) 
+        { 
+            FootballPlayers.addPlaers(this, MainWindow); 
+
+            this.Close();
+        }
+
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace lib3_1
+{
+    /// <summary>
+    /// Логика взаимодействия для AddGameWindow.xaml
+    /// </summary>
+    public partial class AddGameWindow : Window
+    {
+        private readonly MainWindow _mainWindow;
+        public AddGameWindow(MainWindow mainWindow)
+        {
+            InitializeComponent();
+            _mainWindow = mainWindow;
+        }
+
+        private void AddGameButtonClick(object sender, RoutedEventArgs e)
+        {
+            // Создаем новую игру
+            var newGame = new FootbalGames
+            {
+                HomeTeam = HomeTeamTextBox.Text,
+                AwayTeam = AwayTeamTextBox.Text,
+                GameDate = GameDatePicker.SelectedDate ?? DateTime.Now,
+                IsPlayed = IsPlayedCheckBox.IsChecked ?? false
+            };
+
+            // Добавляем в базу данных
+            DatabaseHelper.AddGameToDatabase(newGame);
+
+            // Перезагружаем данные игр
+            _mainWindow.LoadGames();
+
+            // Закрываем окно
+            Close();
+        }
+    }
+}
