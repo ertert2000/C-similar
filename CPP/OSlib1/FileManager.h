@@ -26,7 +26,7 @@ protected:
 
     void moveFile(const std::wstring& srcFile, const std::wstring& destFile);
 
-    void printFileAttributes(const std::wstring& fileName);
+    void printFileAttributes(const std::wstring& fileName, bool flag = true);
 
     void listFilesWithAttributes(const std::wstring& directoryPath);
 
@@ -35,6 +35,12 @@ protected:
     void help();
 
     void listFiles();
+
+    void printFileTime(const FILETIME& fileTime);
+
+    void showFileTime(const std::wstring& fileName);
+
+    void setTimeFile(const std::wstring& fileName, const std::wstring& time, const std::wstring& select);
 
     void handleCommand(const std::wstring& command);
 public:

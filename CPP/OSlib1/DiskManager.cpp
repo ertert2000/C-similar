@@ -10,7 +10,7 @@ void DiskManager::SetConsoleColor(int color)
 
 void DiskManager::getDrive()
 {
-    DWORD drives = GetLogicalDrives(); // битовая маска, в которой каждый значащий бит означает доступный логически диск
+    DWORD drives = GetLogicalDrives(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
     
     for (char letter = 'A'; letter <= 'Z'; ++letter)
     	if (drives & (1 << (letter - 'A')))
@@ -77,11 +77,11 @@ void DiskManager::getInfoDrive(std::wstring drive)
         int filled = static_cast<int>(barWidth * usedSpace / 100);
 
         if (usedSpace < 50)
-            SetConsoleColor(10);  // Зеленый
+            SetConsoleColor(10);  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         else if (usedSpace < 80)
-            SetConsoleColor(14);  // Желтый
+            SetConsoleColor(14);  // пїЅпїЅпїЅпїЅпїЅпїЅ
         else
-            SetConsoleColor(12);  // Красный
+            SetConsoleColor(12);  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
         std::wcout << wdrive << L" [";
         for (int i = 0; i < barWidth; i++)
@@ -93,7 +93,7 @@ void DiskManager::getInfoDrive(std::wstring drive)
         }
         std::wcout << L"] " << usedSpace << L"% (" << L"Free: " << (totalFreeBytes.QuadPart / (1024 * 1024)) << L" MB)" << std::endl;
 
-        SetConsoleColor(7);  // Белый
+        SetConsoleColor(7);  // пїЅпїЅпїЅпїЅпїЅ
     }
     else
         std::wcerr << "Failed to get disk space info for drive " << drive << std::endl;

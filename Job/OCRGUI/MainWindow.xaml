@@ -1,0 +1,16 @@
+﻿<Window x:Class="OCRGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OCRGUI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TextBox Name="recognizedTextTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="200" Margin="10,10,10,0" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+        <Button x:Name="startStopButton" Content="Start/stop" Click="startStopButtonClick" VerticalAlignment="Top" Height="30" Margin="10,255,562,0"/>
+
+        <Label Name="statusLabel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,22,0,0" Width="400" Height="30"/>
+    </Grid>
+</Window>

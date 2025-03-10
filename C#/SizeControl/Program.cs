@@ -1,25 +1,54 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 class Program
 {
+    static List<FileInfo> allFiles = new List<FileInfo>();
+
     static void Main(string[] args)
     {
-        string rootPath = @"F:\";
+        Console.Write("Введите путь к директории: ");
+        string rootPath = Console.ReadLine();
+
         TraverseDirectories(rootPath);
+
+        // Сортируем файлы по размеру
+        var sortedFiles = allFiles.OrderByDescending(f => f.Length).ToList();
+
+        // Записываем результаты в файл
+        string outputPath = "output.txt";
+        using (StreamWriter writer = new StreamWriter(outputPath))
+        {
+            writer.WriteLine("Все найденные файлы (отсортированы по размеру):");
+            foreach (var file in sortedFiles)
+            {
+                writer.WriteLine($"Файл: {file.FullName}, Размер: {FormatBytes(file.Length)}");
+            }
+        }
+
+        Console.WriteLine($"Обход завершен. Результаты записаны в файл {outputPath}");
+        Console.WriteLine("Нажмите Enter для выхода...");
+        Console.ReadLine();
     }
 
     static void TraverseDirectories(string rootPath)
     {
         try
         {
-            var directories = Directory.GetDirectories(rootPath);
+            // Изменение здесь — проверка на существование файла перед добавлением его в список
+            var files = Directory.GetFiles(rootPath)
+                                 .Select(f => new FileInfo(f))
+                                 .Where(f => f.Exists) // Проверка, существует ли файл
+                                 .ToList();
 
+            // Добавляем файлы в общий список
+            allFiles.AddRange(files);
+
+            var directories = Directory.GetDirectories(rootPath);
             foreach (var directory in directories)
             {
-                long size = GetDirectorySize(directory);
-                Console.WriteLine($"Папка: {directory}, Размер: {FormatBytes(size)}");
-
                 TraverseDirectories(directory);
             }
         }
@@ -27,33 +56,18 @@ class Program
         {
             Console.WriteLine($"Нет доступа к папке: {rootPath}");
         }
-    }
-
-    static long GetDirectorySize(string directoryPath)
-    {
-        long totalSize = 0;
-
-        try
+        catch (DirectoryNotFoundException)
         {
-            var files = Directory.GetFiles(directoryPath);
-            foreach (var file in files)
-            {
-                FileInfo fileInfo = new FileInfo(file);
-                totalSize += fileInfo.Length;
-            }
-
-            var subdirectories = Directory.GetDirectories(directoryPath);
-            foreach (var subdirectory in subdirectories)
-            {
-                totalSize += GetDirectorySize(subdirectory);
-            }
+            Console.WriteLine($"Не найдена папка: {rootPath}");
         }
-        catch (UnauthorizedAccessException)
+        catch (FileNotFoundException ex)
         {
-            Console.WriteLine($"Нет доступа к файлам в папке: {directoryPath}");
+            Console.WriteLine($"Файл не найден: {ex.FileName}");
         }
-
-        return totalSize;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при обработке папки {rootPath}: {ex.Message}");
+        }
     }
 
     static string FormatBytes(long bytes)

@@ -78,9 +78,9 @@ void FileManager::createFile(const std::wstring& fileName)
 void FileManager::copyFile(const std::wstring& srcFile, const std::wstring& destFile)
 {
     std::wstring srcPath = currentPath + L"\\" + srcFile;
-    std::wstring destPath = currentPath + L"\\" + destFile;
+    std::wstring destPath = currentPath + L"\\" + destFile; //тут по пути надо разобраться
     if (CopyFileW(srcPath.c_str(), destPath.c_str(), FALSE))
-        std::wcout << L"The file is copied: " << srcFile << L" \U0001F812 " << destFile << std::endl;
+        std::wcout << L"The file is copied: " << srcFile << L" -> " << destFile << std::endl;
     else
         std::wcerr << L"Error: failed to copy " << srcFile << std::endl;
 }
@@ -88,14 +88,14 @@ void FileManager::copyFile(const std::wstring& srcFile, const std::wstring& dest
 void FileManager::moveFile(const std::wstring& srcFile, const std::wstring& destFile)
 {
     std::wstring srcPath = currentPath + L"\\" + srcFile;
-    std::wstring destPath = currentPath + L"\\" + destFile;
+    std::wstring destPath = currentPath + L"\\" + destFile; //тут по пути надо разобраться
     if (MoveFileW(srcPath.c_str(), destPath.c_str()))
-        std::wcout << L"The file moved: " << srcFile << L" \U0001F812 " << destFile << std::endl;
+        std::wcout << L"The file moved: " << srcFile << L" -> " << destFile << std::endl;
     else
         std::wcerr << L"Error: failed to move " << srcFile << std::endl;
 }
 
-void FileManager::printFileAttributes(const std::wstring& fileName)
+void FileManager::printFileAttributes(const std::wstring& fileName, bool flag)
 {
     DWORD attributes = GetFileAttributes(fileName.c_str());
     if (attributes == INVALID_FILE_ATTRIBUTES) 
@@ -120,13 +120,17 @@ void FileManager::printFileAttributes(const std::wstring& fileName)
     if (attributes & FILE_ATTRIBUTE_NOT_CONTENT_INDEXED) attr += L"NOINDEX ";
     if (attributes & FILE_ATTRIBUTE_ENCRYPTED) attr += L"ENC ";
 
-    std::wcout << std::setw(30) << std::left << L"File Name" << L" | Attributes" << std::endl;
-    std::wcout << std::wstring(50, L'-') << std::endl;
+    if (flag)
+    {
+        std::wcout << std::setw(30) << std::left << L"File Name" << L" | Attributes" << std::endl;
+        std::wcout << std::wstring(50, L'-') << std::endl;
+    }
     std::wcout << std::setw(30) << std::left << fileName << L" | " << attr << std::endl;
 }
 
 void FileManager::listFilesWithAttributes(const std::wstring& directoryPath)
 {
+    bool flag = true;
     WIN32_FIND_DATA findFileData;
     HANDLE hFind = FindFirstFile((directoryPath + L"\\*").c_str(), &findFileData);
 
@@ -137,7 +141,10 @@ void FileManager::listFilesWithAttributes(const std::wstring& directoryPath)
     }
 
     do
-        printFileAttributes(directoryPath + L"\\" + findFileData.cFileName);
+    {
+        printFileAttributes(directoryPath + L"\\" + findFileData.cFileName, flag);
+        flag = false;
+    }
     while (FindNextFile(hFind, &findFileData) != 0);
 
     FindClose(hFind);
@@ -164,9 +171,7 @@ void FileManager::getFileInfo(const std::wstring& fileName)
         std::wcout << L"File index: " << fileInfo.nFileIndexHigh << L"-" << fileInfo.nFileIndexLow << std::endl;
     }
     else
-    {
         std::wcerr << L"Error: Unable to retrieve file information." << std::endl;
-    }
 
     CloseHandle(hFile);
 }
@@ -210,6 +215,89 @@ void FileManager::listFiles()
     FindClose(hFind);
 }
 
+void FileManager::printFileTime(const FILETIME& fileTime)
+{
+    SYSTEMTIME systemTime;
+    FileTimeToSystemTime(&fileTime, &systemTime);
+
+    std::wcout << systemTime.wYear << L"." << systemTime.wMonth << L"." << systemTime.wDay << L" " << systemTime.wHour << L":" << systemTime.wMinute << L":" << systemTime.wSecond << std::endl;
+}
+
+void FileManager::showFileTime(const std::wstring& fileName)
+{
+    std::wstring searchPath = currentPath + L"\\" + fileName;
+
+    HANDLE hFile = CreateFile(searchPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    
+    FILETIME cretionFile, accessTime, writeTime;
+    if (GetFileTime(hFile, &cretionFile, &accessTime, &writeTime))
+    {
+        std::wcout << L"Creation time: ";
+        printFileTime(cretionFile);
+        std::wcout << L"Access time: ";
+        printFileTime(accessTime);
+        std::wcout << L"Write time: ";
+        printFileTime(writeTime);
+    }
+    else
+        std::wcerr << L"Error\n";
+
+    CloseHandle(hFile);
+}
+
+void FileManager::setTimeFile(const std::wstring& fileName, const std::wstring& time, const std::wstring& select)
+{
+    std::wstring filename = currentPath + L"\\" + fileName;
+
+
+    HANDLE hFile = CreateFile(filename.c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        std::cerr << "File opening error\n";
+        return;
+    }
+
+    FILETIME ft;
+    SYSTEMTIME st = {};
+
+    std::wstringstream ss(time);
+    wchar_t delimiter;
+    ss >> st.wYear >> delimiter >> st.wMonth >> delimiter >> st.wDay >> st.wHour >> delimiter >> st.wMinute >> delimiter >> st.wSecond;
+    st.wMilliseconds = 0;
+
+    if (!SystemTimeToFileTime(&st, &ft)) 
+    {
+        std::cerr << "Time enveloping error\n";
+        CloseHandle(hFile);
+        return;
+    }
+
+    if (select == L"-w")
+    {
+
+        if (SetFileTime(hFile, NULL, NULL, &ft))
+            std::cout << "The time of the last modification has been successfully changed!\n";
+        else
+            std::cerr << "Time changes error\n";
+    }
+    else if (select == L"-a")
+    {
+        if (SetFileTime(hFile, NULL, &ft, NULL))
+            std::cout << "The time of the last modification has been successfully changed!\n";
+        else
+            std::cerr << "Time changes error\n";
+    }
+    else
+    {
+        if (SetFileTime(hFile, &ft, NULL, NULL))
+            std::cout << "The time of the last modification has been successfully changed!\n";
+        else
+            std::cerr << "Time changes error\n";
+    }
+
+    CloseHandle(hFile);
+}
+
 void FileManager::handleCommand(const std::wstring& command)
 {
     std::wstringstream ss(command);
@@ -240,6 +328,13 @@ void FileManager::handleCommand(const std::wstring& command)
         listFilesWithAttributes(args[2]);
     else if (args[0] == L"info" && args[1] == L"-f" && args.size() == 3)
         getFileInfo(args[2]);
+    else if (args[0] == L"time" && args.size() == 2)
+        showFileTime(args[1]);
+    else if (args[0] == L"time" && args[1] == L"-s" && (args[2] == L"-c" || args[2] == L"-a" || args[2] == L"-w") && args.size() == 6)
+    {
+        std::wstring timeString = args[4] + L" " + args[5];
+        setTimeFile(args[3], timeString, args[2]);
+    }
     else if (args[0] == L"ls")
         listFiles();
     else if (args[0] == L"help")

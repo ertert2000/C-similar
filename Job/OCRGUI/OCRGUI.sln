@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCRGUI", "OCRGUI.csproj", "{05FF9D2E-3198-4CE8-833E-644E3B628E41}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05FF9D2E-3198-4CE8-833E-644E3B628E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05FF9D2E-3198-4CE8-833E-644E3B628E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05FF9D2E-3198-4CE8-833E-644E3B628E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05FF9D2E-3198-4CE8-833E-644E3B628E41}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {65F007C7-0D04-44B7-862C-55CD3017D375}
+	EndGlobalSection
+EndGlobal
