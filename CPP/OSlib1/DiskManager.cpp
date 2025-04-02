@@ -10,7 +10,7 @@ void DiskManager::SetConsoleColor(int color)
 
 void DiskManager::getDrive()
 {
-    DWORD drives = GetLogicalDrives(); // ������� �����, � ������� ������ �������� ��� �������� ��������� ��������� ����
+    DWORD drives = GetLogicalDrives();
     
     for (char letter = 'A'; letter <= 'Z'; ++letter)
     	if (drives & (1 << (letter - 'A')))
@@ -39,7 +39,7 @@ void DiskManager::getInfoDrive(std::wstring drive)
     ULARGE_INTEGER freeBytesAvailable, totalBytes, totalFreeBytes;
 
     if (GetVolumeInformationW(wdrive.c_str(), volumeName, MAX_PATH, &serialNumber, &maxComponentLen, &fileSystemFlags, fileSystem, MAX_PATH))
-        std::wcout << L"Volume:      " << volumeName << L"\nFile system: " << fileSystem << std::endl; //<< std::endl;
+        std::wcout << L"Volume:      " << volumeName << L"\nFile system: " << fileSystem << std::endl;
     else
         std::wcerr << "Failed to get volume information for drive " << drive << std::endl;
 
@@ -77,11 +77,11 @@ void DiskManager::getInfoDrive(std::wstring drive)
         int filled = static_cast<int>(barWidth * usedSpace / 100);
 
         if (usedSpace < 50)
-            SetConsoleColor(10);  // �������
+            SetConsoleColor(10);
         else if (usedSpace < 80)
-            SetConsoleColor(14);  // ������
+            SetConsoleColor(14);
         else
-            SetConsoleColor(12);  // �������
+            SetConsoleColor(12);
 
         std::wcout << wdrive << L" [";
         for (int i = 0; i < barWidth; i++)
@@ -93,7 +93,7 @@ void DiskManager::getInfoDrive(std::wstring drive)
         }
         std::wcout << L"] " << usedSpace << L"% (" << L"Free: " << (totalFreeBytes.QuadPart / (1024 * 1024)) << L" MB)" << std::endl;
 
-        SetConsoleColor(7);  // �����
+        SetConsoleColor(7);
     }
     else
         std::wcerr << "Failed to get disk space info for drive " << drive << std::endl;

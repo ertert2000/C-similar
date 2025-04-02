@@ -52,6 +52,15 @@ void FileManager::createDirectory(const std::wstring& dirName)
         std::wcerr << L"Error: failed to create a catalog " << fullPath << std::endl;
 }
 
+void FileManager::removeFile(const std::wstring& fileName)
+{
+    std::wstring fullPath = currentPath + L"\\" + fileName;
+    if (DeleteFileW(fullPath.c_str()))
+        std::wcout << L"The catalog is deleted: " << fullPath << std::endl;
+    else
+        std::wcerr << L"Error: failed to remove the catalog " << fullPath << std::endl;
+}
+
 void FileManager::removeDirectory(const std::wstring& dirName)
 {
     std::wstring fullPath = currentPath + L"\\" + dirName;
@@ -78,7 +87,13 @@ void FileManager::createFile(const std::wstring& fileName)
 void FileManager::copyFile(const std::wstring& srcFile, const std::wstring& destFile)
 {
     std::wstring srcPath = currentPath + L"\\" + srcFile;
-    std::wstring destPath = currentPath + L"\\" + destFile; //тут по пути надо разобраться
+    std::wstring destPath;
+
+    if (destFile.find(L":\\") != std::wstring::npos || destFile.find(L"\\\\") == 0)
+        destPath = destFile;
+    else
+        destPath = currentPath + L"\\" + destFile;
+
     if (CopyFileW(srcPath.c_str(), destPath.c_str(), FALSE))
         std::wcout << L"The file is copied: " << srcFile << L" -> " << destFile << std::endl;
     else
@@ -88,7 +103,13 @@ void FileManager::copyFile(const std::wstring& srcFile, const std::wstring& dest
 void FileManager::moveFile(const std::wstring& srcFile, const std::wstring& destFile)
 {
     std::wstring srcPath = currentPath + L"\\" + srcFile;
-    std::wstring destPath = currentPath + L"\\" + destFile; //тут по пути надо разобраться
+    std::wstring destPath;
+
+    if (destFile.find(L":\\") != std::wstring::npos || destFile.find(L"\\\\") == 0)
+        destPath = destFile;
+    else
+        destPath = currentPath + L"\\" + destFile;
+
     if (MoveFileW(srcPath.c_str(), destPath.c_str()))
         std::wcout << L"The file moved: " << srcFile << L" -> " << destFile << std::endl;
     else
@@ -162,7 +183,7 @@ void FileManager::getFileInfo(const std::wstring& fileName)
     }
 
     BY_HANDLE_FILE_INFORMATION fileInfo;
-    if (GetFileInformationByHandle(hFile, &fileInfo)) // table
+    if (GetFileInformationByHandle(hFile, &fileInfo))
     {
         std::wcout << L"File Information for: " << fileName << std::endl;
         std::wcout << L"File size: " << ((static_cast<ULONGLONG>(fileInfo.nFileSizeHigh) << 32) | fileInfo.nFileSizeLow) << L" bytes" << std::endl;
@@ -298,14 +319,100 @@ void FileManager::setTimeFile(const std::wstring& fileName, const std::wstring& 
     CloseHandle(hFile);
 }
 
+void FileManager::setFileAttributes(const std::wstring& fileName, const std::wstring& attr)
+{
+    std::unordered_map<std::wstring, DWORD> attrMap = 
+    {
+        {L"R", FILE_ATTRIBUTE_READONLY},
+        {L"H", FILE_ATTRIBUTE_HIDDEN},
+        {L"S", FILE_ATTRIBUTE_SYSTEM},
+        {L"D", FILE_ATTRIBUTE_DIRECTORY},
+        {L"A", FILE_ATTRIBUTE_ARCHIVE},
+        {L"DEV", FILE_ATTRIBUTE_DEVICE},
+        {L"NORM", FILE_ATTRIBUTE_NORMAL},
+        {L"TEMP", FILE_ATTRIBUTE_TEMPORARY},
+        {L"SPARSE", FILE_ATTRIBUTE_SPARSE_FILE},
+        {L"REPARSE", FILE_ATTRIBUTE_REPARSE_POINT},
+        {L"COMP", FILE_ATTRIBUTE_COMPRESSED},
+        {L"OFFLINE", FILE_ATTRIBUTE_OFFLINE},
+        {L"NOINDEX", FILE_ATTRIBUTE_NOT_CONTENT_INDEXED},
+        {L"ENC", FILE_ATTRIBUTE_ENCRYPTED}
+    };
+
+    DWORD fileAttributes = 0;
+    size_t start = 0, end = 0;
+
+    while ((end = attr.find(L' ', start)) != std::wstring::npos) 
+    {
+        std::wstring token = attr.substr(start, end - start);
+        if (attrMap.count(token))
+            fileAttributes |= attrMap[token];
+        else
+            throw std::invalid_argument("Unknown file attribute: " + std::string(token.begin(), token.end()));
+        start = end + 1;
+    }
+
+    if (start < attr.size()) 
+    {
+        std::wstring token = attr.substr(start);
+        if (attrMap.count(token))
+            fileAttributes |= attrMap[token];
+        else
+            throw std::invalid_argument("Unknown file attribute: " + std::string(token.begin(), token.end()));
+    }
+
+    if (!SetFileAttributesW(fileName.c_str(), fileAttributes))
+        throw std::runtime_error("Failed to set the attributes of the file");
+}
+
+std::vector<std::wstring> FileManager::parseCommand(const std::wstring& command)
+{
+    std::vector<std::wstring> args;
+    std::wstringstream ss(command);
+    std::wstring arg;
+    bool inQuotes = false;
+    wchar_t quoteChar = 0;
+    std::wstring currentArg;
+
+    while (ss) 
+    {
+        wchar_t ch = ss.get();
+        if (ss.eof()) 
+            break;
+
+        if ((ch == L'"' || ch == L'\'') && !inQuotes) 
+        {
+            inQuotes = true;
+            quoteChar = ch;
+        }
+        else if (ch == quoteChar && inQuotes) 
+        {
+            inQuotes = false;
+            args.push_back(currentArg);
+            currentArg.clear();
+        }
+        else if (ch == L' ' && !inQuotes)
+        {
+            if (!currentArg.empty())
+            {
+                args.push_back(currentArg);
+                currentArg.clear();
+            }
+        }
+        else 
+            currentArg += ch;
+        
+    }
+
+    if (!currentArg.empty())
+        args.push_back(currentArg);
+
+    return args;
+}
+
 void FileManager::handleCommand(const std::wstring& command)
 {
-    std::wstringstream ss(command);
-    std::vector<std::wstring> args;
-    std::wstring arg;
-
-    while (ss >> arg)
-        args.push_back(arg);
+    std::vector<std::wstring> args = parseCommand(command);
 
     if (args.empty())
         return;
@@ -313,6 +420,8 @@ void FileManager::handleCommand(const std::wstring& command)
     if (args[0] == L"mkdir" && args.size() == 2)
         createDirectory(args[1]);
     else if (args[0] == L"rm" && args.size() == 2)
+        removeFile(args[1]);
+    else if (args[0] == L"rmdir" && args.size() == 2)
         removeDirectory(args[1]);
     else if (args[0] == L"touch" && args.size() == 2)
         createFile(args[1]);
@@ -328,6 +437,8 @@ void FileManager::handleCommand(const std::wstring& command)
         listFilesWithAttributes(args[2]);
     else if (args[0] == L"info" && args[1] == L"-f" && args.size() == 3)
         getFileInfo(args[2]);
+    else if (args[0] == L"info" && args[1] == L"-s" && args.size() == 4)
+        setFileAttributes(args[2], args[3]);
     else if (args[0] == L"time" && args.size() == 2)
         showFileTime(args[1]);
     else if (args[0] == L"time" && args[1] == L"-s" && (args[2] == L"-c" || args[2] == L"-a" || args[2] == L"-w") && args.size() == 6)

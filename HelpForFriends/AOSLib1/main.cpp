@@ -5,14 +5,6 @@
 #include <sstream>
 #include <iomanip>
 
-bool loopFlag = true;
-
-void SetConsoleColor(int color)
-{
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, color);
-}
-
 void ListDrives()
 {
     DWORD drives = GetLogicalDrives();
@@ -31,13 +23,13 @@ void ShowDriveInfo(const std::wstring& drive)
     DWORD serialNumber = 0, maxComponentLen = 0, fileSystemFlags = 0;
     ULARGE_INTEGER freeBytesAvailable, totalBytes, totalFreeBytes;
 
-    if (GetVolumeInformationW(wdrive.c_str(), volumeName, MAX_PATH, &serialNumber, &maxComponentLen, &fileSystemFlags, fileSystem, MAX_PATH))
+    if (GetVolumeInformation(wdrive.c_str(), volumeName, MAX_PATH, &serialNumber, &maxComponentLen, &fileSystemFlags, fileSystem, MAX_PATH))
         std::wcout << L"Том: " << volumeName << L"\nФайловая система: " << fileSystem << std::endl;
     else
         std::wcerr << L"Не удалось получить информацию о томе для диска " << drive << std::endl;
 
     std::wcout << L"-----------------------------" << std::endl;
-    UINT driveType = GetDriveTypeW(wdrive.c_str());
+    UINT driveType = GetDriveType(wdrive.c_str());
     if (driveType == DRIVE_NO_ROOT_DIR)
     {
         std::wcerr << L"Ошибка: Неверный диск " << drive << std::endl;
@@ -63,72 +55,44 @@ void ShowDriveInfo(const std::wstring& drive)
     }
     std::wcout << std::endl;
 
-    if (GetDiskFreeSpaceExW(wdrive.c_str(), &freeBytesAvailable, &totalBytes, &totalFreeBytes))
-    {
-        double usedSpace = (totalBytes.QuadPart - totalFreeBytes.QuadPart) * 100.0 / totalBytes.QuadPart;
-        int barWidth = 30;
-        int filled = static_cast<int>(barWidth * usedSpace / 100);
-
-        if (usedSpace < 50)
-            SetConsoleColor(10);  // Зеленый
-        else if (usedSpace < 80)
-            SetConsoleColor(14);  // Желтый
-        else
-            SetConsoleColor(12);  // Красный
-
-        std::wcout << wdrive << L" [";
-        for (int i = 0; i < barWidth; i++)
-        {
-            if (i < filled)
-                std::wcout << L"*";
-            else
-                std::wcout << L".";
-        }
-        std::wcout << L"] " << usedSpace << L"% (" << L"Свободно: " << (totalFreeBytes.QuadPart / (1024 * 1024)) << L" МБ)" << std::endl;
-
-        SetConsoleColor(7);  // По умолчанию
-    }
+    if (GetDiskFreeSpaceEx(wdrive.c_str(), &freeBytesAvailable, &totalBytes, &totalFreeBytes))
+        std::wcout << L"Свободно: " << (totalFreeBytes.QuadPart / (1024 * 1024)) << L" МБ" << std::endl;
     else
         std::wcerr << L"Не удалось получить информацию о свободном месте на диске " << drive << std::endl;
 }
 
 void CreateDirectory(const std::wstring& dirName)
 {
-    std::wstring fullPath = dirName;
-    if (CreateDirectoryW(fullPath.c_str(), NULL) || GetLastError() == ERROR_ALREADY_EXISTS)
-        std::wcout << L"Каталог создан: " << fullPath << std::endl;
+    if (CreateDirectory(dirName.c_str(), NULL) || GetLastError() == ERROR_ALREADY_EXISTS)
+        std::wcout << L"Каталог создан: " << dirName << std::endl;
     else
-        std::wcerr << L"Ошибка: не удалось создать каталог " << fullPath << std::endl;
+        std::wcerr << L"Ошибка: не удалось создать каталог " << dirName << std::endl;
 }
 
 void RemoveDirectory(const std::wstring& dirName)
 {
-    std::wstring fullPath = dirName;
-    if (RemoveDirectoryW(fullPath.c_str()))
-        std::wcout << L"Каталог удален: " << fullPath << std::endl;
+    if (RemoveDirectory(dirName.c_str()))
+        std::wcout << L"Каталог удален: " << dirName << std::endl;
     else
-        std::wcerr << L"Ошибка: не удалось удалить каталог " << fullPath << std::endl;
+        std::wcerr << L"Ошибка: не удалось удалить каталог " << dirName << std::endl;
 }
 
 void CreateFile(const std::wstring& fileName)
 {
-    std::wstring fullPath = fileName;
-    HANDLE hFile = CreateFileW(fullPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
         CloseHandle(hFile);
-        std::wcout << L"Файл создан: " << fullPath << std::endl;
+        std::wcout << L"Файл создан: " << fileName << std::endl;
     }
     else
-        std::wcerr << L"Ошибка: не удалось создать файл " << fullPath << std::endl;
+        std::wcerr << L"Ошибка: не удалось создать файл " << fileName << std::endl;
 }
 
 void CopyFile(const std::wstring& srcFile, const std::wstring& destFile)
 {
-    std::wstring srcPath = srcFile;
-    std::wstring destPath = destFile;
-    if (CopyFileW(srcPath.c_str(), destPath.c_str(), FALSE))
+    if (CopyFile(srcFile.c_str(), destFile.c_str(), FALSE))
         std::wcout << L"Файл скопирован: " << srcFile << L" -> " << destFile << std::endl;
     else
         std::wcerr << L"Ошибка: не удалось скопировать " << srcFile << std::endl;
@@ -136,9 +100,7 @@ void CopyFile(const std::wstring& srcFile, const std::wstring& destFile)
 
 void MoveFile(const std::wstring& srcFile, const std::wstring& destFile)
 {
-    std::wstring srcPath = srcFile;
-    std::wstring destPath = destFile;
-    if (MoveFileW(srcPath.c_str(), destPath.c_str()))
+    if (MoveFile(srcFile.c_str(), destFile.c_str()))
         std::wcout << L"Файл перемещен: " << srcFile << L" -> " << destFile << std::endl;
     else
         std::wcerr << L"Ошибка: не удалось переместить " << srcFile << std::endl;
@@ -177,35 +139,13 @@ void PrintFileAttributes(const std::wstring& fileName, bool flag = false)
     std::wcout << std::setw(30) << std::left << fileName << L" | " << attr << std::endl;
 }
 
-void ListFilesWithAttributes(const std::wstring& directoryPath)
-{
-    bool flag = true;
-    WIN32_FIND_DATA findFileData;
-    HANDLE hFind = FindFirstFile((directoryPath + L"\\*").c_str(), &findFileData);
-
-    if (hFind == INVALID_HANDLE_VALUE)
-    {
-        std::wcerr << L"Ошибка открытия каталога: " << directoryPath << std::endl;
-        return;
-    }
-
-    do
-    {
-        PrintFileAttributes(directoryPath + L"\\" + findFileData.cFileName, flag);
-        flag = false;
-    } while (FindNextFile(hFind, &findFileData) != 0);
-
-    FindClose(hFind);
-}
-
 void GetFileInfo(const std::wstring& fileName)
 {
-    std::wstring fullPath = fileName;
-    HANDLE hFile = CreateFileW(fullPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        std::wcerr << L"Ошибка: не удалось открыть файл " << fullPath << std::endl;
+        std::wcerr << L"Ошибка: не удалось открыть файл " << fileName << std::endl;
         return;
     }
 
@@ -234,9 +174,7 @@ void PrintFileTime(const FILETIME& fileTime)
 
 void ShowFileTime(const std::wstring& fileName)
 {
-    std::wstring searchPath = fileName;
-
-    HANDLE hFile = CreateFile(searchPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     FILETIME creationTime, accessTime, writeTime;
     if (GetFileTime(hFile, &creationTime, &accessTime, &writeTime))
@@ -256,9 +194,7 @@ void ShowFileTime(const std::wstring& fileName)
 
 void SetFileTime(const std::wstring& fileName, const std::wstring& time, const std::wstring& select)
 {
-    std::wstring filename = fileName;
-
-    HANDLE hFile = CreateFile(filename.c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
         std::cerr << "Ошибка открытия файла\n";
@@ -280,14 +216,14 @@ void SetFileTime(const std::wstring& fileName, const std::wstring& time, const s
         return;
     }
 
-    if (select == L"-w")
+    if (select == L"w")
     {
         if (SetFileTime(hFile, NULL, NULL, &ft))
             std::wcout << L"Время последней модификации успешно изменено!\n";
         else
             std::cerr << "Ошибка изменения времени\n";
     }
-    else if (select == L"-a")
+    else if (select == L"a")
     {
         if (SetFileTime(hFile, NULL, &ft, NULL))
             std::wcout << L"Время последнего доступа успешно изменено!\n";
@@ -305,6 +241,14 @@ void SetFileTime(const std::wstring& fileName, const std::wstring& time, const s
     CloseHandle(hFile);
 }
 
+void SetFileAttribute(std::wstring fileName, DWORD attributes = 0)
+{
+    if (SetFileAttributesW(fileName.c_str(), attributes))
+        std::cout << "Атрибуты успешно изменены!" << std::endl;
+    else
+        std::cerr << "Ошибка: " << GetLastError() << std::endl;
+}
+
 void ShowMenu()
 {
     std::wcout << L"\nМеню:\n";
@@ -316,10 +260,10 @@ void ShowMenu()
     std::wcout << L"6. Скопировать файл\n";
     std::wcout << L"7. Переместить файл\n";
     std::wcout << L"8. Показать атрибуты файла\n";
-    std::wcout << L"9. Показать файлы с атрибутами\n";
-    std::wcout << L"10. Показать информацию о файле\n";
-    std::wcout << L"11. Показать время файла\n";
-    std::wcout << L"12. Установить время файла\n";
+    std::wcout << L"9. Показать информацию о файле\n";
+    std::wcout << L"10. Показать время файла\n";
+    std::wcout << L"11. Установить время файла\n";
+    std::wcout << L"12. Изменить атрибуты файла\n";
     std::wcout << L"0. Выход\n";
     std::wcout << L"Выберите опцию: ";
 }
@@ -332,10 +276,13 @@ int main()
     std::wcout << L"Добро пожаловать в менеджер дисков и файлов!" << std::endl;
 
     int choice;
+    int input4;
     std::wstring input, input2, input3;
+    DWORD attributes;
 
     do
     {
+		system("cls");
         ShowMenu();
         std::wcin >> choice;
         std::wcin.ignore();
@@ -343,76 +290,138 @@ int main()
         switch (choice)
         {
         case 1:
+            system("cls");
             ListDrives();
+            system("pause");
             break;
         case 2:
+            system("cls");
             std::wcout << L"Введите букву диска (например, C:\\): ";
             std::getline(std::wcin, input);
             ShowDriveInfo(input);
+            system("pause");
             break;
         case 3:
+            system("cls");
             std::wcout << L"Введите имя каталога: ";
             std::getline(std::wcin, input);
             CreateDirectory(input);
+            system("pause");
             break;
         case 4:
+            system("cls");
             std::wcout << L"Введите имя каталога: ";
             std::getline(std::wcin, input);
             RemoveDirectory(input);
+            system("pause");
             break;
         case 5:
+            system("cls");
             std::wcout << L"Введите имя файла: ";
             std::getline(std::wcin, input);
             CreateFile(input);
+            system("pause");
             break;
         case 6:
+            system("cls");
             std::wcout << L"Введите исходное имя файла: ";
             std::getline(std::wcin, input);
             std::wcout << L"Введите имя файла назначения: ";
             std::getline(std::wcin, input2);
             CopyFile(input, input2);
+            system("pause");
             break;
         case 7:
+            system("cls");
             std::wcout << L"Введите исходное имя файла: ";
             std::getline(std::wcin, input);
             std::wcout << L"Введите имя файла назначения: ";
             std::getline(std::wcin, input2);
             MoveFile(input, input2);
+            system("pause");
             break;
         case 8:
+            system("cls");
             std::wcout << L"Введите имя файла: ";
             std::getline(std::wcin, input);
             PrintFileAttributes(input, true);
+            system("pause");
             break;
         case 9:
-            std::wcout << L"Введите путь к каталогу: ";
-            std::getline(std::wcin, input);
-            ListFilesWithAttributes(input);
-            break;
-        case 10:
+            system("cls");
             std::wcout << L"Введите имя файла: ";
             std::getline(std::wcin, input);
             GetFileInfo(input);
+            system("pause");
             break;
-        case 11:
+        case 10:
+            system("cls");
             std::wcout << L"Введите имя файла: ";
             std::getline(std::wcin, input);
             ShowFileTime(input);
+            system("pause");
             break;
-        case 12:
+        case 11:
+            system("cls");
             std::wcout << L"Введите имя файла: ";
             std::getline(std::wcin, input);
             std::wcout << L"Введите время (гггг-мм-дд чч:мм:сс): ";
             std::getline(std::wcin, input2);
-            std::wcout << L"Выберите тип времени (-c для создания, -a для доступа, -w для записи): ";
+            std::wcout << L"Выберите тип времени (c для создания, a для доступа, w для записи): ";
             std::getline(std::wcin, input3);
             SetFileTime(input, input2, input3);
+            system("pause");
+            break;
+        case 12:
+            system("cls");
+            
+
+            std::wcout << L"Введите путь к файлу: ";
+            std::getline(std::wcin, input);
+
+            std::wcout << L"Выберите атрибуты (можно несколько, через пробел):\n"
+                L"1 - Только для чтения\n"
+                L"2 - Скрытый\n"
+                L"3 - Системный\n"
+                L"4 - Архивный\n"
+                L"5 - Обычный файл (сброс остальных атрибутов)\n"
+                L"Введите номера (0 - завершить): ";
+
+            while (std::wcin >> input4 && input4 != 0)
+                switch (input4)
+                {
+                case 1: 
+                    attributes |= FILE_ATTRIBUTE_READONLY; 
+                    break;
+                case 2: 
+                    attributes |= FILE_ATTRIBUTE_HIDDEN; 
+                    break;
+                case 3: 
+                    attributes |= FILE_ATTRIBUTE_SYSTEM;
+                    break;
+                case 4: 
+                    attributes |= FILE_ATTRIBUTE_ARCHIVE; 
+                    break;
+                case 5: 
+                    attributes = FILE_ATTRIBUTE_NORMAL; 
+                    break;
+                default:
+                    std::wcout << L"Неверный ввод!\n"; 
+                    break;
+                }
+
+            SetFileAttribute(input, attributes);
+            system("pause");
             break;
         case 0:
+            system("cls");
             std::wcout << L"Выход из программы." << std::endl;
+            system("pause");
             break;
         default:
+            system("cls");
             std::wcout << L"Неверный выбор. Пожалуйста, попробуйте снова." << std::endl;
+			system("pause");
             break;
         }
     } while (choice != 0);

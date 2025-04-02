@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35818.85 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "translateChat", "translateChat.csproj", "{FA1FBE10-38B9-4861-B389-4955E967E1EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA1FBE10-38B9-4861-B389-4955E967E1EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA1FBE10-38B9-4861-B389-4955E967E1EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA1FBE10-38B9-4861-B389-4955E967E1EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA1FBE10-38B9-4861-B389-4955E967E1EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E3BC0C22-405F-40C8-9307-E84552ED9A34}
+	EndGlobalSection
+EndGlobal

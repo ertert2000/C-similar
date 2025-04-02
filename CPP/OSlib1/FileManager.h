@@ -5,7 +5,8 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
-
+#include <stdexcept>
+#include <unordered_map>
 
 class FileManager
 {
@@ -17,6 +18,8 @@ protected:
     void setPath(const std::wstring& path);
 
     void createDirectory(const std::wstring& dirName);
+
+    void removeFile(const std::wstring& file);
 
     void removeDirectory(const std::wstring& dirName);
 
@@ -41,6 +44,10 @@ protected:
     void showFileTime(const std::wstring& fileName);
 
     void setTimeFile(const std::wstring& fileName, const std::wstring& time, const std::wstring& select);
+
+    void setFileAttributes(const std::wstring& fileName, const std::wstring& attr);
+
+    std::vector<std::wstring> parseCommand(const std::wstring& command);
 
     void handleCommand(const std::wstring& command);
 public:

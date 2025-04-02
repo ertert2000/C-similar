@@ -1,42 +1,55 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.IO;
-using Tesseract;
+using System.Threading;
+using OCR;
 
 class Program
 {
     static void Main()
     {
-        string img = "D:\\work\\Commercial-work\\WB\\dataSet\\images\\003.png";
+        Rectangle captureArea = new Rectangle(100, 100, 200, 50); // Область экрана для мониторинга
+        string tessDataPath = @"D:\tesseract\tessdata"; // Укажи путь к папке с Tesseract
 
-        using (var engine = new TesseractEngine(@"D:\tesseract\tessdata", "eng", EngineMode.Default))
+        OCRMonitor monitor = new OCRMonitor(captureArea, tessDataPath);
+        monitor.OnTextRecognized += PrintExtractedText;
+
+        Console.WriteLine("Программа запущена. Нажмите Ctrl+C для выхода.");
+
+        // Обработчик выхода (Ctrl+C)
+        Console.CancelKeyPress += (sender, e) =>
         {
-            using (var im = Pix.LoadFromFile(img))
-            {
-                using (var page = engine.Process(im))
-                {
-                    string extractedText = page.GetText();
+            e.Cancel = true; // Блокируем мгновенный выход
+            Console.WriteLine("Завершение работы...");
+            monitor.StopCapture();
+            Environment.Exit(0);
+        };
 
-                    PrintDocument printDoc = new PrintDocument();
-                    printDoc.PrinterSettings.PrinterName = "Xprinter XP-365B";
+        monitor.StartCapture();
 
-                    printDoc.PrintPage += (sender, e) => PrintText(sender, e, extractedText);
+        // Программа работает бесконечно, ожидая команду выхода
+        while (true)
+        {
+            Thread.Sleep(1000);
+        }
+    }
 
-                    try
-                    {
-                        // Печать
-                        printDoc.Print();
-                        Console.WriteLine("Печать завершена на Windows!");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("Ошибка при печати: " + ex.Message);
-                    }
+    static void PrintExtractedText(string extractedText)
+    {
+        Console.WriteLine($"Обнаружен новый текст: {extractedText}");
 
+        PrintDocument printDoc = new PrintDocument();
+        printDoc.PrinterSettings.PrinterName = "Xprinter XP-365B";
+        printDoc.PrintPage += (sender, e) => PrintText(sender, e, extractedText);
 
-                }
-            }
+        try
+        {
+            printDoc.Print();
+            Console.WriteLine("Печать завершена!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка при печати: " + ex.Message);
         }
     }
 

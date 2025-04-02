@@ -31,6 +31,9 @@ public partial class MainWindow : Window
         string tessDataPath = @"D:\tesseract\tessdata";
 
         OCRMonitor = new OCRMonitor(captureArea, tessDataPath, 250);
+        OCRMonitor.OnTextRecognized += OcrCapture_OnTextRecognized;
+        OCRMonitor.StartCapture();
+
     }
 
     private void OcrCapture_OnTextRecognized(string text)
@@ -48,18 +51,18 @@ public partial class MainWindow : Window
 
     private void startStopButtonClick(object sender, RoutedEventArgs e)
     {
-        if (flag)
-        {
+        //if (flag)
+        //{
 
-            OCRMonitor.OnTextRecognized += OcrCapture_OnTextRecognized;
-            OCRMonitor.StartCapture();
-            flag = false;
-        }
-        else
-        {
-            flag = true;
-            OCRMonitor.StopCapture();
-        }
+        //    OCRMonitor.StopCapture();
+        //    flag = false;
+        //}
+        //else
+        //{
+        //    OCRMonitor.OnTextRecognized += OcrCapture_OnTextRecognized;
+        //    OCRMonitor.StartCapture();
+        //    flag = true;
+        //}
 
     }
 
