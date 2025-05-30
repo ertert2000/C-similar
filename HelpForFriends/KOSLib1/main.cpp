@@ -29,6 +29,8 @@ void SetFileAttribute(std::wstring fileName);
 
 void displayMenu();
 
+void getFileInfo(const std::wstring& fileName);
+
 
 int main() {
     std::locale::global(std::locale("en_US.UTF-8"));
@@ -54,7 +56,8 @@ int main() {
         case 8: system("cls"); std::wcout << L"Enter file name: "; std::getline(std::wcin, input); printFileAttributes(input); system("pause"); break;
         case 9: system("cls"); std::wcout << L"Enter file name: "; std::getline(std::wcin, input); showFileTime(input); system("pause"); break;
         case 10: system("cls"); std::wcout << L"Enter file name: "; std::getline(std::wcin, input); std::wcout << L"Enter time: "; std::getline(std::wcin, input2); std::wcout << L"1 - write, 2 - acces, 3 - create: "; std::wcin >> input3; setFileTime(input, input2, input3); system("pause"); break;
-        case 11: system("cls"); std::wcout << L"Enter file name: "; std::getline(std::wcin, input); SetFileAttribute(input); system("pause"); break;
+        case 11: system("cls"); std::wcout << L"Enter file name: "; std::getline(std::wcin, input); getFileInfo(input); system("pause"); break;
+        case 12: system("cls"); std::wcout << L"Enter file name: "; std::getline(std::wcin, input); SetFileAttribute(input); system("pause"); break;
         case 0: break;
         default: std::wcerr << L"Invalid option!" << std::endl; system("pause"); break;
         }
@@ -283,8 +286,34 @@ void displayMenu() {
     std::wcout << L"8 - Show file attributes\n";
     std::wcout << L"9 - Show file info\n";
     std::wcout << L"10 - Set file time\n";
-    std::wcout << L"11 - Set file attributes\n";
+    std::wcout << L"11 - get file info\n";
+    std::wcout << L"12 - Set file attributes\n";
     std::wcout << L"0 - Exit\n";
     std::wcout << L"#==========================#\n";
     std::wcout << L"Choice: ";
+}
+
+void getFileInfo(const std::wstring& fileName)
+{
+    HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        std::wcerr << L"Error: failed to open the file " << fileName << std::endl;
+        return;
+    }
+
+    BY_HANDLE_FILE_INFORMATION fileInfo;
+    if (GetFileInformationByHandle(hFile, &fileInfo))
+    {
+        std::wcout << L"File information: " << fileName << std::endl;
+        std::wcout << L"File size: " << ((static_cast<ULONGLONG>(fileInfo.nFileSizeHigh) << 32) | fileInfo.nFileSizeLow) << L" байт" << std::endl;
+        std::wcout << L"Number of links: " << fileInfo.nNumberOfLinks << std::endl;
+        std::wcout << L"Tom serial number: " << fileInfo.dwVolumeSerialNumber << std::endl;
+        std::wcout << L"File Index: " << fileInfo.nFileIndexHigh << L"-" << fileInfo.nFileIndexLow << std::endl;
+    }
+    else
+        std::wcerr << L"Error: failed to get information about the file." << std::endl;
+
+    CloseHandle(hFile);
 }

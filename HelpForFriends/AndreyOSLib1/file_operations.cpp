@@ -10,20 +10,20 @@ void PrintFileAttributes(const std::wstring& fileName, bool flag)
     }
 
     std::wstring attr;
-    if (attributes & FILE_ATTRIBUTE_READONLY) attr += L"Т ";
-    if (attributes & FILE_ATTRIBUTE_HIDDEN) attr += L"С ";
-    if (attributes & FILE_ATTRIBUTE_SYSTEM) attr += L"С ";
-    if (attributes & FILE_ATTRIBUTE_DIRECTORY) attr += L"К ";
-    if (attributes & FILE_ATTRIBUTE_ARCHIVE) attr += L"А ";
-    if (attributes & FILE_ATTRIBUTE_DEVICE) attr += L"УСТ ";
-    if (attributes & FILE_ATTRIBUTE_NORMAL) attr += L"НОРМ ";
-    if (attributes & FILE_ATTRIBUTE_TEMPORARY) attr += L"ВРЕМ ";
-    if (attributes & FILE_ATTRIBUTE_SPARSE_FILE) attr += L"РАЗР ";
-    if (attributes & FILE_ATTRIBUTE_REPARSE_POINT) attr += L"ПЕРЕ ";
-    if (attributes & FILE_ATTRIBUTE_COMPRESSED) attr += L"СЖАТ ";
-    if (attributes & FILE_ATTRIBUTE_OFFLINE) attr += L"ОФФЛ ";
-    if (attributes & FILE_ATTRIBUTE_NOT_CONTENT_INDEXED) attr += L"НЕИНД ";
-    if (attributes & FILE_ATTRIBUTE_ENCRYPTED) attr += L"ШИФР ";
+    if (attributes & FILE_ATTRIBUTE_READONLY)            attr += L"Т (Только для чтения) ";
+    if (attributes & FILE_ATTRIBUTE_HIDDEN)              attr += L"С (Скрытый) ";
+    if (attributes & FILE_ATTRIBUTE_SYSTEM)              attr += L"С (Системный) ";
+    if (attributes & FILE_ATTRIBUTE_DIRECTORY)           attr += L"К (Каталог) ";
+    if (attributes & FILE_ATTRIBUTE_ARCHIVE)             attr += L"А (Архивный) ";
+    if (attributes & FILE_ATTRIBUTE_DEVICE)              attr += L"УСТ (Устройство) ";
+    if (attributes & FILE_ATTRIBUTE_NORMAL)              attr += L"НОРМ (Обычный файл) ";
+    if (attributes & FILE_ATTRIBUTE_TEMPORARY)           attr += L"ВРЕМ (Временный) ";
+    if (attributes & FILE_ATTRIBUTE_SPARSE_FILE)         attr += L"РАЗР (Разреженный файл) ";
+    if (attributes & FILE_ATTRIBUTE_REPARSE_POINT)       attr += L"ПЕРЕ (Переадресация) ";
+    if (attributes & FILE_ATTRIBUTE_COMPRESSED)          attr += L"СЖАТ (Сжатый) ";
+    if (attributes & FILE_ATTRIBUTE_OFFLINE)             attr += L"ОФФЛ (Недоступен) ";
+    if (attributes & FILE_ATTRIBUTE_NOT_CONTENT_INDEXED) attr += L"НЕИНД (Не индексируется) ";
+    if (attributes & FILE_ATTRIBUTE_ENCRYPTED)           attr += L"ШИФР (Зашифрованный) ";
 
     if (flag)
     {
